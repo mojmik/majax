@@ -1,0 +1,114 @@
+@animation-duration: 0.25s;
+.majaxout {
+	display:none; 
+	padding:5px;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	margin-bottom: 12px;
+	align-items: stretch;
+	width: 100%;
+	
+}
+@media (min-width: 1100px) {
+	.majaxout {
+		margin-left: 1%;
+		width: 32.3333%;
+	}
+}
+@media (max-width: 1099px) and (min-width: 667px) {
+	.majaxout {
+		margin-left: 0.5%;
+		width: 49.5%;
+	}
+}
+
+
+.majax-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  z-index: 10000; 
+  overflow: hidden;  
+  width: 100%;
+  /*
+  animation: hide 0.4s forwards;
+  animation-iteration-count: 10;
+  animation-delay: 100s;
+  */
+}
+.majax-loader-disappear-anim {
+  animation: hide 0.4s forwards;
+  animation-iteration-count: 1;
+  animation-delay: 1s;
+}
+.majax-loader svg {
+  animation: spin 0.5s linear infinite;
+}
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.majaxmain {
+	display: flex;
+	flex-wrap: wrap;
+}
+.majaxfiltercontainer {
+ width: 100%;
+ justify-content: center;
+ align-items: center;  
+ display: flex;
+}
+.majaxfilterbox {
+ min-width: 160px;	
+ padding: 0 12px 0 12px;
+ height:75px;
+}
+.majaxfilterbox label {
+ width:100%;	 
+}
+.majaxfilterbox input  {
+ height:24px; 
+ padding:0 5px 0 5px;
+}
+.majaxfilterbox .sliderrng {
+ margin-bottom: 4px;	
+ margin-left: 8px;
+}
+.majaxfilterform .sliderval {
+ border:0;
+ padding:0;
+
+}
+
+@media (min-width: 940px) {
+	.majaxfilterform {
+	 display: flex;
+	 align-items: center;
+	 -webkit-box-align: center;	
+	}
+	.majaxfilterbox {
+     margin-bottom: 0;
+     margin-right: 12px;
+     max-width: 225px;
+     width: auto;
+	}
+}
+.select2-container img {
+ height: auto;
+ max-width: 30px;
+}
