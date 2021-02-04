@@ -29,7 +29,7 @@ class CustomFields {
 
   public function loadFromSQL() {
 	global $wpdb;
-	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` ORDER by `sortorder`";
+	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` ORDER by `filterorder`";
 	$load=false;
 	foreach( $wpdb->get_results($query) as $key => $row) {
 		$this->fieldsList[] = new CustomField($row->name,$row->value,$row->type,$row->title,$row->compare,$row->valMin,$row->valMax,$row->$postType);
@@ -172,9 +172,9 @@ class CustomField {
 					'compare'	=> $compare
 				);				
 			}
-			else if ($this->typeIs("bool")) {
-				$val="0";
-				if ($val=="on") $val="1";				
+			else if ($this->typeIs("bool")) {				
+				if ($val=="on" || $val=="1") $val="1";				
+				else $val="0";
 				return array(
 					'key'		=> $this->name,
 					'value'		=> $val,					

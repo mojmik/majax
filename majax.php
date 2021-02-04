@@ -25,6 +25,9 @@ Class Majax {
 		add_action( 'wp_enqueue_scripts', [$this,'mAjaxEnqueue'] );		
 		add_action('wp_ajax_filter_projects', [$pluginRender,'filter_projects_continuous'] );
 		add_action('wp_ajax_nopriv_filter_projects', [$pluginRender,'filter_projects_continuous'] );
+		
+		add_action('wp_ajax_filter_count_results', [$pluginRender,'filter_count_results'] );
+		add_action('wp_ajax_nopriv_filter_count_results', [$pluginRender,'filter_count_results'] );
 
 		//add shortcode
 		add_shortcode('majaxfilter', [$pluginRender,'majax_print_filter'] );
@@ -85,7 +88,7 @@ Class Majax {
 		  valMin text,
 		  valMax text,
 		  postType tinytext,
-		  sortorder smallint,
+		  filterorder smallint,
 		  PRIMARY KEY  (id)
 		) $charset_collate;";
 		
@@ -167,7 +170,7 @@ Class MajaxRender {
 	  $metaQuery["relation"] = 'AND';
 	  
 	  foreach ($this->fields->getList() as $field) {
-		  $filter = $field->getFieldFilter();	
+		  $filter = $field->getFieldFilter();			  
 		  if ($filter) { 		
 		    $metaQuery[] = $filter;
 		    $this->logWrite("name: {$field->name} filter: ".$filter." - ".$_POST[$field->name]);   		   
@@ -193,20 +196,22 @@ Class MajaxRender {
 	  $this->logWrite("query: ".json_encode($wpQuery));
 	  return $wpQuery;
 	}
+
 	function filter_projects_continuous() {
 	  $delayBetweenPostsSeconds=0.5;	
 	  //tohle natahuje data pro ajax jeden post po jednom, vraci json
 	  	    
 	  $ajaxposts = new WP_Query($this->buildQuery());
-		  
+	  //todo seskupovani podle typu/modelu, pokud bude vic vysledku	  
+	  //ukazani kolik je vysledku kazde option
 	  if($ajaxposts->have_posts()) {
 		$this->logWrite("posts found");
 		while($ajaxposts->have_posts()) {
 		  $ajaxposts->the_post();	  
-		  $ajaxPost->title=get_the_title();
+		  $ajaxPost->title=get_the_title()."id:".get_the_id();
 		  $ajaxPost->content=get_the_title();
 		  $ajaxPost->url=get_the_permalink();	
-		  $ajaxPost->meta=get_post_meta(get_the_id(),"hp_vendor",true);	
+		  $ajaxPost->meta="transmission:".get_post_meta(get_the_id(),"mauta_automat",true)."".get_post_meta(get_the_id(),"hp_vendor",true);	
 		  echo json_encode($ajaxPost);
 		  flush();
 		  ob_flush();
@@ -223,6 +228,23 @@ Class MajaxRender {
 	    exit;
 	  }
 	}
+
+	function filter_count_results() {
+		$delayBetweenPostsSeconds=0.5;	
+		//tohle natahuje data pro ajax jeden post po jednom, vraci json				
+		$ajaxposts = new WP_Query($this->buildQuery());
+		 
+		//ukazani kolik je vysledku kazde option
+	
+		  $response->title="majaxnone";
+		  $response->content="no results2";
+		 
+		  echo json_encode($response);
+		  flush();
+		  ob_flush();
+		  exit;	
+	}
+
 	function logWrite($val) {
 	 file_put_contents(plugin_dir_path( __FILE__ ) . "log.txt",date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
 	}

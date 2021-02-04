@@ -38,19 +38,48 @@ function getAjaxParams(varThisObj) {
  var thisId=0;
  var thisHtml="";
  var last_response_len = false;
-  
+ var actionFunction='filter_projects';
+ if (varThisObj.length==0) {
+	actionFunction='filter_count_results';
+	//refresh counts
+	var sendClearFunction=function() {
+		jQuery('#majaxmain').empty();				 
+		jQuery('#majaxmain').append(majaxLoader);	
+		jQuery('.majax-loader').css('display','flex');	 
+	 }
+	 var drawResultsFunction=function(thisId,jsonObj) {	
+		if (jsonObj.title=="majaxnone") thisHtml=postTemplateNone(thisId,jsonObj.content);
+		else thisHtml=postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
+		jQuery('#majaxmain').append(thisHtml);
+		jQuery("#majaxout"+thisId).fadeIn("slow");														
+		jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+	 }
+ }
+ else {
+	var objCategory=varThisObj.data('slug');
+	//draw posts
+	var sendClearFunction=function() {
+		jQuery('#majaxmain').empty();				 
+		jQuery('#majaxmain').append(majaxLoader);	
+		jQuery('.majax-loader').css('display','flex');	 
+	 }
+	 var drawResultsFunction=function(thisId,jsonObj) {	
+		if (jsonObj.title=="majaxnone") thisHtml=postTemplateNone(thisId,jsonObj.content);
+		else thisHtml=postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
+		jQuery('#majaxmain').append(thisHtml);
+		jQuery("#majaxout"+thisId).fadeIn("slow");														
+		jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+	 }
+ }
+   
  var outObj={
 				type: 'POST',
 				data: {
-					  action: 'filter_projects',
-					  category: varThisObj.data('slug'),
+					  action: actionFunction,
+					  category: objCategory,
 					  type: jQuery('input[name="type"]').val()
 				},
-				beforeSend: function() {
-				 jQuery('#majaxmain').empty();				 
-				 jQuery('#majaxmain').append(majaxLoader);	
-				 jQuery('.majax-loader').css('display','flex');	
-				},
+				beforeSend: sendClearFunction,
 				xhrFields: {
 					onprogress: function(e)	{
 						var this_response, response = e.currentTarget.response;
@@ -66,11 +95,7 @@ function getAjaxParams(varThisObj) {
 						thisId++;
 						if (this_response!="") {
 							jsonObj=JSON.parse(this_response);
-							if (jsonObj.title=="majaxnone") thisHtml=postTemplateNone(thisId,jsonObj.content);
-							else thisHtml=postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
-							jQuery('#majaxmain').append(thisHtml);
-							jQuery("#majaxout"+thisId).fadeIn("slow");														
-							jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+							drawResultsFunction(thisId,jsonObj);
 						}
 					}
 				}
@@ -86,6 +111,10 @@ function getAjaxParams(varThisObj) {
 	 }
 	 else {		
 		//ordinary input
+		if (obj.type == "checkbox") {
+			if (obj.checked==true) obj.value="1";
+			if (obj.checked==false) obj.value="0";
+		} 		
 		outObj.data[obj.name]=obj.value;
 	 }
  });
@@ -113,15 +142,13 @@ function getAjaxParams(varThisObj) {
 function runAjax(firingElement) {
  var ajaxPar=getAjaxParams(jQuery(firingElement));	 
  jQuery.ajax(majax.ajax_url, ajaxPar)
-			.done(function(dataOut)
-			{
+			.done(function(dataOut)			{
 				//console.log('Complete response = ' + dataOut);
 			})
-			.fail(function(dataOut)
-			{
+			.fail(function(dataOut)			{
 				//console.log('Error: ', dataOut);
 			});
-			//console.log('Request Sent');
+			
 }
 
 
@@ -137,12 +164,17 @@ function formatState (state) {
 
   // Use .text() instead of HTML string concatenation to avoid script injection issues
   $state.find("span").text(state.text);
-  $state.find("img").attr("src", baseUrl + "/" + state.element.value.toLowerCase() + ".png");
+  $state.find("img").attr("src", baseUrl + "/" + state.element.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".png");
 
   return $state;
 };
 
+function loadCounters() {
+	runAjax(false);
+}
+
 jQuery(document).ready(function() {
+	
 	//fire event handlers	
 	jQuery('.majax-select').on('change', function() {	
 			runAjax(this);
@@ -159,6 +191,9 @@ jQuery(document).ready(function() {
 	
 	//sliders
 	initSliders(); 
+
+	//load counts
+	loadCounters();
 });
 
 function formatSliderVal(val1,val2=0,dir=1) {
