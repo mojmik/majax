@@ -228,7 +228,12 @@ Class MajaxRender {
 	    exit;
 	  }
 	}
-
+	function countPostsByMetaGroups() {
+		$mType = $_POST['type'];	
+		/*
+		SELECT meta_key,meta_value,post_title, COUNT(post_id) AS count FROM `wp_postmeta`,`wp_posts` WHERE (meta_key = 'mauta_znacka' OR meta_key = 'mauta_automat' OR meta_key = 'mauta_cenaden' OR meta_key = 'mauta_kategorie') AND post_id=id AND post_status like 'publish' GROUP BY meta_value ORDER BY meta_value ASC	
+		*/
+	}
 	function filter_count_results() {
 		$delayBetweenPostsSeconds=0.5;	
 		//tohle natahuje data pro ajax jeden post po jednom, vraci json				
