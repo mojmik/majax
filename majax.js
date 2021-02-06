@@ -34,7 +34,9 @@ const majaxLoader = `
 
 `;
 
+var ajaxSeq=0;
 function getAjaxParams(varThisObj) { 
+ var seqNumber = ++ajaxSeq;
  var thisId=0;
  var thisHtml="";
  var last_response_len = false;
@@ -43,11 +45,13 @@ function getAjaxParams(varThisObj) {
 	actionFunction='filter_count_results';
 	//refresh counts
 	var sendClearFunction=function() {
+		return;
 		jQuery('#majaxmain').empty();				 
 		jQuery('#majaxmain').append(majaxLoader);	
 		jQuery('.majax-loader').css('display','flex');	 
 	 }
 	 var drawResultsFunction=function(thisId,jsonObj) {	
+		return;
 		if (jsonObj.title=="majaxnone") thisHtml=postTemplateNone(thisId,jsonObj.content);
 		else thisHtml=postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
 		jQuery('#majaxmain').append(thisHtml);
@@ -82,20 +86,25 @@ function getAjaxParams(varThisObj) {
 				beforeSend: sendClearFunction,
 				xhrFields: {
 					onprogress: function(e)	{
-						var this_response, response = e.currentTarget.response;
-						var jsonObj;
-						if(last_response_len === false)	{
-							this_response = response;
-							last_response_len = response.length;
+						if (seqNumber === ajaxSeq) { //check we are processing correct response
+							var this_response, response = e.currentTarget.response;
+							var jsonObj;
+							if(last_response_len === false)	{
+								this_response = response;
+								last_response_len = response.length;
+							}
+							else {
+								this_response = response.substring(last_response_len);
+								last_response_len = response.length;
+							}
+							thisId++;
+							if (this_response!="") {
+								jsonObj=JSON.parse(this_response);
+								drawResultsFunction(thisId,jsonObj);
+							}
 						}
 						else {
-							this_response = response.substring(last_response_len);
-							last_response_len = response.length;
-						}
-						thisId++;
-						if (this_response!="") {
-							jsonObj=JSON.parse(this_response);
-							drawResultsFunction(thisId,jsonObj);
+							//ignore this seq
 						}
 					}
 				}
@@ -139,8 +148,9 @@ function getAjaxParams(varThisObj) {
  return outObj;
 }
 
-function runAjax(firingElement) {
+function runAjax(firingElement) { 
  var ajaxPar=getAjaxParams(jQuery(firingElement));	 
+ 
  jQuery.ajax(majax.ajax_url, ajaxPar)
 			.done(function(dataOut)			{
 				//console.log('Complete response = ' + dataOut);
@@ -173,8 +183,7 @@ function loadCounters() {
 	runAjax(false);
 }
 
-jQuery(document).ready(function() {
-	
+jQuery(document).ready(function() {	
 	//fire event handlers	
 	jQuery('.majax-select').on('change', function() {	
 			runAjax(this);

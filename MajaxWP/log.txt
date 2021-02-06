@@ -1,0 +1,4 @@
+06-02-2021 01:29:12 name: mauta_cenaden filter: Array - 1|224
+06-02-2021 01:29:12 name: mauta_automat filter: Array - 0
+06-02-2021 01:29:12 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","224"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+06-02-2021 01:29:12 posts found
