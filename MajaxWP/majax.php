@@ -3,9 +3,14 @@ namespace MajaxWP;
    
 Class Majax {
 	public $thisPluginName="majax";
+	private $ajaxRender;
+	private $ajaxHandler;
 	function __construct() {
 		spl_autoload_register([$this,"mLoadClass"]);
-		$this->pluginRender=new MajaxHandler();						
+		if (MAJAX_SHORT) $this->ajaxHandler=new MajaxHandlerShort(); //shortinit lightweight version
+		else $this->ajaxHandler=new MajaxHandler(); //ajax-admin version
+		$this->ajaxHandler->register();						
+		
 	}
 	
 	function mLoadClass($class) {	
@@ -18,21 +23,10 @@ Class Majax {
 		register_activation_hook( __FILE__, [$this,'majax_plugin_install'] );
 		//init actions		
 	
-		add_action( 'wp_enqueue_scripts', [$this,'mAjaxEnqueueScripts'] );		
-		
-		
-		add_action('wp_ajax_filter_projects', [$this->pluginRender,'filter_projects_continuous'] );
-		add_action('wp_ajax_nopriv_filter_projects', [$this->pluginRender,'filter_projects_continuous'] );
-		
-		add_action('wp_ajax_filter_count_results', [$this->pluginRender,'filter_count_results'] );
-		add_action('wp_ajax_nopriv_filter_count_results', [$this->pluginRender,'filter_count_results'] );
-		
-
-		//add shortcode
-		add_shortcode('majaxfilter', [$this->pluginRender,'majax_print_filter'] );
-		add_shortcode('majaxcontent', [$this->pluginRender,'majax_print_content'] );
-	
+		add_action( 'wp_enqueue_scripts', [$this,'mAjaxEnqueueScripts'] );			
 		add_action( 'wp_enqueue_scripts', [$this,'majaxEnqueueStyle'], 11);
+
+		
 	}
 
 	function majaxEnqueueStyle() {		
@@ -53,12 +47,7 @@ Class Majax {
 	}
 
 	function mAjaxEnqueueScripts() {	
-		$mScripts=[	
-			'ajax-script' => ['src' => MAJAX_PLUGIN_URL . 'majax.js', 
-							  'depends' => array('jquery'), 
-							  'localizeObj' => 'majax', 
-							  'localizeArray' => array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) 
-			],
+		$mScripts=[			
 			'select2' => [ 'src' => MAJAX_PLUGIN_URL .'select2.min.js',
 						   'srcCdn' => 'https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js',
 						   'depends' => array('jquery'),
@@ -80,17 +69,6 @@ Class Majax {
 				wp_localize_script( $key, $value["localizeObj"],$value["localizeArray"]);		
 			}
 		}
-		
-		
-		/*
-		wp_enqueue_script( 'ajax-script', MAJAX_PLUGIN_URL . 'majax.js', array('jquery') );
-		wp_localize_script( 'ajax-script', 'majax',	array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-		
-		wp_enqueue_script( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js',array('jquery'),'',true );			
-		wp_enqueue_script( 'select2', MAJAX_PLUGIN_URL .'select2.min.js',array('jquery'),'',true );
-		
-		wp_enqueue_script( 'jquery-ui-slider',array('jquery'),'',true );	
-		*/
 		
 	}
 	

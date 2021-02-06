@@ -114,10 +114,11 @@ class CustomField {
 	 return false;
 	}
 	public function getFieldFilter() {
-			   $val=$_POST[$this->name];
+			   $val=$_POST[$this->name];			   
 			   if ($val=="") {
 				return false;	
 			   }
+			   $val=filter_var($val, FILTER_SANITIZE_STRING);
 			   if (strpos($val,"|")>0) {
 				   //multiple values in select field
 				   $compare="IN";	//multiple values selection
@@ -138,7 +139,7 @@ class CustomField {
 					   'compare'	=> '='
 				   );	
 			   }
-			   else {
+			   else {				
 				   //single value
 				   return array(
 					   'key'		=> $this->name,
