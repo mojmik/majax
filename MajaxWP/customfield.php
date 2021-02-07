@@ -20,6 +20,7 @@ class CustomField {
 		return "{$this->name};{$this->value};{$this->type};{$this->compare}";
 	}
 	public function outSelectOptions() {
+	   $out="";
 	   $values=explode(";",$this->value);
 	   foreach ($values as $val) {
 		$out.="<option value='$val'>$val</option>";	
@@ -54,6 +55,7 @@ class CustomField {
 	public function initValues() {
 	   global $wpdb;
 	   $maxValues=50;
+	   $n=0;
 		   
 	   $query="SELECT DISTINCT(`meta_value`) AS val FROM ".$wpdb->prefix."postmeta AS pm 
 	   WHERE pm.meta_key like '{$this->name}' LIMIT 0,".($maxValues+10);

@@ -10,6 +10,7 @@ class CustomFields {
 	return $this->fieldsList;
   }
   public function outFields() {
+	$out="";
 	foreach ($this->fieldsList as $f) {
 	  if ($out!="") $out.="|";	
 	  $out.=$f->outField();
@@ -17,6 +18,7 @@ class CustomFields {
 	return $out;
   }
    public function readValues(bool $doSave=true) {
+	$out="";
 	foreach ($this->fieldsList as $f) {
 	  $out.="min:".$f->getValMin();
 	  $out.="max:".$f->getValMax();
@@ -34,7 +36,7 @@ class CustomFields {
 	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields`";
 	$load=false;
 	foreach( $wpdb->get_results($query) as $key => $row) {
-		$this->fieldsList[] = new CustomField($row->name,$row->value,$row->type,$row->title,$row->compare,$row->valMin,$row->valMax,$row->$postType);
+		$this->fieldsList[] = new CustomField($row->name,$row->value,$row->type,$row->title,$row->compare,$row->valMin,$row->valMax,$row->postType);
 		$load=true;
 	}	
 	return $load;

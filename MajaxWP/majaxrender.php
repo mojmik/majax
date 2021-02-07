@@ -1,26 +1,32 @@
 <?php
 namespace MajaxWP;
 
+use stdClass;
+
 Class MajaxRender {	
 
 
-	function __construct() {		
+	function __construct($loadFields=true) {		
+		if ($loadFields) {
 			//init custom fields
 			$this->fields=new CustomFields();
-			
+						
 			//kdyz uz mam nacteny pole
 			$forceReload=false;
 			$loadValues=false;
-			if (!$this->fields->loadFromSQL() && $forceReload) {
-				//manual setup
-				//kdyz jeste ne		
-				$this->fields->addField(new CustomField("hp_price",10,"NUMERIC","Price",">"));
-				$this->fields->addField(new CustomField("hp_vendor","Milanoo","","Vendor","="));		
-				$this->fields->addField(new CustomField("hp_brand","Milanoo","","Brand","="));	
-				$this->fields->addField(new CustomField("hp_murl","Milanoo","","URL","="));		
+			if (!$loadFields || $forceReload) {
+				//preloading hardcoded fields
+				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
+				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
+				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
+				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
+				if ($forceReload) $this->fields->saveToSQL();
 				if ($loadValues) echo $this->fields->readValues();
-				else $this->fields->saveToSQL();
-			}				
+			}
+			else {
+				$this->fields->loadFromSQL();
+			}			
+		}			
 	}
 
 	function regShortCodes() {		
@@ -101,10 +107,36 @@ Class MajaxRender {
 	  $this->logWrite("query: ".json_encode($wpQuery));
 	  return $wpQuery;
 	}
-
+	function showRows($rows) {
+		$delayBetweenPostsSeconds=0.5;
+		$ajaxPost=new StdClass();
+		foreach ($rows as $row) {
+			$ajaxPost->title=$row["post_title"]."id:".$row["ID"];
+			$ajaxPost->content=$row["post_content"];
+			$ajaxPost->url="url";	
+			$ajaxPost->meta="transmission:";
+			echo json_encode($ajaxPost).PHP_EOL;
+			flush();
+			ob_flush();
+		
+			
+			/*
+			wp_send_json($ajaxPost);
+			flush();
+			ob_flush();
+			*/
+			session_write_close();
+			usleep($delayBetweenPostsSeconds*1000000);	
+		}	
+		exit;	
+	}
+	private function createResponse() {
+		$response=new StdClass();
+		return $response;
+	}
 	function filter_projects_continuous() {
-	  $delayBetweenPostsSeconds=0.5;	
-	  
+	  $delayBetweenPostsSeconds=0.5;		  
+	  $response=$this->createResponse();
 	  //read posts count
 	  //$this->filter_count_results(true);	    
 
@@ -116,12 +148,12 @@ Class MajaxRender {
 		$this->logWrite("posts found");
 		while($ajaxposts->have_posts()) {
 		  $ajaxposts->the_post();	  
-		  $ajaxPost->title=get_the_title()."id:".get_the_id();
-		  $ajaxPost->content=get_the_title();
-		  $ajaxPost->url=get_the_permalink();	
-		  $ajaxPost->meta="transmission:".get_post_meta(get_the_id(),"mauta_automat",true)."".get_post_meta(get_the_id(),"hp_vendor",true);	
+		  $response->title=get_the_title()."id:".get_the_id();
+		  $response->content=get_the_title();
+		  $response->url=get_the_permalink();	
+		  $response->meta="transmission:".get_post_meta(get_the_id(),"mauta_automat",true)."".get_post_meta(get_the_id(),"hp_vendor",true);	
 		
-		  echo json_encode($ajaxPost).PHP_EOL;
+		  echo json_encode($response).PHP_EOL;
 		  flush();
 		  ob_flush();
 		 
@@ -146,6 +178,7 @@ Class MajaxRender {
 	  }
 	}
 	function sendBlankResponse() {
+		$response=$this->createResponse();
 		$response->title="neco2342";	
 		$response->content="neco345643";
 		echo json_encode($response);
@@ -155,11 +188,13 @@ Class MajaxRender {
 	}
 	function filter_count_results($doExit=false) {
 		//send blank - debug
+		$response=$this->createResponse();
 		$this->sendBlankResponse();
 		//<-
 		global $wpdb;
 		$delayBetweenPostsSeconds=0.5;	
 		$n=0;
+		$filter="";
 
 		$response->title="postcounts";	
 		$response->content="postcounts";	

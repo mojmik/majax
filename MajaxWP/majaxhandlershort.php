@@ -22,20 +22,23 @@ Class MajaxHandlerShort {
 	}
 	
 	public function register_script()    {	      		
-		wp_register_script('majax-script', MAJAX_PLUGIN_URL . 'ajaxshort.js', array( 'jquery' ) );		
+		wp_register_script('majax-script', MAJAX_PLUGIN_URL . 'majax.js', array( 'jquery' ) );		
 		wp_localize_script('majax-script', 'majax', $this->get_ajax_data());
 		wp_enqueue_script('majax-script');
 	}
 	
 	private function get_ajax_data() {
+		if (MAJAX_SHORT_2==true) $ajaxPhp="ajaxsupershort.php";
+		else $ajaxPhp="ajaxshort.php";
+				
         return array(
-			'ajax_url' =>  MAJAX_PLUGIN_URL . 'ajaxshort.php',
+			'ajax_url' =>  MAJAX_PLUGIN_URL . $ajaxPhp,
             'action' => self::ACTION,
             'nonce' => wp_create_nonce(MajaxHandlerShort::NONCE)
-        );
+		);		
 	}
 	
-	function logWrite($val) {
+	public static function logWrite($val) {
 	 file_put_contents(plugin_dir_path( __FILE__ ) . "log.txt",date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
 	}
 }

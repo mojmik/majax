@@ -1,4 +1,7 @@
 <?php
+/*
+ this feeds ajax from wordpress with minimal loading
+*/
 namespace MajaxWP;
 
 define('SHORTINIT', true);
@@ -26,6 +29,8 @@ require_once( ABSPATH . WPINC . '/class-wp-user.php' );
 require_once( ABSPATH . WPINC . '/class-wp-user-query.php' );
 require_once( ABSPATH . WPINC . '/class-wp-roles.php' );
 require_once( ABSPATH . WPINC . '/class-wp-role.php' );
+require_once( ABSPATH . WPINC . '/class-wp-session-tokens.php' );
+require_once( ABSPATH . WPINC . '/class-wp-user-meta-session-tokens.php' );
 
 
 // Posts
@@ -48,14 +53,16 @@ require_once( ABSPATH . WPINC . '/query.php' );
 require_once( ABSPATH . WPINC . '/comment.php' );
 require_once( ABSPATH . WPINC . '/class-wp-comment.php' );
 
+wp_cookie_constants();
 $GLOBALS['wp_the_query'] = new \WP_Query();
 $GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
 
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
+require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxhandlershort.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfields.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
 $renderer = new MajaxRender();
-//check_ajax_referer(MajaxHandler::NONCE,'security');
+check_ajax_referer(MajaxHandlerShort::NONCE,'security');
 $action=$_POST["action"];
 if ($action=="count") $renderer->filter_count_results();
 else $renderer->filter_projects_continuous();
