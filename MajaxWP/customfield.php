@@ -151,6 +151,40 @@ class CustomField {
 				   );
 			   }
 	}
+	public function getFieldFilterSQL() {
+		$val=$_POST[$this->name];			   
+		if ($val=="") {
+		 return false;	
+		}
+		$val=filter_var($val, FILTER_SANITIZE_STRING);
+		if (strpos($val,"|")>0) {
+			//multiple values in select field
+			$compare="IN";	//multiple values selection
+			$vals=explode("|",$val);
+
+			if ($this->typeIs("NUMERIC")) { 				 
+				 return "{$this->name} BETWEEN {$vals[0]} AND {$vals[1]}";
+			} else {
+				$valsStr="";
+				$n=0;
+				foreach ($vals as $v) {
+				 if ($n>0) $valsStr.=",";
+				 $valsStr="'".$v."'";	
+				 $n++;
+				}
+				return "`{$this->name}` IN ({$valsStr})";
+			}				
+		}
+		else if ($this->typeIs("bool")) {				
+			if ($val=="on" || $val=="1") $val="1";				
+			else $val="0";
+			return "`{$this->name}` = '{$val}'";
+		}
+		else {				
+			//single value
+			return "`{$this->name}` {$this->compare} '{$val}'";			
+		}
+}
 	public function save() {
 	  global $wpdb;
 	  $query = "DELETE FROM `".$wpdb->prefix."majax_fields` WHERE `name` like '{$this->name}';";   

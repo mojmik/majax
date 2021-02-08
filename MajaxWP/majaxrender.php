@@ -7,26 +7,26 @@ Class MajaxRender {
 
 
 	function __construct($loadFields=true) {		
-		if ($loadFields) {
+		
 			//init custom fields
 			$this->fields=new CustomFields();
 						
 			//kdyz uz mam nacteny pole
 			$forceReload=false;
 			$loadValues=false;
-			if (!$loadFields || $forceReload) {
+			if (!$loadFields || $forceReload) {	
 				//preloading hardcoded fields
 				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
-				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
-				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
-				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
+				$this->fields->addField(new CustomField("mauta_znacka","---;Škoda;VW;Mercedes Benz;Hyundai;FIAT;Opel;Renault","select","Znacka","=",false,false,"mauta"));
+				$this->fields->addField(new CustomField("mauta_cenaden","","NUMERIC","Cena - den",">",false,false,"mauta"));
+				$this->fields->addField(new CustomField("mauta_automat","","bool","Automat","=",false,false,"mauta"));
 				if ($forceReload) $this->fields->saveToSQL();
 				if ($loadValues) echo $this->fields->readValues();
 			}
 			else {
+				//loading meta fields from db
 				$this->fields->loadFromSQL();
-			}			
-		}			
+			}					
 	}
 
 	function regShortCodes() {		
@@ -71,7 +71,7 @@ Class MajaxRender {
 	}
 	function buildQuery() {  
 	  $catSlug = $_POST['category'];
-	  $mType = $_POST['type'];	
+	  $mType = filter_var($_POST['type'], FILTER_SANITIZE_STRING); 	
 	  $hivePress=false;
 	  if ($hivePress) {
 		$postTypeDefault="hp_listing";  
@@ -107,6 +107,43 @@ Class MajaxRender {
 	  $this->logWrite("query: ".json_encode($wpQuery));
 	  return $wpQuery;
 	}
+	function buildQuerySQL() {	
+		//get all posts and their metas			
+		$limit=" LIMIT 10";		
+		$mType = filter_var($_POST['type'], FILTER_SANITIZE_STRING); 
+		$col="";
+		$filters="";
+		$colSelect="";
+		foreach ($this->fields->getList() as $field) {			
+			$fieldName=$field->outName();		
+			$col.=",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as $fieldName";			
+			$colSelect.=",PM1.$fieldName";
+			$filter=$field->getFieldFilterSQL();
+			if ($filter) {
+				if ($filters) $filters.=" AND ";
+				$filters.=$filter;
+			}
+
+		}
+		if ($filters) $filters=" WHERE $filters";
+		$query=
+		"
+		SELECT post_title,post_content{$colSelect}  FROM
+		(SELECT post_title,post_content 
+			$col
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like '$mType'			
+			GROUP BY ID, post_title
+			) AS PM1
+			$filters
+			$limit
+		";
+		$this->logWrite("countposts {$query}");
+
+		return $query;
+	}	
 	function showRows($rows) {
 		$delayBetweenPostsSeconds=0.5;
 		$ajaxPost=new StdClass();

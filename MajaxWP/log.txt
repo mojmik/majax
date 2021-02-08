@@ -74,3 +74,523 @@
 07-02-2021 12:15:21 name: mauta_automat filter: Array - 0
 07-02-2021 12:15:21 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","353"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
 07-02-2021 12:15:21 posts found
+07-02-2021 12:25:54 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:25:54 name: mauta_automat filter: Array - 0
+07-02-2021 12:25:54 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:25:54 posts found
+07-02-2021 12:25:57 name: mauta_cenaden filter: Array - 1|339
+07-02-2021 12:25:57 name: mauta_automat filter: Array - 0
+07-02-2021 12:25:57 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","339"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:25:57 posts found
+07-02-2021 12:26:01 name: mauta_cenaden filter: Array - 1|269
+07-02-2021 12:26:01 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:01 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","269"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:01 posts found
+07-02-2021 12:26:05 name: mauta_cenaden filter: Array - 1|312
+07-02-2021 12:26:05 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:05 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","312"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:05 posts found
+07-02-2021 12:26:19 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:26:19 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:19 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:19 posts found
+07-02-2021 12:26:21 name: mauta_cenaden filter: Array - 1|333
+07-02-2021 12:26:21 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:21 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","333"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:21 posts found
+07-02-2021 12:26:26 name: mauta_cenaden filter: Array - 1|359
+07-02-2021 12:26:26 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:26 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","359"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:26 posts found
+07-02-2021 12:26:35 name: mauta_cenaden filter: Array - 1|378
+07-02-2021 12:26:35 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:35 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","378"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:35 posts found
+07-02-2021 12:26:42 name: mauta_cenaden filter: Array - 1|403
+07-02-2021 12:26:42 name: mauta_automat filter: Array - 0
+07-02-2021 12:26:42 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","403"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:26:42 posts found
+07-02-2021 12:39:59 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:39:59 name: mauta_automat filter: Array - 0
+07-02-2021 12:39:59 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:39:59 posts found
+07-02-2021 12:40:03 name: mauta_cenaden filter: Array - 1|256
+07-02-2021 12:40:03 name: mauta_automat filter: Array - 0
+07-02-2021 12:40:03 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","256"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:40:03 posts found
+07-02-2021 12:40:15 name: mauta_cenaden filter: Array - 1|289
+07-02-2021 12:40:15 name: mauta_automat filter: Array - 0
+07-02-2021 12:40:15 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","289"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:40:15 posts found
+07-02-2021 12:41:00 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:41:00 name: mauta_automat filter: Array - 0
+07-02-2021 12:41:00 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:41:00 posts found
+07-02-2021 12:41:03 name: mauta_cenaden filter: Array - 1|358
+07-02-2021 12:41:03 name: mauta_automat filter: Array - 0
+07-02-2021 12:41:03 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","358"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:41:03 posts found
+07-02-2021 12:43:00 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:43:00 name: mauta_automat filter: Array - 0
+07-02-2021 12:43:00 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:43:00 posts found
+07-02-2021 12:43:34 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:43:34 name: mauta_automat filter: Array - 0
+07-02-2021 12:43:34 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:43:35 posts found
+07-02-2021 12:44:07 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:44:07 name: mauta_automat filter: Array - 0
+07-02-2021 12:44:07 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:44:07 posts found
+07-02-2021 12:44:21 name: mauta_cenaden filter: Array - 1|339
+07-02-2021 12:44:21 name: mauta_automat filter: Array - 0
+07-02-2021 12:44:21 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","339"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:44:21 posts found
+07-02-2021 12:45:06 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:45:06 name: mauta_automat filter: Array - 0
+07-02-2021 12:45:06 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:45:06 posts found
+07-02-2021 12:45:26 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:45:26 name: mauta_automat filter: Array - 0
+07-02-2021 12:45:26 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:45:26 posts found
+07-02-2021 12:49:14 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 12:49:14 name: mauta_automat filter: Array - 0
+07-02-2021 12:49:14 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:49:14 posts found
+07-02-2021 12:49:16 name: mauta_cenaden filter: Array - 1|358
+07-02-2021 12:49:16 name: mauta_automat filter: Array - 0
+07-02-2021 12:49:16 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","358"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 12:49:17 posts found
+07-02-2021 01:17:10 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 01:17:10 name: mauta_automat filter: Array - 0
+07-02-2021 01:17:10 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 01:17:12 name: mauta_cenaden filter: Array - 1|326
+07-02-2021 01:17:12 name: mauta_automat filter: Array - 0
+07-02-2021 01:17:12 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","326"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 01:54:42 countposts SELECT meta_key,meta_value,post_title,post_content 
+		FROM `wp_postmeta`,`wp_posts` 
+		WHERE (   AND    AND  mauta_cenaden BETWEEN 1 AND 300  AND  `mauta_automat` = {'0'} ) 
+			AND post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+		
+07-02-2021 01:56:12 countposts SELECT meta_key,meta_value,post_title,post_content 
+		FROM `wp_postmeta`,`wp_posts` 
+		WHERE (   AND    AND  mauta_cenaden BETWEEN 1 AND 300  AND  `mauta_automat` = '0' ) 
+			AND post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+		
+07-02-2021 01:59:07 countposts SELECT meta_key,meta_value,post_title,post_content 
+		FROM `wp_postmeta`,`wp_posts` 
+		WHERE ( mauta_cenaden BETWEEN 1 AND 300  AND  `mauta_automat` = '0' ) 
+			AND post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+		
+07-02-2021 02:48:04 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:48:04 name: mauta_automat filter: Array - 0
+07-02-2021 02:48:04 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:48:04 posts found
+07-02-2021 02:48:08 name: mauta_cenaden filter: Array - 1|333
+07-02-2021 02:48:08 name: mauta_automat filter: Array - 0
+07-02-2021 02:48:08 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","333"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:48:08 posts found
+07-02-2021 02:48:17 name: mauta_cenaden filter: Array - 1|333
+07-02-2021 02:48:17 name: mauta_automat filter: Array - 0
+07-02-2021 02:48:17 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","333"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:48:17 posts found
+07-02-2021 02:49:14 name: mauta_znacka filter: Array - Škoda
+07-02-2021 02:49:14 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:14 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:14 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_znacka","value":"\u0160koda","type":"select","compare":"="},"1":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"2":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:14 posts found
+07-02-2021 02:49:18 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:18 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:18 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:18 posts found
+07-02-2021 02:49:20 name: mauta_znacka filter: Array - VW
+07-02-2021 02:49:20 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:20 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:20 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_znacka","value":"VW","type":"select","compare":"="},"1":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"2":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:20 no response
+07-02-2021 02:49:22 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:22 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:22 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:22 posts found
+07-02-2021 02:49:24 name: mauta_znacka filter: Array - FIAT
+07-02-2021 02:49:24 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:24 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:24 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_znacka","value":"FIAT","type":"select","compare":"="},"1":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"2":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:24 posts found
+07-02-2021 02:49:44 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:44 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:44 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:44 posts found
+07-02-2021 02:49:45 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:45 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:45 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:45 posts found
+07-02-2021 02:49:54 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:55 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:55 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:55 posts found
+07-02-2021 02:49:57 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:49:57 name: mauta_automat filter: Array - 0
+07-02-2021 02:49:57 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:49:57 posts found
+07-02-2021 02:52:27 name: mauta_cenaden filter: Array - 1|300
+07-02-2021 02:52:27 name: mauta_automat filter: Array - 0
+07-02-2021 02:52:27 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","300"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:52:27 posts found
+07-02-2021 02:52:29 name: mauta_cenaden filter: Array - 1|329
+07-02-2021 02:52:29 name: mauta_automat filter: Array - 0
+07-02-2021 02:52:29 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","329"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:52:29 posts found
+07-02-2021 02:52:36 name: mauta_znacka filter: Array - Škoda
+07-02-2021 02:52:36 name: mauta_cenaden filter: Array - 1|329
+07-02-2021 02:52:36 name: mauta_automat filter: Array - 0
+07-02-2021 02:52:36 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_znacka","value":"\u0160koda","type":"select","compare":"="},"1":{"key":"mauta_cenaden","value":["1","329"],"type":"NUMERIC","compare":"BETWEEN"},"2":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:52:36 posts found
+07-02-2021 02:52:56 name: mauta_cenaden filter: Array - 1|329
+07-02-2021 02:52:56 name: mauta_automat filter: Array - 0
+07-02-2021 02:52:56 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","329"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:52:56 posts found
+07-02-2021 02:53:07 name: mauta_znacka filter: Array - FIAT
+07-02-2021 02:53:07 name: mauta_cenaden filter: Array - 1|329
+07-02-2021 02:53:07 name: mauta_automat filter: Array - 0
+07-02-2021 02:53:07 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_znacka","value":"FIAT","type":"select","compare":"="},"1":{"key":"mauta_cenaden","value":["1","329"],"type":"NUMERIC","compare":"BETWEEN"},"2":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:53:07 posts found
+07-02-2021 02:53:13 name: mauta_cenaden filter: Array - 1|329
+07-02-2021 02:53:13 name: mauta_automat filter: Array - 0
+07-02-2021 02:53:13 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_cenaden","value":["1","329"],"type":"NUMERIC","compare":"BETWEEN"},"1":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:53:13 posts found
+07-02-2021 02:53:15 name: mauta_znacka filter: Array - Škoda
+07-02-2021 02:53:15 name: mauta_cenaden filter: Array - 1|329
+07-02-2021 02:53:15 name: mauta_automat filter: Array - 0
+07-02-2021 02:53:15 query: {"posts_per_page":8,"orderby":"menu_order","order":"desc","post_type":"mauta","meta_query":{"relation":"AND","0":{"key":"mauta_znacka","value":"\u0160koda","type":"select","compare":"="},"1":{"key":"mauta_cenaden","value":["1","329"],"type":"NUMERIC","compare":"BETWEEN"},"2":{"key":"mauta_automat","value":"0","compare":"="}}}
+07-02-2021 02:53:15 posts found
+07-02-2021 02:53:34 countposts SELECT meta_key,meta_value,post_title,post_content 
+		FROM `wp_postmeta`,`wp_posts` 
+		WHERE ( mauta_cenaden BETWEEN 1 AND 300  AND  `mauta_automat` = '0' ) 
+			AND post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+		
+07-02-2021 03:03:01 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			AND post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			GROUP BY ID, post_title
+		
+07-02-2021 03:04:22 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			GROUP BY ID, post_title
+		
+07-02-2021 03:04:27 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			GROUP BY ID, post_title
+		
+07-02-2021 03:05:29 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+		
+07-02-2021 03:05:33 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+		
+07-02-2021 03:06:16 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10
+		
+07-02-2021 03:06:18 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10
+		
+07-02-2021 03:06:27 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10
+		
+07-02-2021 03:06:30 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10
+		
+07-02-2021 03:06:33 countposts SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10
+		
+07-02-2021 03:18:38 countposts 
+		SELECT post_title,post_contentPM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+		
+07-02-2021 03:19:10 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+		
+07-02-2021 03:19:13 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			 LIMIT 10) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 259 AND `mauta_automat` = '0'
+		
+07-02-2021 03:22:00 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:22:03 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 250 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:22:13 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = {'Škoda'} AND mauta_cenaden BETWEEN 1 AND 250 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:23:07 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:23:08 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = 'Škoda' AND mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:23:12 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:23:14 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = 'FIAT' AND mauta_cenaden BETWEEN 1 AND 300 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:37:10 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = 'FIAT' AND mauta_cenaden BETWEEN 1 AND 361 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:37:11 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = 'FIAT' AND mauta_cenaden BETWEEN 1 AND 412 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:37:12 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = 'FIAT' AND mauta_cenaden BETWEEN 1 AND 349 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 03:37:26 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 349 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 09:36:01 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 306 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 09:36:05 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 306 AND `mauta_automat` = '1'
+			 LIMIT 10
+		
+07-02-2021 09:36:08 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE mauta_cenaden BETWEEN 1 AND 306 AND `mauta_automat` = '0'
+			 LIMIT 10
+		
+07-02-2021 09:36:11 countposts 
+		SELECT post_title,post_content,PM1.mauta_kategorie,PM1.mauta_znacka,PM1.mauta_cenaden,PM1.mauta_automat  FROM
+		(SELECT post_title,post_content 
+			,MAX(CASE WHEN pm1.meta_key = 'mauta_kategorie' then pm1.meta_value ELSE NULL END) as mauta_kategorie,MAX(CASE WHEN pm1.meta_key = 'mauta_znacka' then pm1.meta_value ELSE NULL END) as mauta_znacka,MAX(CASE WHEN pm1.meta_key = 'mauta_cenaden' then pm1.meta_value ELSE NULL END) as mauta_cenaden,MAX(CASE WHEN pm1.meta_key = 'mauta_automat' then pm1.meta_value ELSE NULL END) as mauta_automat
+			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
+			WHERE post_id=id 
+			AND post_status like 'publish' 
+			AND post_type like 'mauta'			
+			GROUP BY ID, post_title
+			) AS PM1
+			 WHERE `mauta_znacka` = 'Škoda' AND mauta_cenaden BETWEEN 1 AND 306 AND `mauta_automat` = '0'
+			 LIMIT 10
+		

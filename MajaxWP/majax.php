@@ -7,7 +7,7 @@ Class Majax {
 	private $ajaxHandler;
 	function __construct() {
 		spl_autoload_register([$this,"mLoadClass"]);
-		if (MAJAX_SHORT) $this->ajaxHandler=new MajaxHandlerShort(); //shortinit lightweight version
+		if (MAJAX_FAST > 1) $this->ajaxHandler=new MajaxHandlerShort(); //shortinit lightweight version
 		else $this->ajaxHandler=new MajaxHandler(); //ajax-admin version
 		$this->ajaxHandler->register();						
 		

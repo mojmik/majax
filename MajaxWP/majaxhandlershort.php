@@ -28,8 +28,9 @@ Class MajaxHandlerShort {
 	}
 	
 	private function get_ajax_data() {
-		if (MAJAX_SHORT_2==true) $ajaxPhp="ajaxsupershort.php";
-		else $ajaxPhp="ajaxshort.php";
+		if (MAJAX_FAST==4) $ajaxPhp="ajaxsupershort.php";
+		if (MAJAX_FAST==3) $ajaxPhp="ajaxshort.php";
+		if (MAJAX_FAST==2) $ajaxPhp="ajaxnotsoshort.php";		
 				
         return array(
 			'ajax_url' =>  MAJAX_PLUGIN_URL . $ajaxPhp,

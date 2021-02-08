@@ -46,17 +46,14 @@ class Db {
 	}	
 }
 
+require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfields.php');
+require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
 
-Db::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-$rows=Db::getRows("SELECT * FROM wp_posts WHERE post_type like 'mauta' LIMIT 10");
-
 $renderer = new MajaxRender(false);
+$query=$renderer->buildQuerySQL();
+
+Db::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+$rows=Db::getRows($query);
 $renderer->showRows($rows);
-/*
-check_ajax_referer(MajaxHandlerShort::NONCE,'security');
-$action=$_POST["action"];
-if ($action=="count") $renderer->filter_count_results();
-else $renderer->filter_projects_continuous();
-*/
 
