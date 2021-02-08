@@ -78,7 +78,7 @@ Class Majax {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$query = "DROP TABLE `$table_name`";   	
-		$result = mysqli_query($wpdb->dbh,$query);
+		mysqli_query($wpdb->dbh,$query);
 		
 		$sql = "CREATE TABLE $table_name (
 		  id mediumint(9) NOT NULL AUTO_INCREMENT,	
