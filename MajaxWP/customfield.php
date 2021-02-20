@@ -3,7 +3,7 @@ namespace MajaxWP;
 
 class CustomField {
  
-	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing") {
+	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing",$icon="") {
 	 $this->name=$name;	 
 	 $this->value=$value;	 
 	 $this->type=$type;	 
@@ -12,6 +12,7 @@ class CustomField {
 	 $this->valMin=$valMin;	
 	 $this->valMax=$valMax;	
 	 $this->postType=$postType;  
+	 $this->icon=$icon;  
 	}
 	public function outName() {
 		return "{$this->name}";

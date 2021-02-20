@@ -91,6 +91,8 @@ Class Majax {
 		  valMax text,
 		  postType tinytext,
 		  filterorder smallint,
+		  displayorder smallint,
+		  icon text,
 		  PRIMARY KEY  (id)
 		) $charset_collate;";
 		

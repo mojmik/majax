@@ -123,9 +123,6 @@ const majaxRender = {
 
 const majaxPrc = {
 	ajaxSeq:0,
-	loadCounters: function() {
-		//this.runAjax(false);	
-	},
 	runAjax: function(firingElement) { 
 		var ajaxPar=majaxPrc.getAjaxParams(jQuery(firingElement));	 
 		
@@ -265,11 +262,9 @@ const majaxPrc = {
 		//fire event handlers	
 		jQuery('.majax-select').on('change', function() {				
 				majaxPrc.runAjax(this);
-				majaxPrc.loadCounters();
 		});
 		jQuery('.majax-fireinputs').on('change', function() {	
 				majaxPrc.runAjax(this);
-				majaxPrc.loadCounters();
 		});
 		
 		//select2
@@ -280,9 +275,7 @@ const majaxPrc = {
 		
 		//sliders
 		majaxSlider.initSliders(); 
-	
-		//load counts
-		majaxPrc.loadCounters();
+			
 	}); 
 })();
 

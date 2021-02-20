@@ -36,7 +36,7 @@ class CustomFields {
 	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields`";
 	$load=false;
 	foreach( $wpdb->get_results($query) as $key => $row) {
-		$this->fieldsList[] = new CustomField($row->name,$row->value,$row->type,$row->title,$row->compare,$row->valMin,$row->valMax,$row->postType);
+		$this->fieldsList[] = new CustomField($row->name,$row->value,$row->type,$row->title,$row->compare,$row->valMin,$row->valMax,$row->postType,$row->icon);
 		$load=true;
 	}	
 	return $load;

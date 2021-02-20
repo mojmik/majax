@@ -156,17 +156,17 @@ Class MajaxRender {
 		$this->logWrite($out);
 		return $out;					
 	}
+	function buildInit() {
+		$row=[];
+		$row["buildInit"]=1;
+		foreach ($this->fields->getList() as $field) {	
+			$row[$field->outName()]["icon"]="icon:".$field->icon;
+		}
+		return $row;	
+	}
 	function buildCounts($rows) {
 		$out=[];
 		$c=[];
-		//row["mauta_znacka"]["FIAT"]=5;
-
-		//nastavit nulovy checkboxy
-		/*
-		foreach ($this->fields->getList() as $field) {			
-			$c[$field->outName()]["1"]=0;	
-		}
-		*/
 		$out[]=["meta_key" => "clearall", "meta_value" => "clearall", "count" => "0", "post_title" => "" ];
 
 		foreach ($rows as $row) {
@@ -197,20 +197,20 @@ Class MajaxRender {
 		$n=0;		
 		foreach ($rows as $row) {
 			if ($limit>0 && $n>$limit) break;
-			if ($custTitle) { 
+			if ($custTitle=="majaxcounts") { 
 				$row["title"]=$custTitle;
 				$this->logWrite("countitem ".json_encode($row));
 				echo json_encode($row).PHP_EOL;				
 			}
-			else echo $this->buildItem($row).PHP_EOL;			
+			else {
+				 if ($n==0) {
+					echo json_encode($this->buildInit()).PHP_EOL;					 
+				 }
+				 echo $this->buildItem($row).PHP_EOL;				
+				 
+			} 
 			flush();
 			ob_flush();
-			
-			/*
-			wp_send_json($ajaxPost);
-			flush();
-			ob_flush();
-			*/
 			session_write_close();
 			if ($delayBetweenPostsSeconds>0) usleep($delayBetweenPostsSeconds*1000000);	
 			$n++;
@@ -221,49 +221,7 @@ Class MajaxRender {
 		$response=new StdClass();
 		return $response;
 	}
-	function filter_rows_continuous() {
-	  $delayBetweenPostsSeconds=0.5;		  
-	  $response=$this->createResponse();
-	  //read posts count
-	  //$this->filter_count_results(true);	    
 
-	  //tohle natahuje data pro ajax jeden post po jednom, vraci json
-	  $ajaxposts = new \WP_Query($this->buildQuery());
-	  //todo seskupovani podle typu/modelu, pokud bude vic vysledku	  
-	  //ukazani kolik je vysledku kazde option	  
-	  if($ajaxposts->have_posts()) {		
-		$this->logWrite("posts found");
-		while($ajaxposts->have_posts()) {
-		  $ajaxposts->the_post();	  
-		  $response->title=get_the_title()."id:".get_the_id();
-		  $response->content=get_the_title();
-		  $response->url=get_the_permalink();	
-		  $response->meta="transmission:".get_post_meta(get_the_id(),"mauta_automat",true)."".get_post_meta(get_the_id(),"hp_vendor",true);	
-		
-		  echo json_encode($response).PHP_EOL;
-		  flush();
-		  ob_flush();
-		 
-		  
-		  /*
-		  wp_send_json($ajaxPost);
-		  flush();
-		  ob_flush();
-		  */
-		  session_write_close();
-		  usleep($delayBetweenPostsSeconds*1000000);
-		}
-		exit;
-	  } else {	
-		$response->title="majaxnone";
-		$response->content="no results";
-		$this->logWrite("no response");
-		echo json_encode($response);
-		flush();
-		ob_flush();
-	    exit;
-	  }
-	}
 	function sendBlankResponse() {
 		$response=$this->createResponse();
 		$response->title="neco2342";	

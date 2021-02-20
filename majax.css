@@ -1,4 +1,4 @@
-@animation-duration: 0.25s;
+
 .majaxout {  
 	display:none; 
 	padding:5px;
@@ -44,6 +44,7 @@
 .majax-loader svg {
   animation: spin 0.5s linear infinite;
 }
+
 @keyframes hide {
   from {
     opacity: 1;
