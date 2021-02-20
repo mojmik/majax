@@ -37,7 +37,7 @@ class Db {
 	public static function getRows($query, $params = array())	{
 		$out = self::$dbconn->prepare($query);
 		$out->execute($params);
-		return $out->fetchAll();
+		return $out->fetchAll(\PDO::FETCH_ASSOC);
 	}
 	public static function getRow($query, $params = array())	{
 		$out = self::$dbconn->prepare($query);
@@ -49,11 +49,30 @@ class Db {
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfields.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
+require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxitem.php');
 
 $renderer = new MajaxRender(false);
-$query=$renderer->buildQuerySQL();
-
 Db::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-$rows=Db::getRows($query);
-$renderer->showRows($rows);
+
+$action=$_POST["action"];
+if ($action=="filter_rows") {
+	/*
+	$query=$renderer->buildQueryCount();
+    $rows=Db::getRows($query);
+    $renderer->showRows($rows,0,"majaxcounts");
+	*/
+
+    $query=$renderer->buildQuerySQL();
+	$rows=Db::getRows($query);
+	$countsRows=$renderer->buildCounts($rows);	
+	$renderer->showRows($countsRows,0,"majaxcounts",0);
+	$renderer->showRows($rows);		
+	exit;
+}
+if ($action=="filter_count_results") {
+    $query=$renderer->buildQueryCount();
+    $rows=Db::getRows($query);
+    $renderer->showRows($rows,0,"majaxcounts");
+}
+
 

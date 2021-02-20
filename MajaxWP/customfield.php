@@ -3,7 +3,7 @@ namespace MajaxWP;
 
 class CustomField {
  
-	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing") {
+	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing",$icon="") {
 	 $this->name=$name;	 
 	 $this->value=$value;	 
 	 $this->type=$type;	 
@@ -12,6 +12,7 @@ class CustomField {
 	 $this->valMin=$valMin;	
 	 $this->valMax=$valMax;	
 	 $this->postType=$postType;  
+	 $this->icon=$icon;  
 	}
 	public function outName() {
 		return "{$this->name}";
@@ -44,13 +45,13 @@ class CustomField {
 		else if ($this->compare==">") {
 		   return "<label {$labelFor}>{$this->title}</label>
 			   <div class='sliderrng' id='majax-slider-".urlencode($this->name)."'></div>
-			   <input class='sliderval' type='text' name='".$this->name."' data-group='majax-fields' data-mslider='majax-slider-".urlencode($this->name)."' id='custField".urlencode($this->name)."'></input>					
+			   <input class='sliderval' type='text' name='".$this->name."' data-group='majax-fields' data-mslider='majax-slider-".urlencode($this->name)."' id='custField".urlencode($this->name)."' />					
 			   "; 
 		}
 		else if ($this->type=="bool") {
-		   return "<label {$labelFor}>{$this->title}</label><input class='majax-fireinputs' type='checkbox' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."'></input>";	 
+		   return "<label {$labelFor}>{$this->title}</label><input class='majax-fireinputs' type='checkbox' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."' />";	 
 		}
-		return "<label {$labelFor}>{$this->title}</label><input class='majax-fireinputs' type='text' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."'></input>";
+		return "<label {$labelFor}>{$this->title}</label><input class='majax-fireinputs' type='text' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."' />";
 	}
 	public function initValues() {
 	   global $wpdb;
@@ -151,6 +152,39 @@ class CustomField {
 				   );
 			   }
 	}
+	public function checkValueInField($row) {
+		//not used		
+		$rowVal=$row[$this->outName()];
+		$val=$_POST[$this->name];
+		if ($val=="") {
+			return true;	
+		}
+		$val=filter_var($val, FILTER_SANITIZE_STRING);
+		if (strpos($val,"|")>0) {
+			$vals=explode("|",$val);
+			if ($this->typeIs("NUMERIC")) { 				 
+				 return ($rowVal>=$vals[0] && $rowVal<=$vals[1]);
+			} else {			
+				foreach ($vals as $v) {		
+				 if ($v===$rowVal) return true;			
+				}
+			}				
+		}
+		else if ($this->typeIs("bool")) {				
+			if ($val=="on" || $val=="1") $val="1";				
+			else $val="0";
+			if ($val===$rowVal) return true;	
+		}
+		else {				
+			//single value
+			if ($this->compare == ">") return ($rowVal > $val);
+			if ($this->compare == "<") return ($rowVal < $val);
+			if ($this->compare == "=") return ($rowVal == $val);
+			if ($this->compare == "<=") return ($rowVal <= $val);
+			if ($this->compare == ">=") return ($rowVal >= $val);
+			return ($rowVal == $val);		
+		}
+	}
 	public function getFieldFilterSQL() {
 		$val=$_POST[$this->name];			   
 		if ($val=="") {
@@ -159,7 +193,6 @@ class CustomField {
 		$val=filter_var($val, FILTER_SANITIZE_STRING);
 		if (strpos($val,"|")>0) {
 			//multiple values in select field
-			$compare="IN";	//multiple values selection
 			$vals=explode("|",$val);
 
 			if ($this->typeIs("NUMERIC")) { 				 
@@ -169,7 +202,7 @@ class CustomField {
 				$n=0;
 				foreach ($vals as $v) {
 				 if ($n>0) $valsStr.=",";
-				 $valsStr="'".$v."'";	
+				 $valsStr.="'".$v."'";	
 				 $n++;
 				}
 				return "`{$this->name}` IN ({$valsStr})";
@@ -177,7 +210,10 @@ class CustomField {
 		}
 		else if ($this->typeIs("bool")) {				
 			if ($val=="on" || $val=="1") $val="1";				
-			else $val="0";
+			else { 
+				//not checked value => doesn't matter, select all
+				return "";
+			}
 			return "`{$this->name}` = '{$val}'";
 		}
 		else {				

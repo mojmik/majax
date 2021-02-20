@@ -17,8 +17,8 @@ Class MajaxHandler {
 		
 		$this->ajaxRender->regShortCodes();
 		
-		add_action('wp_ajax_filter_projects', [$this,'handleShow'] );
-		add_action('wp_ajax_nopriv_filter_projects', [$this,'handleShow'] );
+		add_action('wp_ajax_filter_rows', [$this,'handleShow'] );
+		add_action('wp_ajax_nopriv_filter_rows', [$this,'handleShow'] );
 		
 		add_action('wp_ajax_filter_count_results', [$this,'handleCount'] );
 		add_action('wp_ajax_nopriv_filter_count_results', [$this,'handleCount'] );
@@ -49,7 +49,7 @@ Class MajaxHandler {
 	private function handle($action="")    {
         
         check_ajax_referer(MajaxHandler::NONCE,'security');
-		if ($action=="show") $this->ajaxRender->filter_projects_continuous();
+		if ($action=="show") $this->ajaxRender->filter_rows_continuous();
 		if ($action=="count") $this->ajaxRender->filter_count_results();
         
         die();

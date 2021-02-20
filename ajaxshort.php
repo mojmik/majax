@@ -22,6 +22,7 @@ require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxhandlershort.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfields.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
+require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxitem.php');
 $renderer = new MajaxRender(false);
 
 $checkNonce=false;
