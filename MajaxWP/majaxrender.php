@@ -110,6 +110,7 @@ Class MajaxRender {
 	function buildQuerySQL() {	
 		//get all posts and their metas			
 		$limit=" LIMIT 10";		
+		$limit=""; //need all rows for counts
 		$mType = filter_var($_POST['type'], FILTER_SANITIZE_STRING); 
 		$col="";
 		$filters="";
@@ -140,22 +141,70 @@ Class MajaxRender {
 			$filters
 			$limit
 		";
-		$this->logWrite("countposts {$query}");
+		$this->logWrite("queryitem {$query}");
 
 		return $query;
 	}	
-	function showRows($rows) {
-		$delayBetweenPostsSeconds=0.5;
-		$ajaxPost=new StdClass();
+	function buildItem($row) {
+		$ajaxItem=new MajaxItem();
+		$ajaxItem->addField("title",$row["post_title"])->addField("id",$row["ID"])
+		->addField("content",$row["post_content"])->addField("url",$row["slug"]);
+		foreach ($this->fields->getList() as $field) {
+		 $ajaxItem->addMeta($field->outName(),$row[$field->outName()]);
+		}	
+		$out=$ajaxItem->expose();
+		$this->logWrite($out);
+		return $out;					
+	}
+	function buildCounts($rows) {
+		$out=[];
+		$c=[];
+		//row["mauta_znacka"]["FIAT"]=5;
+
+		//nastavit nulovy checkboxy
+		/*
+		foreach ($this->fields->getList() as $field) {			
+			$c[$field->outName()]["1"]=0;	
+		}
+		*/
+		$out[]=["meta_key" => "clearall", "meta_value" => "clearall", "count" => "0", "post_title" => "" ];
+
 		foreach ($rows as $row) {
-			$ajaxPost->title=$row["post_title"]."id:".$row["ID"];
-			$ajaxPost->content=$row["post_content"];
-			$ajaxPost->url="url";	
-			$ajaxPost->meta="transmission:";
-			echo json_encode($ajaxPost).PHP_EOL;
+			foreach ($this->fields->getList() as $field) {			
+				$val=$row[$field->outName()];
+				$c[$field->outName()][$val]++;
+			}	
+			
+		}
+		foreach ($this->fields->getList() as $field) {			
+			$fieldName=$field->outName();						
+			foreach ($c[$fieldName] as $val => $cnt) {	
+				$this->logWrite("iter:{$fieldName} {$val} {$cnt} ");				
+					$m["meta_key"]=$fieldName;
+					$m["meta_value"]=$val;
+					$m["count"]=$cnt;
+					$m["post_title"]="counts";
+					$out[]=$m;
+			}
+		}	
+		
+		$out[]=["meta_key" => "endall", "meta_value" => "endall", "count" => "0", "post_title" => "" ];
+
+		$this->logWrite("count meta rows:".count($out));
+		return $out;
+	}
+	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=10) {
+		$n=0;		
+		foreach ($rows as $row) {
+			if ($limit>0 && $n>$limit) break;
+			if ($custTitle) { 
+				$row["title"]=$custTitle;
+				$this->logWrite("countitem ".json_encode($row));
+				echo json_encode($row).PHP_EOL;				
+			}
+			else echo $this->buildItem($row).PHP_EOL;			
 			flush();
 			ob_flush();
-		
 			
 			/*
 			wp_send_json($ajaxPost);
@@ -163,15 +212,16 @@ Class MajaxRender {
 			ob_flush();
 			*/
 			session_write_close();
-			usleep($delayBetweenPostsSeconds*1000000);	
+			if ($delayBetweenPostsSeconds>0) usleep($delayBetweenPostsSeconds*1000000);	
+			$n++;
 		}	
-		exit;	
+		//exit;	
 	}
 	private function createResponse() {
 		$response=new StdClass();
 		return $response;
 	}
-	function filter_projects_continuous() {
+	function filter_rows_continuous() {
 	  $delayBetweenPostsSeconds=0.5;		  
 	  $response=$this->createResponse();
 	  //read posts count
@@ -223,19 +273,9 @@ Class MajaxRender {
 		ob_flush();		  
 		exit;
 	}
-	function filter_count_results($doExit=false) {
-		//send blank - debug
-		$response=$this->createResponse();
-		$this->sendBlankResponse();
-		//<-
-		global $wpdb;
-		$delayBetweenPostsSeconds=0.5;	
+	function buildQueryCount() {
 		$n=0;
 		$filter="";
-
-		$response->title="postcounts";	
-		$response->content="postcounts";	
-
 		foreach ($this->fields->getList() as $field) {
 			if ($n>0) $filter .= " OR ";
 			$filter .= "meta_key = '{$field->outName()}'";			 			
@@ -245,7 +285,21 @@ Class MajaxRender {
 		WHERE ($filter) 
 		AND post_id=id AND post_status like 'publish' 
 		GROUP BY meta_value ORDER BY meta_value ASC";
-		$this->logWrite("countposts {$query}");
+		$this->logWrite("querycountposts {$query}");
+		return $query;
+	}
+	function filter_count_results($doExit=false) {
+		//send blank - debug
+		$response=$this->createResponse();
+		//<-
+		global $wpdb;
+		$delayBetweenPostsSeconds=0.5;	
+		
+
+		$response->title="postcounts";	
+		$response->content="postcounts";	
+
+		
 
 		//ukazani kolik je vysledku kazde option	
 		/*
@@ -253,6 +307,7 @@ Class MajaxRender {
 			$response->content=$row->meta_key;	
 		  }
 		*/
+		$query=$this->buildQueryCount();
 		$response->postcounts=$wpdb->get_results($query); 
 		//$response->content=$wpdb->get_results($query); 
 		

@@ -70,5 +70,5 @@ $renderer = new MajaxRender(false);
 check_ajax_referer(MajaxHandlerShort::NONCE,'security');
 $action=$_POST["action"];
 if ($action=="count") $renderer->filter_count_results();
-else $renderer->filter_projects_continuous();
+else $renderer->filter_rows_continuous();
 
