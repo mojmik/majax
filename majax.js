@@ -33,7 +33,28 @@ const mCounts = {
 		return this.metaCounts[key]["rowsCount"]=this.metaCounts[key]["rowsCount"];
 	  }
 	  
-  }
+}
+const metaMisc = {
+ icons: [],
+ valMin: [],
+ valMax: [],
+ addMetaMisc: function(misc) {
+	for (let key in misc) {
+		this.icons[key]=misc[key]["icon"];
+		this.valMin[key]=misc[key]["min"];
+		this.valMax[key]=misc[key]["max"];
+	}
+ },
+ getIcon: function(key) {
+	return this.icons[key];
+ },
+ getMin: function(key) {
+	return this.valMin[key];
+ },
+ getMax: function(key) {
+	return this.valMax[key];
+ }
+}
 
 const majaxRender = {
 	majaxLoader: () => `
@@ -57,12 +78,24 @@ const majaxRender = {
 	postTemplate: (id,title,content,url,meta) => { 
 		let metaOut="";
 		for (const property in meta) {
-			metaOut=metaOut + `<div style='background:#ccc;'>${property} ${meta[property]}</div>`;
+			let metaIcon=metaMisc.getIcon(property);
+			if (typeof metaIcon!== 'undefined') metaIcon=`<img src='${metaIcon}' />`;
+			else metaIcon=`<span>${property}</span>`;
+			metaOut=metaOut + `<div>${metaIcon} ${meta[property]}</div>`;
 		}
 		return(
 		`
 		<div class='majaxout' id='majaxout${id}'>
 		title ${title} ${content} meta ${metaOut}
+		</div>
+		`);
+	},
+	postTemplateEmpty: (id,content) => { 
+		let metaOut="";	
+		return(
+		`
+		<div class='majaxout' id='majaxout${id}'>
+		${content}
 		</div>
 		`);
 	},
@@ -93,7 +126,9 @@ const majaxRender = {
 				}
 			}	
 			//update selects
-			jQuery(".majax-select").trigger('change.select2');			
+			jQuery(".majax-select").trigger('change.select2');	
+			
+			
 			return;
 		}
 		mCounts.addMetaCount(mStrings.mNormalize(meta["meta_key"]),mStrings.mNormalize(meta["meta_value"]),meta["count"]);
@@ -108,6 +143,17 @@ const majaxRender = {
 	},
 	drawResultsFunction: (thisId,jsonObj) => {	
 		if (jsonObj.title=="majaxcounts") thisHtml=majaxRender.postTemplateCounts(thisId,jsonObj);
+		else if (jsonObj.title=="buildInit") {
+			metaMisc.addMetaMisc(jsonObj.misc);
+			//update sliders min-max
+			majaxSlider.initSlidersMinMax(); 
+		}
+		else if (jsonObj.title=="empty") {
+			thisHtml=majaxRender.postTemplateEmpty(thisId,jsonObj.content);
+			jQuery('#majaxmain').append(thisHtml);
+			jQuery("#majaxout"+thisId).fadeIn("slow");														
+			jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+		}
 		else { 
 			thisHtml=majaxRender.postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
 			jQuery('#majaxmain').append(thisHtml);
@@ -268,10 +314,13 @@ const majaxPrc = {
 		});
 		
 		//select2
-		jQuery(".majax-select").select2({
-			templateResult: majaxSelect.formatState,
-			templateSelection: majaxSelect.formatState
-		});
+		let sliders2 =jQuery(".majax-select");
+		if (sliders2.length>0) {
+			sliders2.select2({
+				templateResult: majaxSelect.formatState,
+				templateSelection: majaxSelect.formatState
+			});
+		}
 		
 		//sliders
 		majaxSlider.initSliders(); 
@@ -322,6 +371,12 @@ const majaxSlider =  {
 	formatSliderVal: (val1 , val2=0, dir=1) => {
 		const mask="$"	+ val1 + " - " + "$" + val2;	
 		if (dir==0) return "$"	+ val1 + " - " + "$" + val2;
+		else if (dir==1) return ""	+ val1 + ",- Kč - " + "" + val2 + ",- Kč";
+		else if (dir==2) return ""	+ val1 + " - " + "" + val2 + "";
+		else if (dir==3) return ""	+ val1 + "EUR - " + "" + val2 + "EUR";
+		else if (dir!=-1) {
+		 return dir.replace("%1",val1) + " - " + dir.replace("%1",val2);
+		}
 		
 		//let's take 2 numbers
 		const rex = /-?\d(?:[,\d]*\.\d+|[,\d]*)/g;
@@ -331,6 +386,23 @@ const majaxSlider =  {
 		   out+=match[0];
 		}
 		return out;
+	},
+	initSlidersMinMax: function() {		
+		var fs=this.formatSliderVal;
+		jQuery('input[data-mslider]').each(function(index) {
+			var inputId=this.id;
+			let sliderId=jQuery(this).attr('data-mslider');
+			let sliderRange=jQuery('#'+sliderId+'');			
+			let inputName=jQuery(this).attr('name');
+			let valMin=Number(metaMisc.getMin(inputName));
+			let valMax=Number(metaMisc.getMax(inputName));
+			if (!isNaN(valMin) && !isNaN(valMax)) {			
+				jQuery(sliderRange).slider("option", "values",[valMin,valMax]);
+				jQuery(sliderRange).slider("option", "min",valMin);
+				jQuery(sliderRange).slider("option", "max",valMax);
+				jQuery(this).val(fs(valMin,valMax,"%1,- Kč"));
+			}			
+		});
 	},
 	initSliders: function() {
 		var fs=this.formatSliderVal;		
@@ -342,10 +414,10 @@ const majaxSlider =  {
 			jQuery(sliderRange).slider({
 			range: true,
 			min: 0,
-			max: 500,
-			values: [ 1, 300 ],
+			max: 5000,
+			values: [ 1, 5000 ],
 			slide: function( event, ui ) {
-			jQuery('#'+inputId).val(fs(ui.values[ 0 ],ui.values[ 1 ],0));
+			jQuery('#'+inputId).val(fs(ui.values[ 0 ],ui.values[ 1 ],0));			
 			}
 		});
 		sliderRange.on('slidestop',function(e) {

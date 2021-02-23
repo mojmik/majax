@@ -66,9 +66,8 @@ require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxhandlershort.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfields.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
-$renderer = new MajaxRender(false);
+$renderer = new MajaxWPRender(false);
 check_ajax_referer(MajaxHandlerShort::NONCE,'security');
 $action=$_POST["action"];
-if ($action=="count") $renderer->filter_count_results();
-else $renderer->filter_rows_continuous();
+$renderer->filter_rows_continuous();
 

@@ -3,7 +3,7 @@ namespace MajaxWP;
 
 use stdClass;
 
-Class MajaxRender {	
+Class MajaxWPRender {	
 
 
 	function __construct($loadFields=true) {		
@@ -34,6 +34,9 @@ Class MajaxRender {
 		add_shortcode('majaxcontent', [$this,'majax_print_content'] );
 	}
 	
+	function initFields() {
+		echo $this->fields->initFields();
+	}
 	function majax_print_filter($atts = []) {
 		 $atts = array_change_key_case( (array) $atts, CASE_LOWER );
 		 if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute		
@@ -44,7 +47,7 @@ Class MajaxRender {
 			<div class='majaxfiltercontainer'>			
 					<input type='hidden' name='type' value='<?= $type?>' />
 				<?php		
-				foreach ($this->fields->getFieldsFiltered() as $fields) {
+				foreach ($this->fields->getList() as $fields) {
 				  ?> <div class='majaxfilterbox'> <?php  
 							echo $fields->outFieldFilter();	
 				  ?> </div> <?php
@@ -114,8 +117,8 @@ Class MajaxRender {
 		$colSelect="";
 		foreach ($this->fields->getList() as $field) {			
 			$fieldName=$field->outName();		
-			$col.=",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as `$fieldName`";			
-			$colSelect.=",PM1.`$fieldName`";
+			$col.=",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as $fieldName";			
+			$colSelect.=",PM1.$fieldName";
 			$filter=$field->getFieldFilterSQL();
 			if ($filter) {
 				if ($filters) $filters.=" AND ";
@@ -155,13 +158,10 @@ Class MajaxRender {
 	}
 	function buildInit() {
 		$row=[];
-		$row["title"]="buildInit";
+		$row["buildInit"]=1;
 
 		foreach ($this->fields->getList() as $field) {								
-			$row["misc"][$field->outName()]["icon"]=$field->icon;
-			$row["misc"][$field->outName()]["fieldformat"]=$field->fieldformat;
-			$row["misc"][$field->outName()]["min"]=$field->valMin;
-			$row["misc"][$field->outName()]["max"]=$field->valMax;			
+			$row[$field->outName()]["icon"]=$field->icon;
 		}
 		return $row;	
 	}
@@ -195,10 +195,7 @@ Class MajaxRender {
 		return $out;
 	}
 	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=10) {
-		$n=0;	
-		if ($custTitle != "majaxcounts" && count($rows)<1)	 {
-			$this->sendBlankResponse();
-		}
+		$n=0;		
 		foreach ($rows as $row) {
 			if ($limit>0 && $n>$limit) break;
 			if ($custTitle=="majaxcounts") { 
@@ -228,9 +225,9 @@ Class MajaxRender {
 
 	function sendBlankResponse() {
 		$response=$this->createResponse();
-		$response->title="empty";	
-		$response->content="Sorry, no results.";
-		echo json_encode($response).PHP_EOL;
+		$response->title="neco2342";	
+		$response->content="neco345643";
+		echo json_encode($response);
 		flush();
 		ob_flush();		  
 		exit;
@@ -238,5 +235,40 @@ Class MajaxRender {
 
 	function logWrite($val) {
 	 file_put_contents(plugin_dir_path( __FILE__ ) . "log.txt",date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
-	}
+    }
+    function filter_rows_continuous() {
+        $delayBetweenPostsSeconds=0.5;	
+        $ajaxPost=new StdClass();
+        $response=new StdClass();
+        //tohle natahuje data pro ajax jeden post po jednom, vraci json
+                
+        $ajaxposts = new \WP_Query($this->buildQuery());
+        //todo seskupovani podle typu/modelu, pokud bude vic vysledku	  
+        //ukazani kolik je vysledku kazde option
+        if($ajaxposts->have_posts()) {
+          $this->logWrite("posts found");
+          while($ajaxposts->have_posts()) {
+            $ajaxposts->the_post();	  
+            $ajaxPost->title=get_the_title()."id:".get_the_id();
+            $ajaxPost->content=get_the_title();
+            $ajaxPost->url=get_the_permalink();	
+            $ajaxPost->meta="transmission:".get_post_meta(get_the_id(),"mauta_automat",true)."".get_post_meta(get_the_id(),"hp_vendor",true);	
+            echo json_encode($ajaxPost);
+            flush();
+            ob_flush();
+            usleep($delayBetweenPostsSeconds*1000000);
+          }
+          exit;
+        } else {	
+          $response->title="majaxnone";
+          $response->content="no results";
+          $this->logWrite("no response");
+          echo json_encode($response);
+          flush();
+          ob_flush();
+          exit;
+        }
+      }
+
+  
 }

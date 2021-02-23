@@ -93,6 +93,7 @@ Class Majax {
 		  filterorder smallint,
 		  displayorder smallint,
 		  icon text,
+		  fieldformat text,
 		  PRIMARY KEY  (id)
 		) $charset_collate;";
 		

@@ -51,7 +51,7 @@ require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
 require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxitem.php');
 
-$renderer = new MajaxRender(false);
+$renderer = new MajaxRender(true); //use false pro preloading hardcoded fields (save one sql query)
 Db::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 
 $action=$_POST["action"];
@@ -68,11 +68,6 @@ if ($action=="filter_rows") {
 	$renderer->showRows($countsRows,0,"majaxcounts",0);
 	$renderer->showRows($rows);		
 	exit;
-}
-if ($action=="filter_count_results") {
-    $query=$renderer->buildQueryCount();
-    $rows=Db::getRows($query);
-    $renderer->showRows($rows,0,"majaxcounts");
 }
 
 

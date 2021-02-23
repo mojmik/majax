@@ -3,7 +3,7 @@ namespace MajaxWP;
 
 class CustomField {
  
-	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing",$icon="") {
+	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing",$icon="",$filterOrder="",$displayOrder="",$fieldformat="") {
 	 $this->name=$name;	 
 	 $this->value=$value;	 
 	 $this->type=$type;	 
@@ -12,13 +12,13 @@ class CustomField {
 	 $this->valMin=$valMin;	
 	 $this->valMax=$valMax;	
 	 $this->postType=$postType;  
-	 $this->icon=$icon;  
+	 $this->icon=$icon;  	 
+	 $this->fieldformat=$fieldformat;  	 
+	 $this->filterOrder=$filterOrder;
+	 $this->displayOrder=$displayOrder;
 	}
 	public function outName() {
 		return "{$this->name}";
-	}
-	public function outField() {
-		return "{$this->name};{$this->value};{$this->type};{$this->compare}";
 	}
 	public function outSelectOptions() {
 	   $out="";
@@ -73,41 +73,7 @@ class CustomField {
 	   
 	   $this->value=$vals;
 	}
-	public function initValMin() {
-	   global $wpdb;
-	   
-	   $query="SELECT MIN(`meta_value`) AS min FROM ".$wpdb->prefix."postmeta AS pm, ".$wpdb->prefix."posts AS po 
-	   WHERE pm.meta_key like '{$this->name}' AND po.post_status = 'publish' 
-	   AND po.post_type = '{$this->postType}'";
-	   
-	   $query="SELECT MIN(`meta_value`) AS min FROM ".$wpdb->prefix."postmeta AS pm 
-	   WHERE pm.meta_key like '{$this->name}'";
-	   
-	   $min = $wpdb->get_var($query);	 
-	   $this->valMin=$min;
-	   //echo "<br />".$query;
-	}
-	 public function initValMax() {
-	   global $wpdb;
-	   $query = "SELECT MAX(`meta_value`) AS max FROM ".$wpdb->prefix."postmeta AS pm, ".$wpdb->prefix."posts AS po 
-	   WHERE pm.meta_key like '{$this->name}' AND po.post_status = 'publish' 
-	   AND po.post_type = '{$this->postType}'";	
-   
-	   $query = "SELECT MAX(`meta_value`) AS max FROM ".$wpdb->prefix."postmeta AS pm 
-	   WHERE pm.meta_key like '{$this->name}'";	
-	   
-	   $max = $wpdb->get_var($query);	 
-	   $this->valMax=$max;
-	   //echo "<br />".$query;
-	}
-	public function getValMin() {
-	  if ($this->valMin===false) $this->initValMin();
-	  return $this->valMin;
-	}
-	public function getValMax() {
-	  if ($this->valMax===false) $this->initValMax();
-	  return $this->valMax;
-	}
+	
 	public function getValues() {
 	  if ($this->values=="") $this->initValues();
 	  return $this->value;
@@ -196,7 +162,7 @@ class CustomField {
 			$vals=explode("|",$val);
 
 			if ($this->typeIs("NUMERIC")) { 				 
-				 return "{$this->name} BETWEEN {$vals[0]} AND {$vals[1]}";
+				 return "`{$this->name}` BETWEEN {$vals[0]} AND {$vals[1]}";
 			} else {
 				$valsStr="";
 				$n=0;
@@ -226,9 +192,9 @@ class CustomField {
 	  $query = "DELETE FROM `".$wpdb->prefix."majax_fields` WHERE `name` like '{$this->name}';";   
 	  $result = $wpdb->get_results($query);	 
 	  
-	  $query = "INSERT INTO `".$wpdb->prefix."majax_fields` ( `name`, `value`, `type`, `title`, `compare`, `valMin`, `valMax`, `postType`) 
-	   VALUES ('{$this->name}', '{$this->value}', '{$this->type}', '{$this->title}', '{$this->compare}', '{$this->valMin}', '{$this->valMax}', '{$this->postType}');";   
-	  $result = $wpdb->get_results($query);	 
+	  $query = "INSERT INTO `".$wpdb->prefix."majax_fields` ( `name`, `value`, `type`, `title`, `compare`, `valMin`, `valMax`, `postType`, `fitlerorder`, `displayorder`, `icon`, `fieldformat` ) 
+	   VALUES ('{$this->name}', '{$this->value}', '{$this->type}', '{$this->title}', '{$this->compare}', '{$this->valMin}', '{$this->valMax}', '{$this->postType}', '{$this->filterorder}', '{$this->displayorder}', '{$this->icon}'), '{$this->fieldformat}';";   
+	  $wpdb->get_results($query);	 
 	  return "<br />{$this->name} saved $query";
 	}
    }
