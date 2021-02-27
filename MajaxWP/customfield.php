@@ -16,6 +16,7 @@ class CustomField {
 	 $this->fieldformat=$fieldformat;  	 
 	 $this->filterOrder=$filterOrder;
 	 $this->displayOrder=$displayOrder;
+	 $this->fieldformat=$fieldformat;	 
 	}
 	public function outName() {
 		return "{$this->name}";

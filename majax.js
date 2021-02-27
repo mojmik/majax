@@ -35,25 +35,38 @@ const mCounts = {
 	  
 }
 const metaMisc = {
- icons: [],
- valMin: [],
- valMax: [],
- addMetaMisc: function(misc) {
-	for (let key in misc) {
-		this.icons[key]=misc[key]["icon"];
-		this.valMin[key]=misc[key]["min"];
-		this.valMax[key]=misc[key]["max"];
-	}
- },
- getIcon: function(key) {
-	return this.icons[key];
- },
- getMin: function(key) {
-	return this.valMin[key];
- },
- getMax: function(key) {
-	return this.valMax[key];
- }
+	icons: [],
+	valMin: [],
+	valMax: [],
+	fieldformat: [],
+	aktMin:[],
+	aktMax:[],
+	addMetaMisc: function(misc) {
+		for (let key in misc) {
+			this.icons[key]=misc[key]["icon"];
+			this.valMin[key]=misc[key]["min"];
+			this.valMax[key]=misc[key]["max"];
+			this.fieldformat[key]=misc[key]["fieldformat"];
+		}
+	},
+	getIcon: function(key) {
+		return this.icons[key];
+	},
+	getMin: function(key) {
+		return this.valMin[key];
+	},
+	getMax: function(key) {
+		return this.valMax[key];
+	},
+	getFieldFormat: function(key) {
+		return this.fieldformat[key];
+	},
+	setAktMin: function(key,val) {
+		this.aktMin[key]=val;
+	},
+	setAktMax: function(key,val) {
+		this.aktMax[key]=val;
+	}	
 }
 
 const majaxRender = {
@@ -81,12 +94,37 @@ const majaxRender = {
 			let metaIcon=metaMisc.getIcon(property);
 			if (typeof metaIcon!== 'undefined') metaIcon=`<img src='${metaIcon}' />`;
 			else metaIcon=`<span>${property}</span>`;
-			metaOut=metaOut + `<div>${metaIcon} ${meta[property]}</div>`;
+			metaOut=metaOut + `<div class='col meta'>${metaIcon} ${meta[property]}</div>`;
 		}
 		return(
 		`
 		<div class='majaxout' id='majaxout${id}'>
-		title ${title} ${content} meta ${metaOut}
+			<div class='row flex-grow-1'>
+				<div class='col title'>
+					title ${title}
+					${content}
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col meta'>
+					meta
+				</div>				
+				 ${metaOut}
+				
+			</div>
+			<div class='row'>
+				<div class='col-sm-6 price'>
+					cena bez dph
+				</div>
+				<div class='col-sm-6 price'>
+					cena vcetne dph
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col action'>
+					akce
+				</div>
+			</div>
 		</div>
 		`);
 	},
@@ -141,6 +179,12 @@ const majaxRender = {
 		//nastavit vsem checkboxum a dalsim elementum nuly- neni potreba, posilaji se i nuly
 		//jQuery('.counter').text("(0)");
 	},
+	animateMajaxBox: (thisHtml,thisId) => {
+		jQuery('#majaxmain').append(thisHtml);
+		//jQuery("#majaxout"+thisId).fadeIn("slow");														
+		jQuery("#majaxout"+thisId).css("display", "flex").hide().fadeIn("slow");
+		jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+	},
 	drawResultsFunction: (thisId,jsonObj) => {	
 		if (jsonObj.title=="majaxcounts") thisHtml=majaxRender.postTemplateCounts(thisId,jsonObj);
 		else if (jsonObj.title=="buildInit") {
@@ -150,15 +194,11 @@ const majaxRender = {
 		}
 		else if (jsonObj.title=="empty") {
 			thisHtml=majaxRender.postTemplateEmpty(thisId,jsonObj.content);
-			jQuery('#majaxmain').append(thisHtml);
-			jQuery("#majaxout"+thisId).fadeIn("slow");														
-			jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+			majaxRender.animateMajaxBox(thisHtml,thisId);			
 		}
 		else { 
 			thisHtml=majaxRender.postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
-			jQuery('#majaxmain').append(thisHtml);
-			jQuery("#majaxout"+thisId).fadeIn("slow");														
-			jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+			majaxRender.animateMajaxBox(thisHtml,thisId);			
 		}
 	 }
 }
@@ -186,14 +226,9 @@ const majaxPrc = {
 	 var thisId=0;	 
 	 var last_response_len = false;
 	 var actionFunction='filter_rows';
-	 if (varThisObj.length==0) {
-		actionFunction='filter_count_results';
-		//refresh counts
-	 }
-	 else {
+	 if (varThisObj.length!=0) {		
 		var objCategory=varThisObj.data('slug');
-		//draw posts
-		
+		//draw posts		
 	 }
 	 
 	
@@ -264,7 +299,13 @@ const majaxPrc = {
 		 let sliderId=jQuery(this).attr('data-mslider');	 
 		 if (typeof sliderId !== 'undefined') {
 			 //special slider input
-			 outObj.data[obj.name]=majaxSlider.formatSliderVal(obj.value);
+			 let defaultVal = "0 - 1";
+			 if (obj.value != defaultVal) {
+				let inputName=jQuery(this).attr('name');
+				let fieldFormat=metaMisc.getFieldFormat(inputName);
+				fieldFormat = (fieldFormat == "") ? 2 : fieldFormat;
+				outObj.data[obj.name]=majaxSlider.formatSliderVal(obj.value,0,fieldFormat,"fromFormat");
+			 } 
 		 }
 		 else {		
 			//ordinary input
@@ -311,8 +352,7 @@ const majaxPrc = {
 		});
 		jQuery('.majax-fireinputs').on('change', function() {	
 				majaxPrc.runAjax(this);
-		});
-		
+		});		
 		//select2
 		let sliders2 =jQuery(".majax-select");
 		if (sliders2.length>0) {
@@ -320,11 +360,12 @@ const majaxPrc = {
 				templateResult: majaxSelect.formatState,
 				templateSelection: majaxSelect.formatState
 			});
-		}
-		
+		}		
 		//sliders
 		majaxSlider.initSliders(); 
-			
+		
+		//load
+		majaxPrc.runAjax(false);
 	}); 
 })();
 
@@ -368,24 +409,30 @@ const majaxSelect = {
 
 const majaxSlider =  {
 
-	formatSliderVal: (val1 , val2=0, dir=1) => {
-		const mask="$"	+ val1 + " - " + "$" + val2;	
-		if (dir==0) return "$"	+ val1 + " - " + "$" + val2;
-		else if (dir==1) return ""	+ val1 + ",- Kč - " + "" + val2 + ",- Kč";
-		else if (dir==2) return ""	+ val1 + " - " + "" + val2 + "";
-		else if (dir==3) return ""	+ val1 + "EUR - " + "" + val2 + "EUR";
-		else if (dir!=-1) {
-		 return dir.replace("%1",val1) + " - " + dir.replace("%1",val2);
+	formatSliderVal: (val1 , val2=0, format=2, direction="toFormat") => {		
+		if (direction=="toFormat") {			
+			if (format===2) return ""	+ val1 + " - " + "" + val2 + "";
+			else {
+			 return format.replace("%1",val1) + " - " + format.replace("%1",val2);
+			}
 		}
-		
-		//let's take 2 numbers
-		const rex = /-?\d(?:[,\d]*\.\d+|[,\d]*)/g;
-		let out="";
-		while ((match = rex.exec(val1)) !== null) {
-		   if (out!="") out+='|'; 
-		   out+=match[0];
+		else {
+			if (format!==2) {
+				let formatStr=format.replace("%1","");
+				val1=val1.split(formatStr).join(""); //replaceAll added on August2020
+				val1=val1.split(" - ").join("|"); //or use replaceAll
+				return val1;
+			}
+			//convert from format			
+			//let's take 2 numbers
+			const rex = /-?\d(?:[,\d]*\.\d+|[,\d]*)/g;
+			let out="";
+			while ((match = rex.exec(val1)) !== null) {
+			if (out!="") out+='|'; 
+			out+=match[0];
+			}
+			return out;
 		}
-		return out;
 	},
 	initSlidersMinMax: function() {		
 		var fs=this.formatSliderVal;
@@ -396,36 +443,56 @@ const majaxSlider =  {
 			let inputName=jQuery(this).attr('name');
 			let valMin=Number(metaMisc.getMin(inputName));
 			let valMax=Number(metaMisc.getMax(inputName));
-			if (!isNaN(valMin) && !isNaN(valMax)) {			
-				jQuery(sliderRange).slider("option", "values",[valMin,valMax]);
+			let fieldFormat=metaMisc.getFieldFormat(inputName);
+			fieldFormat = (fieldFormat == "") ? 2 : fieldFormat;
+			if (!isNaN(valMin) && !isNaN(valMax)) {	
+				let aktMin=metaMisc.aktMin[inputName];
+				let aktMax=metaMisc.aktMax[inputName];
+				if (typeof aktMin === 'undefined') aktMin=valMin;
+				if (typeof aktMax === 'undefined') aktMax=valMax;				
+				jQuery(sliderRange).slider({
+					range: true,
+					min: valMin,
+					max: valMax,
+					slide: function( event, ui ) {
+						metaMisc.aktMin[inputName]=ui.values[0];
+						metaMisc.aktMax[inputName]=ui.values[1];
+						jQuery('#'+inputId).val(fs(ui.values[ 0 ],ui.values[ 1 ],fieldFormat));			
+					}
+				});	
+				
+				jQuery(sliderRange).slider("option", "values",[aktMin,aktMax]);
 				jQuery(sliderRange).slider("option", "min",valMin);
 				jQuery(sliderRange).slider("option", "max",valMax);
-				jQuery(this).val(fs(valMin,valMax,"%1,- Kč"));
+							
+				jQuery(this).val(fs(aktMin,aktMax,fieldFormat));
 			}			
 		});
 	},
 	initSliders: function() {
-		var fs=this.formatSliderVal;		
-		//initialize numeric sliders
-		jQuery('input[data-mslider]').each(function(index) {
-			var inputId=this.id;
-			let sliderId=jQuery(this).attr('data-mslider');
-			let sliderRange=jQuery('#'+sliderId+'');
-			jQuery(sliderRange).slider({
-			range: true,
-			min: 0,
-			max: 5000,
-			values: [ 1, 5000 ],
-			slide: function( event, ui ) {
-			jQuery('#'+inputId).val(fs(ui.values[ 0 ],ui.values[ 1 ],0));			
-			}
-		});
-		sliderRange.on('slidestop',function(e) {
-			majaxPrc.runAjax(this);
-			//loadCounters();
-		});
-		jQuery(this).val(fs(jQuery(sliderRange).slider( "values", 0 ),jQuery(sliderRange).slider( "values", 1 ),0));
-		})
+			var fs=this.formatSliderVal;		
+			//initialize numeric sliders
+			jQuery('input[data-mslider]').each(function(index) {
+				var inputId=this.id;
+				let sliderId=jQuery(this).attr('data-mslider');
+				let sliderRange=jQuery('#'+sliderId+'');
+				jQuery(sliderRange).slider({
+				range: true,
+				min: 0,
+				max: 1,
+				values: [ 0, 1 ],
+				slide: function( event, ui ) {
+					metaMisc.aktMin[inputName]=ui.values[0];
+					metaMisc.aktMax[inputName]=ui.values[1];
+					jQuery('#'+inputId).val(fs(ui.values[0],ui.values[1],2));			
+				}
+				});
+				sliderRange.on('slidestop',function(e) {			
+					majaxPrc.runAjax(this);
+					//loadCounters();
+				});
+				jQuery(this).val(fs(jQuery(sliderRange).slider( "values", 0 ),jQuery(sliderRange).slider( "values", 1 ),2));
+			})
 	}	
 }
 

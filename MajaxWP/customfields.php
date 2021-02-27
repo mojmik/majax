@@ -3,6 +3,22 @@ namespace MajaxWP;
 
 class CustomFields {
   public $fieldsList=array();
+  public $fieldsRows=array();
+  public function prepare($forceCreateJson) {
+	//recreate fields json		
+	if ($forceCreateJson) {
+	 $this->createJson();	
+	}
+	else {
+		$fieldRows=Caching::cacheRead("fieldsrows");	
+		if (!count($fieldRows))	$this->createJson();		
+		else $this->loadFromRows($fieldRows);
+	}
+  }
+  private function createJson() {
+	$this->loadFromSQL();
+	Caching::cacheWrite("fieldsrows",$this->fieldsRows);
+  }
   public function addField($c) {
     $this->fieldsList[] = $c;	  
   }
@@ -50,9 +66,10 @@ class CustomFields {
 
   public function loadFromSQL() {
 	global $wpdb;
-	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` WHERE `displayorder`>0 ORDER BY `filterorder`";
+	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` ORDER BY `filterorder`";
 	$load=false;
-	foreach( $wpdb->get_results($query) as $key => $row) {
+	foreach( $wpdb->get_results($query) as $key => $row) {	
+		$this->fieldsRows[] = $row;	
 		$this->fieldsList[] = new CustomField($row->name,$row->value,$row->type,$row->title,$row->compare,$row->valMin,$row->valMax,$row->postType,$row->icon,$row->filterorder,$row->displayorder,$row->fieldformat);
 		$load=true;
 	}	
@@ -62,6 +79,14 @@ class CustomFields {
 	  foreach ($this->fieldsList as $f) {
 		  $f->save();
 	  }
+  }  
+  public function loadFromRows($rows) {	
+	foreach( $rows as $row) {	
+		$this->fieldsRows[] = $row;	
+		$this->fieldsList[] = new CustomField($row["name"],$row["value"],$row["type"],$row["title"],$row["compare"],$row["valMin"],$row["valMax"],$row["postType"],$row["icon"],$row["filterorder"],$row["displayorder"],$row["fieldformat"]);
+		$load=true;
+	}	
+	return $load;
   }
 }
 

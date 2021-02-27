@@ -20,7 +20,11 @@ Class Majax {
 	}
 	
 	function initWP() {
-		register_activation_hook( __FILE__, [$this,'majax_plugin_install'] );
+		
+		add_action('majaxcronhook',[$this,'majax_cron_job']);
+		
+		register_activation_hook( PLUGIN_FILE_URL, [$this,'majax_plugin_install'] );
+		register_deactivation_hook( PLUGIN_FILE_URL, [$this,'majax_plugin_uninstall'] );
 		//init actions		
 	
 		add_action( 'wp_enqueue_scripts', [$this,'mAjaxEnqueueScripts'] );			
@@ -73,7 +77,12 @@ Class Majax {
 	}
 	
 	function majax_plugin_install() {
-		global $wpdb;			
+		global $wpdb;		
+		add_action('majaxcronhook',[$this,'majax_cron_job']);
+		if ( ! wp_next_scheduled( 'majaxcronhook' ) ) {
+			wp_schedule_event( time(), 'daily', 'majaxcronhook' );
+		}
+
 		$table_name = $wpdb->prefix . "majax_fields"; 	
 		$charset_collate = $wpdb->get_charset_collate();
 
@@ -99,6 +108,15 @@ Class Majax {
 		
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
+		
+		
 	}
+	function majax_plugin_uninstall() {
+		wp_clear_scheduled_hook( 'majaxcronhook' );
+	}
+	function majax_cron_job() {
+		Caching::pruneCache();
+	}
+	
 }
 	

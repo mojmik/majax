@@ -6,35 +6,23 @@ use stdClass;
 Class MajaxRender {	
 
 
-	function __construct($loadFields=true) {		
+	function __construct($caller="empty",$createJson=false) {		
 		
 			//init custom fields
 			$this->fields=new CustomFields();
-						
-			//kdyz uz mam nacteny pole
-			$forceReload=false;
-			$loadValues=false;
-			if (!$loadFields || $forceReload) {	
-				//preloading hardcoded fields
-				$this->fields->addField(new CustomField("mauta_kategorie","vetsi;mensi;dodavky","select","Kategorie","=",false,false,"mauta"));
-				$this->fields->addField(new CustomField("mauta_znacka","---;Škoda;VW;Mercedes Benz;Hyundai;FIAT;Opel;Renault","select","Znacka","=",false,false,"mauta"));
-				$this->fields->addField(new CustomField("mauta_cenaden","","NUMERIC","Cena - den",">",false,false,"mauta"));
-				$this->fields->addField(new CustomField("mauta_automat","","bool","Automat","=",false,false,"mauta"));
-				if ($forceReload) $this->fields->saveToSQL();
-				if ($loadValues) echo $this->fields->readValues();
-			}
-			else {
-				//loading meta fields from db
-				$this->fields->loadFromSQL();
-			}					
-	}
+			$this->fields->prepare($createJson);
+			//$this->caching=new Caching();
 
-	function regShortCodes() {		
-		add_shortcode('majaxfilter', [$this,'majax_print_filter'] );
-		add_shortcode('majaxcontent', [$this,'majax_print_content'] );
+			
 	}
 	
-	function majax_print_filter($atts = []) {
+
+	function regShortCodes() {		
+		add_shortcode('majaxfilter', [$this,'printFilters'] );
+		add_shortcode('majaxcontent', [$this,'printContent'] );
+	}
+	
+	function printFilters($atts = []) {
 		 $atts = array_change_key_case( (array) $atts, CASE_LOWER );
 		 if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute		
 		//prints filter, run by shortcode majaxfilter	
@@ -55,7 +43,7 @@ Class MajaxRender {
 		<?php
 		 return ob_get_clean();
 	}	
-	function majax_print_content($atts = []) {	
+	function printContent($atts = []) {	
 		//prints content, run by shortcode majaxcontent		
 		ob_start();
 		?>
@@ -146,7 +134,7 @@ Class MajaxRender {
 		$ajaxItem=new MajaxItem();
 		$ajaxItem->addField("title",$row["post_title"])->addField("id",$row["ID"])
 		->addField("content",$row["post_content"])->addField("url",$row["slug"]);
-		foreach ($this->fields->getList() as $field) {
+		foreach ($this->fields->getFieldsDisplayed() as $field) {
 		 $ajaxItem->addMeta($field->outName(),$row[$field->outName()]);
 		}	
 		$out=$ajaxItem->expose();
@@ -165,33 +153,38 @@ Class MajaxRender {
 		}
 		return $row;	
 	}
-	function buildCounts($rows) {
+	function buildCounts($rows,$cachedJson) {
 		$out=[];
-		$c=[];
-		$out[]=["meta_key" => "clearall", "meta_value" => "clearall", "count" => "0", "post_title" => "" ];
+		$c=[];	
+		if ($cachedJson) {
+			$out=$cachedJson;
+		}
+		else {
+			$out[]=["meta_key" => "clearall", "meta_value" => "clearall", "count" => "0", "post_title" => "" ];
 
-		foreach ($rows as $row) {
-			foreach ($this->fields->getList() as $field) {			
-				$val=$row[$field->outName()];
-				$c[$field->outName()][$val]++;
+			foreach ($rows as $row) {
+				foreach ($this->fields->getFieldsFiltered() as $field) {			
+					$val=$row[$field->outName()];
+					$c[$field->outName()][$val]++;
+				}	
+				
+			}
+			foreach ($this->fields->getFieldsFiltered() as $field) {			
+				$fieldName=$field->outName();						
+				foreach ($c[$fieldName] as $val => $cnt) {	
+					//$this->logWrite("iter:{$fieldName} {$val} {$cnt} ");				
+						$m["meta_key"]=$fieldName;
+						$m["meta_value"]=$val;
+						$m["count"]=$cnt;
+						$m["post_title"]="counts";
+						$out[]=$m;
+				}
 			}	
 			
-		}
-		foreach ($this->fields->getList() as $field) {			
-			$fieldName=$field->outName();						
-			foreach ($c[$fieldName] as $val => $cnt) {	
-				$this->logWrite("iter:{$fieldName} {$val} {$cnt} ");				
-					$m["meta_key"]=$fieldName;
-					$m["meta_value"]=$val;
-					$m["count"]=$cnt;
-					$m["post_title"]="counts";
-					$out[]=$m;
-			}
-		}	
-		
-		$out[]=["meta_key" => "endall", "meta_value" => "endall", "count" => "0", "post_title" => "" ];
-
-		$this->logWrite("count meta rows:".count($out));
+			$out[]=["meta_key" => "endall", "meta_value" => "endall", "count" => "0", "post_title" => "" ];
+	
+			$this->logWrite("json out:".json_encode($out));
+		}		
 		return $out;
 	}
 	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=10) {

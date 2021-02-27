@@ -15,6 +15,7 @@
 
 
 define('MAJAX_PLUGIN_PREFIX','majax-');
+define('PLUGIN_FILE_URL', __FILE__);
 define( 'MAJAX_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MAJAX_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define('MAJAX_FAST',4); 
@@ -50,6 +51,16 @@ define('MAJAX_FAST',4);
         GROUP BY p.ID
     option3:
         create special table for mauta custom posts type for faster filtering
+*/
+
+/*
+add_action('my_cron_hook','majax_cron_hook');
+if ( ! wp_next_scheduled( 'majax_cron_hook') ) {
+    wp_schedule_event( time(), 'daily', 'my_cron_hook' );
+}
+function majax_cron_hook() {
+    Caching::pruneCache();
+}
 */
 
 require_once MAJAX_PLUGIN_PATH . '/MajaxWP/majax.php';

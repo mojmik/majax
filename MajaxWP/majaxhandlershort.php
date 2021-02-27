@@ -14,7 +14,7 @@ Class MajaxHandlerShort {
 
 	public function register()  {		
 
-		$this->ajaxRender=new MajaxRender();
+		$this->ajaxRender=new MajaxRender("handlershort");
 		
 		$this->ajaxRender->regShortCodes();				
 
