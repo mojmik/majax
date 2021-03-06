@@ -46,6 +46,13 @@ class CustomFields {
 	  } 
 	  return $rows;
   }
+  public function getFieldsOfType($type) {
+	$rows=[];
+	foreach ($this->fieldsList as $f) {		
+		if ($f->typeIs($type)) $rows[]=$f;
+	  } 
+	  return $rows;
+  }
   public function getFieldsFiltered() {
 	return $this->getFieldsFilteredGreaterThan(["filterOrder" => "0"]);
   }
@@ -87,6 +94,11 @@ class CustomFields {
 		$load=true;
 	}	
 	return $load;
+  }
+  public function loadPostedValues() {
+	foreach ($this->fieldsList as $f) {
+		$f->loadPostedValue();
+	} 
   }
 }
 

@@ -17,9 +17,13 @@ class CustomField {
 	 $this->filterOrder=$filterOrder;
 	 $this->displayOrder=$displayOrder;
 	 $this->fieldformat=$fieldformat;	 
-	}
+	 $this->postedValue="";
+	}	
 	public function outName() {
 		return "{$this->name}";
+	}
+	public function getPostedValue() {
+		return "{$this->postedValue}";
 	}
 	public function outSelectOptions() {
 	   $out="";
@@ -84,11 +88,12 @@ class CustomField {
 	 return false;
 	}
 	public function getFieldFilter() {
-			   $val=$_POST[$this->name];			   
+			   //$val=$_POST[$this->name];			   
+			   $val=$this->postedValue;			   
 			   if ($val=="") {
 				return false;	
 			   }
-			   $val=filter_var($val, FILTER_SANITIZE_STRING);
+			   //$val=filter_var($val, FILTER_SANITIZE_STRING);
 			   if (strpos($val,"|")>0) {
 				   //multiple values in select field
 				   $compare="IN";	//multiple values selection
@@ -122,11 +127,11 @@ class CustomField {
 	public function checkValueInField($row) {
 		//not used		
 		$rowVal=$row[$this->outName()];
-		$val=$_POST[$this->name];
+		$val=$this->postedValue;
 		if ($val=="") {
 			return true;	
 		}
-		$val=filter_var($val, FILTER_SANITIZE_STRING);
+		//$val=filter_var($val, FILTER_SANITIZE_STRING);
 		if (strpos($val,"|")>0) {
 			$vals=explode("|",$val);
 			if ($this->typeIs("NUMERIC")) { 				 
@@ -153,11 +158,12 @@ class CustomField {
 		}
 	}
 	public function getFieldFilterSQL() {
-		$val=$_POST[$this->name];			   
+		//$val=$_POST[$this->name];			   
+		$val=$this->postedValue;			   
 		if ($val=="") {
 		 return false;	
 		}
-		$val=filter_var($val, FILTER_SANITIZE_STRING);
+		//$val=filter_var($val, FILTER_SANITIZE_STRING);
 		if (strpos($val,"|")>0) {
 			//multiple values in select field
 			$vals=explode("|",$val);
@@ -187,6 +193,21 @@ class CustomField {
 			//single value
 			return "`{$this->name}` {$this->compare} '{$val}'";			
 		}
+}
+public function loadPostedValue() {
+	$val=$_POST[$this->name];	
+	$val=filter_var($val, FILTER_SANITIZE_STRING);
+	$this->postedValue=$val;
+}
+public function isInSelect($rowVal) {	
+	if (!$this->typeIs("select")) return true;		
+	$val=$this->postedValue;	
+	if (!$val) return true;
+	$vals=explode("|",$val);
+	if (in_array($rowVal,$vals)) return true;
+	
+	//if ($rowVal==$val) return true;
+	return false;
 }
 	public function save() {
 	  global $wpdb;
