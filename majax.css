@@ -1,3 +1,104 @@
+.yellowBand {
+  background: #ffd100;
+  color:#000;
+  padding:10px 15px 10px 15px;
+  margin:0 0 15px 0;
+}
+.pullRight {
+  float: right!important;
+  text-align: right;
+}
+.mcent {
+  margin:0 auto;
+  background: #fff;
+}
+.mbutton {
+  font-size: 13px;
+  padding: 15px 30px;
+  border: 0;
+  font-weight: 700;
+  color: #fff;
+  background-color: #EAAB1C;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  -webkit-appearance: button;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 auto;
+}
+.mbutton a {
+  color: #fff;
+  text-decoration: none;
+}
+#majaxback {
+  text-align:left;
+  margin-bottom:15px;
+}
+.frameGray {
+  padding-top: 69px;
+  background: url(./pics/form-bg.jpg) repeat-x scroll 0 0;
+  background-size: cover;
+}
+.frameGray .formGroup {
+  margin-bottom:16px;
+}
+.formGroup .form-control {
+    height: 34px;
+    border-radius: 0px;
+    font-size: 16px;
+    background: #fff;
+    color: #000;
+    margin-bottom: 0;
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    line-height: 1.42857143;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.formGroup .email {
+  background: url(./pics/email.jpg) no-repeat right center;
+}
+.formGroup .cal {
+  background: url(./pics/cal.jpg) no-repeat right center;
+  cursor: pointer;
+}
+.formGroup .tel {
+  background: url(./pics/tel.jpg) no-repeat right center;
+}
+.formGroup .mileage {
+  background: url(./pics/mileage.jpg) no-repeat right center;
+}
+.formGroup .leisLabel {
+  position: relative;
+  font-size: 14px;
+  line-height: normal;
+  color: #898989;
+  vertical-align: middle;
+  position: relative;
+  padding-left: 25px;
+  padding-top: 10px;
+}
+.formGroup .leisLabel .leisCheck {
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+  position: absolute;
+}
+.formGroup .leisLabel em {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 20px;
+  height: 20px;
+  background-position: -236px 0;
+  background-image: url(./pics/sprite.png);
+}
+.formGroup .leisLabel .checked {
+  background-position: -236px -20px;
+}
 
 .majaxout {  
 	display:none; 
@@ -5,23 +106,48 @@
 	flex-direction: column;
 	margin-bottom: 12px;
 	align-items: stretch;
-  width: 100%;	
-  border: 1px solid #ffdd00;
+  width: 100%;	 
+  color:#000;
+}
+.majaxout .bors {
+  border-left: 1px solid #ffdd00;
+  border-right: 1px solid #ffdd00;
+}
+.majaxout .bort {
+  border-top: 1px solid #ffdd00;
+  border-left: 1px solid #ffdd00;
+  border-right: 1px solid #ffdd00;
+}
+.majaxout .borb {
+  border-bottom: 1px solid #ffdd00;
+  border-left: 1px solid #ffdd00;
+  border-right: 1px solid #ffdd00;
 }
 .majaxout .row {
   width:100%;
   padding:0;
   margin:0;
 }
+.majaxout .mcontent {
+  padding:0 0 0 5px;  
+}
+.majaxout .mcontent span {
+  padding:0px;  
+}
 .majaxout .action {
   text-align:center;
 }
 .majaxout .meta {
-  background:#ccc;  
+  background:#eee;  
+  padding:5px;
+}
+.majaxout .meta img {
+  width:25px;
 }
 .majaxout .price {
   border-bottom:1px solid #ffdd00;  
   text-align: center;
+  font-size:smaller;
 }
 .majaxout .price:first-child {
   border-right:1px solid #ffdd00;  
@@ -43,7 +169,9 @@
 		width: 49.5%;
 	}
 }
-
+.row2 {
+  width:100%;
+}
 
 .majax-loader {
   display: flex;

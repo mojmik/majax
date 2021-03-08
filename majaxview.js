@@ -1,26 +1,7 @@
 var majaxModule=(function (my) {
-    
-    
-    const majaxRender = {
-        majaxLoader: () => `
-        <div class="majax-loader" data-component="loader" style="display: none;">
-        <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-        <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="gradient">
-        <stop stop-color="#ffc107" stop-opacity="0" offset="0%"></stop>
-        <stop stop-color="#ffc107" stop-opacity=".631" offset="63.146%"></stop>
-        <stop stop-color="#ffc107" offset="100%"></stop>
-        </linearGradient>
-        </defs>
-        <g fill="none" fill-rule="evenodd">
-        <g transform="translate(1 1)">
-        <path d="M36 18c0-9.94-8.06-18-18-18" stroke="url(#gradient)" stroke-width="3"></path>
-        <circle fill="#fff" cx="36" cy="18" r="1"></circle>
-        </g>
-        </g>
-        </svg></div>	
-        `,
-        postTemplate: (id,title,content,url,meta) => { 
+        
+    const majaxRender = {        
+        postTemplate: (id,title,content,url,meta,image,single) => { 
             let metaOut=[];
             metaOut[0]="";
             metaOut[1]="";
@@ -34,31 +15,52 @@ var majaxModule=(function (my) {
                 if (displayOrder<20) {
                     metaOut[0]=metaOut[0] + `<div class='col meta'>${metaIcon} ${meta[property]}</div>`;
                 }
-                else {
-                    metaOut[1]=metaOut[1] + `<div class='col-sm-6 price'>${metaIcon} ${meta[property]}</div>`;
-                    metaOut[2]=metaOut[2] + `<div class='col-sm-6 price'>${metaIcon} ${meta[property]*1.21}</div>`;
+                if (displayOrder>=20 && displayOrder<=30) {
+                    metaOut[1]=metaOut[1] + `
+                    <div class='col-sm-6 price'>
+                        Cena bez DPH / měsíc 
+                        <div class='row'>
+                            <div class='col'>
+                                ${meta[property]}
+                            </div>
+                        </div> 
+                    </div>`;
+                    metaOut[2]=metaOut[2] + `
+                    <div class='col-sm-6 price'>
+                        Cena včetně DPH / měsíc 
+                        <div class='row'>
+                            <div class='col'>
+                             ${meta[property]*1.21}
+                            </div>
+                        </div> 
+                    </div>`;
                 }
                 
             }	
-    
+            if (image!="") {
+                image=`<img src='${image}' />`;
+            }
+            let mainClassName="majaxout";
+            if (typeof single !== 'undefined' ) mainClassName="majaxout row2"
             return(
             `
-            <div class='majaxout' id='majaxout${id}'>
+            <div class='${mainClassName}' id='majaxout${id}'>
                 <div class='row flex-grow-1'>
-                    <div class='col title'>
-                        title ${title}
-                        ${content}
+                    <div class='col title'>                        
+                        ${image}                        
                     </div>
                 </div>
-                <div class='row'>			
-                     ${metaOut[0]}
-                    
+                <div class='row mcontent'>			    
+                    <span>${content}</span>
                 </div>
-                <div class='row'>			
+                <div class='row bors'>			
+                     ${metaOut[0]}                    
+                </div>
+                <div class='row bort'>			
                         ${metaOut[1]}
                         ${metaOut[2]}	
                 </div>
-                <div class='row'>
+                <div class='row borb'>
                     <div class='col action'>
                         <a data-slug='${my.mStrings.mNormalize(title)}' href='?id=${my.mStrings.mNormalize(title)}'>akce</a>
                     </div>
@@ -96,7 +98,7 @@ var majaxModule=(function (my) {
                             followingElement.text(cnt);
                         } else {
                             labelFor.after(spanCounter);
-                            console.log(spanCounter);
+                            //console.log(spanCounter);
                         }
                         
                     }
@@ -143,23 +145,6 @@ var majaxModule=(function (my) {
                     if (p==aktPage+3) content+=`..`;
                 }
             }
-
-            /*
-            for (let page in pages) {                
-                if (page!="title") { 
-                    if (pages[page]=="1") {
-                        let url=my.mUrl.generateUrl("aktPage",page);
-                        content+=`
-                        <span><a data-slug='pagination' data-page='${page}' href='${url}'>page ${page}</a></span>
-                        `;
-                    } else {
-                        content+=`
-                        <span>aktpage ${page}</span> 
-                        `;
-                    }
-                }
-            }
-            */
             return(
                 `    
                 <div class='mpagination'>            
@@ -167,9 +152,28 @@ var majaxModule=(function (my) {
                 </div>
                 `);   
         },
+        postTemplateAction: (content) => {
+            if (content) {
+                return(
+                    `    
+                    <div class='mpagination'>            
+                    ${content}                      
+                    </div>
+                    `);   
+            }            
+            else {
+                return(
+                    `    
+                    <div class='mpagination'>            
+                    ${content}  
+                    ${my.majaxViewComponents.majaxContactForm()}              
+                    </div>
+                    `);   
+            }
+        },
         sendClearFunction: (firingAction) => {
             jQuery('#majaxmain').empty();				 
-            jQuery('#majaxmain').append(majaxRender.majaxLoader);	
+            jQuery('#majaxmain').append(my.majaxViewComponents.majaxLoader);
             if (firingAction!="single_row") jQuery('.majax-loader').css('display','flex');	 
             //my.mCounts.clearCounts();	
             //nastavit vsem checkboxum a dalsim elementum nuly- neni potreba, posilaji se i nuly
@@ -181,6 +185,29 @@ var majaxModule=(function (my) {
             jQuery("#majaxout"+thisId).css("display", "flex").hide().fadeIn("slow");
             jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
         },
+        showBack: () => {
+            /*
+            const goBack=`<a href='${my.mUrl.getCurBaseUrl()}'>zpátky</a>`;
+            let postType=`
+             <input name='type' type='hidden' value='${jQuery('input[name="type"]').val()}' />
+             `;
+             jQuery("#majaxback").val(postType + goBack); //"<a href='"++"'>zpátky</a>");
+             */
+             //jQuery("#majaxform").css("display", "hidden");
+             //jQuery("#majaxform").replaceWith(goBack);             
+
+             jQuery("#majaxform").hide();
+             jQuery("#majaxback").show();
+        },
+        hideBack: () => {
+            /*
+            const goBack=``;           
+             jQuery("#majaxback").val(goBack); //"<a href='"++"'>zpátky</a>");
+             jQuery("#majaxform").css("display", "flex");
+             */
+            jQuery("#majaxform").show();
+            jQuery("#majaxback").hide();
+        },
         drawResultsFunction: (thisId,jsonObj) => {	
             if (jsonObj.title=="majaxcounts") thisHtml=majaxRender.postTemplateCounts(thisId,jsonObj);
             else if (jsonObj.title=="buildInit") {
@@ -190,14 +217,27 @@ var majaxModule=(function (my) {
             }
             else if (jsonObj.title=="pagination") {                
                 let thisHtml=majaxRender.postTemplatePagination(jsonObj);
+                jQuery('#majaxmain').append(thisHtml);                
+            }
+            else if (jsonObj.title=="action") {                
+                let thisHtml=majaxRender.postTemplateAction(jsonObj.content);
                 jQuery('#majaxmain').append(thisHtml);
+                jQuery("#pickDate").datepicker();
+                jQuery("#dropDate").datepicker();
+                majaxRender.showBack();
+                jQuery("#majaxContactForm").on('submit', function(event) {				
+                    my.majaxPrc.runAjax(this);
+                    event.preventDefault();			
+			        return false;
+                });                
+        
             }
             else if (jsonObj.title=="empty") {
                 thisHtml=majaxRender.postTemplateEmpty(thisId,jsonObj.content);
                 majaxRender.animateMajaxBox(thisHtml,thisId);			
             }
             else { 
-                thisHtml=majaxRender.postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta);
+                thisHtml=majaxRender.postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta,jsonObj.image,jsonObj.single);
                 majaxRender.animateMajaxBox(thisHtml,thisId);			
             }
          }

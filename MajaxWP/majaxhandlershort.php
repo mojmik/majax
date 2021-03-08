@@ -24,10 +24,12 @@ Class MajaxHandlerShort {
 	public function register_script()    {	      		
 		wp_register_script('majaxelements', MAJAX_PLUGIN_URL . 'majaxelements.js', array( 'jquery' ) );	
 		wp_enqueue_script('majaxelements');
+		wp_register_script('majaxviewcomponents', MAJAX_PLUGIN_URL . 'majaxviewcomponents.js', array( 'jquery' ) );	
+		wp_enqueue_script('majaxviewcomponents');
 		wp_register_script('majaxview', MAJAX_PLUGIN_URL . 'majaxview.js', array( 'jquery' ) );	
 		wp_enqueue_script('majaxview');
 		wp_register_script('majaxprc', MAJAX_PLUGIN_URL . 'majaxprc.js', array( 'jquery' ) );	
-		wp_enqueue_script('majaxprc');
+		wp_enqueue_script('majaxprc');		
 		wp_register_script('majax-script', MAJAX_PLUGIN_URL . 'majax.js', array( 'jquery' ) );		
 		wp_localize_script('majax-script', 'majax', $this->get_ajax_data());
 		wp_enqueue_script('majax-script');		

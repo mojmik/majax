@@ -35,7 +35,7 @@ Class Majax {
 
 	function majaxEnqueueStyle() {		
 		$wp_scripts = wp_scripts();	
-		$mStyles=[
+		$mStyles=[			 
 			 'majax' => ['src' => MAJAX_PLUGIN_URL . 'majax.css'],
 			 'select2' => ['src' => MAJAX_PLUGIN_URL .'select2.min.css', 'srcCdn'=>'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-core']->ver . '/themes/smoothness/jquery-ui.css'],
 			 'admin-ui' => [ 'src' => MAJAX_PLUGIN_URL . "jquery-ui.min.css",
@@ -60,7 +60,11 @@ Class Majax {
 			],
 			'jquery-ui-slider' => ['src' => array('jquery'),
 								   'inFotter' => true
+			],
+			'jquery-ui' => [ 'src' => MAJAX_PLUGIN_URL .'jquery-ui.min.js',
+							 'srcCdn' => 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
 			]
+
 		];
 		
 		

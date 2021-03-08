@@ -1,6 +1,7 @@
 var majaxModule=(function (my) {
 
     const mUrl = {
+        prevUrl: "",
         params: [], 
         getCurUrl() {
             return window.location.href;
@@ -54,7 +55,8 @@ var majaxModule=(function (my) {
     const majaxPrc = {
         ajaxSeq:0,
         thisFiringObjId:"",
-        runAjax: function(firingElement) {             
+        runAjax: function(firingElement) {
+            my.majaxRender.hideBack();             
             mUrl.readUrl(); //load parameters from url           
             var ajaxPar=majaxPrc.getAjaxParams(jQuery(firingElement));	 
             
@@ -74,6 +76,7 @@ var majaxModule=(function (my) {
          var objCategory="";
          var actionFunction='filter_rows';
          var aktPage=0;
+         
          if (varThisObj.length!=0) {		
             objCategory=varThisObj.data('slug');
             let href=varThisObj.attr('href');
@@ -86,9 +89,14 @@ var majaxModule=(function (my) {
                     actionFunction='single_row';	
                 }                
             }
+            if (varThisObj[0].id=="majaxContactForm") {
+                actionFunction='contact_filled'; 
+                objCategory=mUrl.params["id"];
+            }
             majaxPrc.thisFiringObjId=varThisObj[0].id;		
          }
-         if (mUrl.params["id"]) {
+
+         if (mUrl.params["id"] && actionFunction!='contact_filled') {
             actionFunction='single_row';	
             objCategory=mUrl.params["id"];
          }

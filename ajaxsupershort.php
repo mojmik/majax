@@ -18,34 +18,32 @@ require_once( '../../../wp-config.php' );
 
 
 
-require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfields.php');
-require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/customfield.php');
-require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxrender.php');
-require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/majaxitem.php');
-require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/caching.php');
-require_once(plugin_dir_path( __FILE__ ) . '/MajaxWP/mikdb.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/customfields.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/customfield.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/majaxrender.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/majaxitem.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/caching.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/mikdb.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/imagecache.php');
 
 
 $action=$_POST["action"];
-if ($action=="single_row") {
+if ($action=="contact_filled") {
 	$renderer = new MajaxRender(); //use false pro preloading hardcoded fields (save one sql query)
-	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);	
-	/*
-	$query=$renderer->buildQueryCount();
-    $rows=Db::getRows($query);
-    $renderer->showRows($rows,0,"majaxcounts");
-	*/	
+	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);		
     $query=$renderer->buildSingle($_POST["category"]);
 	$rows=Caching::getCachedRows($query);
-	$countsJson=Caching::getCachedJson("json_$query");
-	/*
-	$countsRows=$renderer->buildCounts($rows,$countsJson);	
-	if (!$countJson) {
-		Caching::addCache("json_$query",$countsRows);
-	}
-	$renderer->showRows($countsRows,0,"majaxcounts",0);
-	*/
-	$renderer->showRows($rows,0,"",10);		
+	$countsJson=Caching::getCachedJson("json_$query");	
+	$renderer->showRows($rows,0,"single",9,0,"contactFilled");		
+	exit;
+}
+if ($action=="single_row") {
+	$renderer = new MajaxRender(); //use false pro preloading hardcoded fields (save one sql query)
+	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);		
+    $query=$renderer->buildSingle($_POST["category"]);
+	$rows=Caching::getCachedRows($query);
+	$countsJson=Caching::getCachedJson("json_$query");	
+	$renderer->showRows($rows,0,"single",9,0,"action");		
 	exit;
 }
 if ($action=="filter_rows") {
@@ -68,7 +66,7 @@ if ($action=="filter_rows") {
 	}
 	$renderer->showRows($countsRows,0,"majaxcounts",0);
 	$page=intval($_POST["aktPage"]);
-	$renderer->showRows($renderer->filterMetaSelects($rows),0,"",10,$page);		
+	$renderer->showRows($renderer->filterMetaSelects($rows),0,"",9,$page);		
 	exit;
 }
 

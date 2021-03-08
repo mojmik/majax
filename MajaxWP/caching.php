@@ -7,6 +7,7 @@ Class Caching {
     public static $cacheMap = array();
     //private static $cachePath=plugin_dir_path( __FILE__ ) . "cache/";
     private static $cachePath;    
+    private static $compressJson=0;    
   
     static function getCachePath() {
         if (!Caching::$cachePath) Caching::$cachePath=plugin_dir_path( __FILE__ ) ."cache/";
@@ -27,10 +28,16 @@ Class Caching {
     }
 
     static function cacheWrite($name,$rows) {
-        file_put_contents(Caching::getCachePath() . "$name.json",json_encode($rows));
+        if (Caching::$compressJson) 
+         file_put_contents(Caching::getCachePath() . "$name.json",gzcompress(json_encode($rows)));
+        else 
+         file_put_contents(Caching::getCachePath() . "$name.json",json_encode($rows));
     }
     static function cacheRead($name) {
-       $rows=json_decode(file_get_contents(Caching::getCachePath() . "$name.json"),1);
+       if (Caching::$compressJson) 
+        $rows=json_decode(gzuncompress(file_get_contents(Caching::getCachePath() . "$name.json")),1);
+       else 
+        $rows=json_decode(file_get_contents(Caching::getCachePath() . "$name.json"),1);
        return $rows;
     }
     static function getCachedFn($query) {
@@ -59,7 +66,7 @@ Class Caching {
          Caching::logWrite("-$query json not exist in cache-");
          return false;
         }
-        Caching::logWrite("$query json loaded from cache");
+        Caching::logWrite("$query json loaded from cache");        
         return Caching::cacheRead($fnName);
     }
     static function addCache($query,$rows) {
@@ -77,7 +84,7 @@ Class Caching {
             Caching::$cacheMap[]=["query" => $ex[0], "fnId" => $ex[1]];
         }
     }
-    static function logWrite($val) {
-        file_put_contents(Caching::getCachePath() . "caching.txt",date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
-       }
+    static function logWrite($val,$fn="caching.txt") {
+        file_put_contents(Caching::getCachePath() . $fn,date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
+    }
 }

@@ -63,6 +63,12 @@ function majax_cron_hook() {
 }
 */
 
-require_once MAJAX_PLUGIN_PATH . '/MajaxWP/majax.php';
+/*
+ idelani by bylo mit jednu tabulku
+ id|content|image|meta1|meta2|..
+ asi by bylo dobre ji vyrobit, pri vetsich databazich
+*/
+
+require_once MAJAX_PLUGIN_PATH . '/majaxwp/majax.php';
 $majax=new Majax();
 $majax->initWP();

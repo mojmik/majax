@@ -46,6 +46,13 @@ class CustomFields {
 	  } 
 	  return $rows;
   }
+  public function getFieldsFilteredOrDisplayed() {
+	$rows=[];
+	foreach ($this->fieldsList as $f) {
+		if ($f->displayOrder>0 || $f->filterOrder>0) $rows[]=$f;
+	  } 
+	  return $rows;
+  }
   public function getFieldsOfType($type) {
 	$rows=[];
 	foreach ($this->fieldsList as $f) {		
@@ -73,7 +80,7 @@ class CustomFields {
 
   public function loadFromSQL() {
 	global $wpdb;
-	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` ORDER BY `filterorder`";
+	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` WHERE `filterorder`>'0' OR `displayorder`>'0' ORDER BY `filterorder`";
 	$load=false;
 	foreach( $wpdb->get_results($query) as $key => $row) {	
 		$this->fieldsRows[] = $row;	

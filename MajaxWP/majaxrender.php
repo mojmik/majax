@@ -4,14 +4,26 @@ namespace MajaxWP;
 use stdClass;
 
 Class MajaxRender {	
-
-
+	
 	function __construct($caller="empty",$createJson=false) {		
 		
 			//init custom fields
 			$this->fields=new CustomFields();
 			$this->fields->prepare($createJson);
 			$this->fields->loadPostedValues();			
+			ImageCache::loadImageCache();			
+			$this->setPostType();
+	}
+	function getPostType() {		
+		return $this->postType; 	
+	}
+	function setPostType() {
+		//return "mauta";
+		$hivePress=false;
+	  	if ($hivePress) {
+			$this->postType="hp_listing";
+	    }	 
+		$this->postType=filter_var($_POST['type'], FILTER_SANITIZE_STRING); 	
 	}
 
 	function regShortCodes() {		
@@ -25,7 +37,7 @@ Class MajaxRender {
 		//prints filter, run by shortcode majaxfilter	
 		ob_start();		
 		?>
-		<form>
+		<form id="majaxform">
 			<div class='majaxfiltercontainer'>			
 					<input type='hidden' name='type' value='<?= $type?>' />
 				<?php		
@@ -37,6 +49,11 @@ Class MajaxRender {
 				?>			
 			</div>
 		</form>
+		<div style='display:none;' id="majaxback">
+			<div class='mbutton btn'>
+				<a href='javascript: history.go(-1)'>zpátky</a>
+			</div>
+		</div>
 		<?php
 		 return ob_get_clean();
 	}	
@@ -50,58 +67,26 @@ Class MajaxRender {
 		 ?>
 		</div> <?php
 		 return ob_get_clean();
-	}
-	function buildQuery() {  
-	  $catSlug = $_POST['category'];
-	  $mType = filter_var($_POST['type'], FILTER_SANITIZE_STRING); 	
-	  $hivePress=false;
-	  if ($hivePress) {
-		$postTypeDefault="hp_listing";  
-		$taxonomy="hp_listing_category";
-	  }	  
-	  
-	  $metaQuery["relation"] = 'AND';
-	  
-	  foreach ($this->fields->getList() as $field) {
-		  $filter = $field->getFieldFilter();			  
-		  if ($filter) { 		
-		    $metaQuery[] = $filter;
-		    $this->logWrite("name: {$field->name} filter: ".$filter." - ".$field->postedValue);   		   
-		  } 
-	  }
-	
-	  $wpQuery=[	
-		'posts_per_page' => 8,
-		'orderby' => 'menu_order', 
-		'order' => 'desc',
-	  ];
-	  if ($catSlug) { 
-	   $wpQuery["taxonomy_terms"]=$catSlug;  	   	  
-	   $wpQuery["taxonomy"]=$taxonomy;  	   
-	  }
-	  if ($mType) { 
-	    $wpQuery["post_type"]=$mType;  
-	  }
-	  else if ($postTypeDefault) {		
-		$wpQuery["post_type"]=$postTypeDefault;    
-	  }	 
-	  $wpQuery["meta_query"]=$metaQuery;  
-	  $this->logWrite("query: ".json_encode($wpQuery));
-	  return $wpQuery;
-	}
+	}	
 	function buildSingle($id) {	
 		//get all posts and their metas						
 		$limit=""; //need all rows for counts
-		$mType = filter_var($_POST['type'], FILTER_SANITIZE_STRING); 
+		$mType = $this->getPostType();
 		$col="";
 		$filters="";
 		$colSelect="";
-		foreach ($this->fields->getList() as $field) {			
+		foreach ($this->fields->getFieldsFilteredOrDisplayed() as $field) {			
 			$fieldName=$field->outName();		
-			$col.=",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as `$fieldName`";			
-			$colSelect.=",PM1.`$fieldName`";		
+			$col.=$this->getSqlFilterMeta($fieldName);
+			$colSelect.=$this->getSqlSelectMeta($fieldName);		
 
 		}
+		$additionalMetas=["_thumbnail_id"];
+		foreach ($additionalMetas as $fieldName) {			
+			$col.=$this->getSqlFilterMeta($fieldName);
+			$colSelect.=$this->getSqlSelectMeta($fieldName);
+		}
+
 		$filters=" WHERE post_name like '$id'";
 		$query=
 		"
@@ -113,7 +98,7 @@ Class MajaxRender {
 			AND post_status like 'publish' 
 			AND post_type like '$mType'			
 			GROUP BY ID, post_title
-			) AS PM1
+			) AS pm1
 			$filters
 			$limit
 		";
@@ -121,18 +106,24 @@ Class MajaxRender {
 
 		return $query;
 	}	
+	function getSqlFilterMeta($fieldName) {
+		return ",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as `$fieldName`";
+	}
+	function getSqlSelectMeta($fieldName) {
+		return ",pm1.`$fieldName`";
+	}
 	function buildQuerySQL() {	
 		//get all posts and their metas, filter only non selects for multiple selections		
 		$limit=" LIMIT 10";		
 		$limit=""; //need all rows for counts
-		$mType = filter_var($_POST['type'], FILTER_SANITIZE_STRING); 
+		$mType = $this->getPostType();
 		$col="";
 		$filters="";
 		$colSelect="";
-		foreach ($this->fields->getList() as $field) {			
+		foreach ($this->fields->getFieldsFilteredOrDisplayed() as $field) {			
 			$fieldName=$field->outName();		
-			$col.=",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as `$fieldName`";			
-			$colSelect.=",PM1.`$fieldName`";
+			$col.=$this->getSqlFilterMeta($fieldName);
+			$colSelect.=$this->getSqlSelectMeta($fieldName);
 			$filter=$field->getFieldFilterSQL();
 			if ($filter && !$field->typeIs("select")) {
 				if ($filters) $filters.=" AND ";
@@ -140,6 +131,12 @@ Class MajaxRender {
 			}
 
 		}
+		$additionalMetas=["_thumbnail_id"];
+		foreach ($additionalMetas as $fieldName) {			
+			$col.=$this->getSqlFilterMeta($fieldName);
+			$colSelect.=$this->getSqlSelectMeta($fieldName);
+		}
+
 		if ($filters) $filters=" WHERE $filters";
 		$query=
 		"
@@ -151,7 +148,7 @@ Class MajaxRender {
 			AND post_status like 'publish' 
 			AND post_type like '$mType'			
 			GROUP BY ID, post_title
-			) AS PM1
+			) AS pm1
 			$filters
 			$limit
 		";
@@ -177,11 +174,13 @@ Class MajaxRender {
 		}
 		return $outRows;
 	}		
-	function buildItem($row) {
+	
+	function buildItem($row,$addFieldKey="",$addFieldValue="") {
 		$ajaxItem=new MajaxItem();
 		$ajaxItem->addField("title",$row["post_title"])->addField("id",$row["ID"])
 		->addField("content",$row["post_content"])->addField("url",$row["slug"])
-		->addField("image",$row["image"]);
+		->addField("image",ImageCache::getImageUrlFromId($row["_thumbnail_id"]));
+		if ($addFieldKey && $addFieldValue) $ajaxItem->addField($addFieldKey,$addFieldValue);
 		foreach ($this->fields->getFieldsDisplayed() as $field) {
 		 $ajaxItem->addMeta($field->outName(),$row[$field->outName()]);
 		}	
@@ -193,7 +192,7 @@ Class MajaxRender {
 		$row=[];
 		$row["title"]="buildInit";
 
-		foreach ($this->fields->getList() as $field) {								
+		foreach ($this->fields->getFieldsFilteredOrDisplayed() as $field) {								
 			$row["misc"][$field->outName()]["icon"]=$field->icon;
 			$row["misc"][$field->outName()]["fieldformat"]=$field->fieldformat;
 			$row["misc"][$field->outName()]["min"]=$field->valMin;
@@ -247,7 +246,19 @@ Class MajaxRender {
 		}		
 		return $row;
 	}
-	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=10,$aktPage=0) {
+	function getMiscAction($action="") {		
+		$row=[];
+		if ($action=="action") {
+			$row["title"]="action";
+			$row["content"]="";
+		}
+		if ($action=="contactFilled") {
+			$row["title"]="action";
+			$row["content"]="Díky za odeslání. Budeme vás brzy kontaktovat.";
+		}
+		return $row;
+	}
+	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=9,$aktPage=0,$miscAction="") {
 		$n=0;	
 		$totalRows=count($rows);
 
@@ -261,9 +272,6 @@ Class MajaxRender {
 			$this->logWrite("aktpage ".$aktPage);
 		}
 		
-		
-		
-		
 		foreach ($rows as $row) {
 			//if ($limit>0 && $n>$limit) break;
 			if ($custTitle=="majaxcounts") { 
@@ -274,12 +282,14 @@ Class MajaxRender {
 			else {
 				 if ($n==0) {
 					 //first row
-					echo json_encode($this->buildInit()).PHP_EOL;					 
+					echo json_encode($this->buildInit()).PHP_EOL;	
+					if ($miscAction) echo json_encode($this->getMiscAction($miscAction)).PHP_EOL;				 
 				 }
-				 echo $this->buildItem($row).PHP_EOL;
+				 if (count($rows)==1) echo $this->buildItem($row,"single","yes").PHP_EOL;
+				 else echo $this->buildItem($row).PHP_EOL;
 				 if ($n==count($rows)-1) { 
 					 //last row
-					echo json_encode($pagination).PHP_EOL;	
+					echo json_encode($pagination).PHP_EOL;						
 				 }
 				 
 			} 

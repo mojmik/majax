@@ -77,7 +77,7 @@ const metaMisc = {
 	
 	jQuery(document).ready(function() {	
 		my.mUrl.readUrl();
-		//fire event handlers	
+		//fire event handlers			
 		jQuery('.majax-select').on('change', function() {				
 				my.majaxPrc.runAjax(this);
 		});
@@ -96,11 +96,11 @@ const metaMisc = {
 		//click items anchors 
 		jQuery('#majaxmain').on('click', 'a', function(event) {
 			let href=jQuery(this).attr('href');
-			console.info('Anchor clicked!' + href);
+			//console.info('Anchor clicked!' + href);
+			//window.history.pushState({href: href}, '', href);
 			window.history.pushState({href: href}, '', href);
 			my.majaxPrc.runAjax(this);
-			event.preventDefault();
-			
+			event.preventDefault();			
 			return false;
 		});
 		
