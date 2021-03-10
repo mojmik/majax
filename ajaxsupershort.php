@@ -20,6 +20,7 @@ require_once( '../../../wp-config.php' );
 
 require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/customfields.php');
 require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/customfield.php');
+require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/majaxhtmlelements.php');
 require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/majaxrender.php');
 require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/majaxitem.php');
 require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/caching.php');
@@ -29,7 +30,7 @@ require_once(plugin_dir_path( __FILE__ ) . '/majaxwp/imagecache.php');
 
 $action=$_POST["action"];
 if ($action=="contact_filled") {
-	$renderer = new MajaxRender(); //use false pro preloading hardcoded fields (save one sql query)
+	$renderer = new MajaxRender(true); //use false pro preloading hardcoded fields (save one sql query)
 	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);		
     $query=$renderer->buildSingle($_POST["category"]);
 	$rows=Caching::getCachedRows($query);
@@ -38,7 +39,7 @@ if ($action=="contact_filled") {
 	exit;
 }
 if ($action=="single_row") {
-	$renderer = new MajaxRender(); //use false pro preloading hardcoded fields (save one sql query)
+	$renderer = new MajaxRender(true); //use false pro preloading hardcoded fields (save one sql query)
 	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);		
     $query=$renderer->buildSingle($_POST["category"]);
 	$rows=Caching::getCachedRows($query);
@@ -47,7 +48,7 @@ if ($action=="single_row") {
 	exit;
 }
 if ($action=="filter_rows") {
-	$renderer = new MajaxRender(); //use false pro preloading hardcoded fields (save one sql query)
+	$renderer = new MajaxRender(true); //use false pro preloading hardcoded fields (save one sql query)
 	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);	
 	/*
 	$query=$renderer->buildQueryCount();

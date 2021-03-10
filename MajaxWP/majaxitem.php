@@ -12,11 +12,11 @@ Class MajaxItem {
         $this->mainFields[$fieldKey]=($fieldValue);
         return $this;
     }
-    public function expose() {        
-        //return json_encode(get_object_vars($this));
-        //return json_encode(array_merge($this->mainFields,$this->metaFields));
+    public function expose($getJson=1) {        
         $arr=$this->mainFields;
         $arr["meta"]=$this->metaFields;
-        return json_encode($arr);        
+        if ($getJson) return json_encode($arr);        
+        else return $arr;
     }
+    
 }

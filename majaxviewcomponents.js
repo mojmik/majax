@@ -3,13 +3,13 @@ var majaxModule=(function (my) {
         majaxContactForm: () =>  { 
             //jQuery(document).on("click", "label.leisLabel", function() {               		            
             jQuery(document).on("click", "label.leisLabel", function(e) {               		                            
-                e.stopPropagation();
-                e.preventDefault();
+                e.stopImmediatePropagation();
                 let forCheckBox=jQuery(this).attr("for");
             
                 jQuery("#"+forCheckBox).prop('checked', !jQuery("#"+forCheckBox).prop('checked'));
                 jQuery("#"+forCheckBox+"Box").toggleClass('checked');
-           
+                alert (my.mUrl.prevUrl);
+                return false;
 		    });
             return `
             <div class="row frameGray">

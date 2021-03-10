@@ -57,13 +57,18 @@ const metaMisc = {
 	aktMin:[],
 	aktMax:[],
 	displayorder:[],
+	title:[],
 	addMetaMisc: function(misc) {
 		for (let key in misc) {
 			this.icons[key]=misc[key]["icon"];
 			this.valMin[key]=misc[key]["min"];
 			this.valMax[key]=misc[key]["max"];
+			if (this.valMax[key]>0 && this.valMin[key]==this.valMax[key]) {
+				this.valMin[key]=0;
+			}
 			this.fieldformat[key]=misc[key]["fieldformat"];
 			this.displayorder[key]=misc[key]["displayorder"];
+			this.title[key]=misc[key]["title"];
 		}
 	}
 };
@@ -75,7 +80,7 @@ const metaMisc = {
 	
 
 	
-	jQuery(document).ready(function() {	
+	jQuery(document).ready(function() {		
 		my.mUrl.readUrl();
 		//fire event handlers			
 		jQuery('.majax-select').on('change', function() {				
@@ -98,10 +103,16 @@ const metaMisc = {
 			let href=jQuery(this).attr('href');
 			//console.info('Anchor clicked!' + href);
 			//window.history.pushState({href: href}, '', href);
+			my.mUrl.saveUrl();
 			window.history.pushState({href: href}, '', href);
 			my.majaxPrc.runAjax(this);
 			event.preventDefault();			
 			return false;
+		});
+
+		jQuery('#goBackButton').on('click', function(e) {			
+			e.stopImmediatePropagation();
+			my.mUrl.goBack();			
 		});
 		
 		window.addEventListener('popstate', function(e){
@@ -116,7 +127,7 @@ const metaMisc = {
 		my.majaxSlider.initSliders(); 
 		
 		//load
-		my.majaxPrc.runAjax(false);
+		if (jQuery('#majaxform').length>0) my.majaxPrc.runAjax(false);
 	}); 
 })();
 

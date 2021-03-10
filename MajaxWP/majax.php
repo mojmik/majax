@@ -2,15 +2,14 @@
 namespace MajaxWP;
    
 Class Majax {
-	public $thisPluginName="majax";
-	private $ajaxRender;
+	public $thisPluginName="majax";	
 	private $ajaxHandler;
+	public $postTypeName=["mauta","mauta2"];
 	function __construct() {
 		spl_autoload_register([$this,"mLoadClass"]);
 		if (MAJAX_FAST > 1) $this->ajaxHandler=new MajaxHandlerShort(); //shortinit lightweight version
 		else $this->ajaxHandler=new MajaxHandler(); //ajax-admin version
-		$this->ajaxHandler->register();						
-		
+		$this->ajaxHandler->register();							
 	}
 	
 	function mLoadClass($class) {	
@@ -19,8 +18,7 @@ Class Majax {
         require($path);
 	}
 	
-	function initWP() {
-		
+	function initWP() {		
 		add_action('majaxcronhook',[$this,'majax_cron_job']);
 		
 		register_activation_hook( PLUGIN_FILE_URL, [$this,'majax_plugin_install'] );
@@ -81,38 +79,39 @@ Class Majax {
 	}
 	
 	function majax_plugin_install() {
-		global $wpdb;		
+		global $wpdb;				
 		add_action('majaxcronhook',[$this,'majax_cron_job']);
 		if ( ! wp_next_scheduled( 'majaxcronhook' ) ) {
 			wp_schedule_event( time(), 'daily', 'majaxcronhook' );
 		}
-
-		$table_name = $wpdb->prefix . "majax_fields"; 	
-		$charset_collate = $wpdb->get_charset_collate();
-
-		$query = "DROP TABLE `$table_name`";   	
-		mysqli_query($wpdb->dbh,$query);
-		
-		$sql = "CREATE TABLE $table_name (
-		  id mediumint(9) NOT NULL AUTO_INCREMENT,	
-		  name tinytext,
-		  value text,
-		  title text,
-		  type tinytext,
-		  compare tinytext,
-		  valMin text,
-		  valMax text,
-		  postType tinytext,
-		  filterorder smallint,
-		  displayorder smallint,
-		  icon text,
-		  fieldformat text,
-		  PRIMARY KEY  (id)
-		) $charset_collate;";
-		
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-		
+		foreach ($this->postTypeName as $cpt) {
+			$table_name = $wpdb->prefix . $cpt ."_majax_fields"; 	
+			$charset_collate = $wpdb->get_charset_collate();
+	
+			$query = "DROP TABLE `$table_name`";   	
+			mysqli_query($wpdb->dbh,$query);
+			
+			$sql = "CREATE TABLE $table_name (
+			  id mediumint(9) NOT NULL AUTO_INCREMENT,	
+			  name tinytext,
+			  value text,
+			  title text,
+			  type tinytext,
+			  compare tinytext,
+			  valMin text,
+			  valMax text,
+			  postType tinytext,
+			  filterorder smallint,
+			  displayorder smallint,
+			  icon text,
+			  fieldformat text,
+			  PRIMARY KEY  (id)
+			) $charset_collate;";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+			Caching::setPostType($cpt);
+			Caching::checkPath();
+		}
 		
 	}
 	function majax_plugin_uninstall() {

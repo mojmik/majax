@@ -5,12 +5,24 @@ use stdClass;
 
 Class Caching {	    
     public static $cacheMap = array();
-    //private static $cachePath=plugin_dir_path( __FILE__ ) . "cache/";
+    private static $customPostType;
     private static $cachePath;    
     private static $compressJson=0;    
-  
+    static function checkPath() {
+        $path=Caching::getCachePath();
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        } 
+    }
+    static function setPostType($cpt) {
+        Caching::$cachePath="";
+        Caching::$customPostType=$cpt;
+    }
     static function getCachePath() {
-        if (!Caching::$cachePath) Caching::$cachePath=plugin_dir_path( __FILE__ ) ."cache/";
+        if (!Caching::$cachePath) { 
+            if (Caching::$customPostType) Caching::$cachePath=plugin_dir_path( __FILE__ ) ."cache/".Caching::$customPostType."/";
+            else Caching::$cachePath=plugin_dir_path( __FILE__ ) ."cache/";
+        }
         return Caching::$cachePath;
     }
     static function pruneCache() {
@@ -27,7 +39,19 @@ Class Caching {
         Caching::logWrite("cache pruned");
     }
 
+    
+    static function addCache($query,$rows,$fnId="") {
+        //add query into cachemap and write rows
+        if (!$fnId) {
+            $fnId=date("d-m-y-h-i-s").rand(10000,99999).".txt";            
+        }        
+        $cacheMap[] = ["query" => $query, "fnId" => $fnId];
+        file_put_contents(Caching::getCachePath() . "cachemap.txt",$query."|".$fnId."^",FILE_APPEND | LOCK_EX);
+        Caching::cacheWrite($fnId,$rows);
+        Caching::logWrite("$query added to cache");
+    } 
     static function cacheWrite($name,$rows) {
+        //add rows into cache
         if (Caching::$compressJson) 
          file_put_contents(Caching::getCachePath() . "$name.json",gzcompress(json_encode($rows)));
         else 
@@ -50,11 +74,17 @@ Class Caching {
         return false;
     }
     static function getCachedRows($query) {
+       global $wpdb;
+       $with="used mikdb";
        $fnName=Caching::getCachedFn($query);
        if ($fnName == false) {
-        $rows=MikDb::getRows($query);
+        if ($wpdb) {
+            $rows=$wpdb->get_results($query,ARRAY_A);
+            $with="used wpdb";
+        }
+        else $rows=MikDb::getRows($query);
         Caching::addCache($query,$rows);
-        Caching::logWrite("$query added to cache");
+        Caching::logWrite("$query added to cache $with");
         return $rows;
        }
        Caching::logWrite("$query loaded from cache");
@@ -69,12 +99,7 @@ Class Caching {
         Caching::logWrite("$query json loaded from cache");        
         return Caching::cacheRead($fnName);
     }
-    static function addCache($query,$rows) {
-        $fnId=date("d-m-y-h-i-s").rand(10000,99999).".txt";
-        $cacheMap[] = ["query" => $query, "fnId" => $fnId];
-        file_put_contents(Caching::getCachePath() . "cachemap.txt",$query."|".$fnId."^",FILE_APPEND | LOCK_EX);
-        Caching::cacheWrite($fnId,$rows);
-    } 
+    
     static function loadCacheMap() {
         Caching::$cacheMap=array();
         $txt=file_get_contents(Caching::getCachePath() . "cachemap.txt");

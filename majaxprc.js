@@ -9,9 +9,17 @@ var majaxModule=(function (my) {
         getCurBaseUrl() {
             return window.location.href.split('?')[0];
         },
+        saveUrl() {            
+            mUrl.prevUrl=mUrl.getCurUrl();
+        },
+        goBack() {            
+            if (mUrl.getCurUrl() == mUrl.prevUrl || mUrl.prevUrl == "") history.go(-1);
+            else window.location=mUrl.prevUrl;
+        },
         readUrl() {
          //read all values from browser's address
          let url=mUrl.getCurUrl();
+         
          mUrl.params=[];
          const urlParams = new URLSearchParams(window.location.search);
          urlParams.forEach(function(value, key) {
@@ -20,7 +28,7 @@ var majaxModule=(function (my) {
         },
         writeUrl() {
          //put all values into browser's address
-         let srcUrl=mUrl.getCurUrl();
+         let srcUrl=mUrl.getCurUrl();         
          let href=mUrl.getCurBaseUrl();
          let n=0;
          for (let key in this.params) {

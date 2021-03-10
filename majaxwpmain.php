@@ -2,7 +2,7 @@
    /*
    Plugin Name: Majax plugin
    Plugin URI: http://ttj.cz
-   description: >-
+   description: majax plugin v1
   majax plugin
    Version: 1.2
    Author: Mik

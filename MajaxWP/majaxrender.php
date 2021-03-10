@@ -4,69 +4,80 @@ namespace MajaxWP;
 use stdClass;
 
 Class MajaxRender {	
-	
-	function __construct($caller="empty",$createJson=false) {		
-		
-			//init custom fields
-			$this->fields=new CustomFields();
-			$this->fields->prepare($createJson);
-			$this->fields->loadPostedValues();			
-			ImageCache::loadImageCache();			
-			$this->setPostType();
+	private $callFromAjax;	
+	private $postType;
+	private $htmlElements;
+
+	function __construct($ajax=false) {	
+			$this->htmlElements=new MajaxHtmlElements();
+			$this->callFromAjax=$ajax;
+			//init custom fields			
+			if ($this->callFromAjax) { 
+				$this->setPostType();				
+				$this->loadFields();
+			}
 	}
-	function getPostType() {		
+	function loadFields() {
+		//$this->logWrite("cpt!@ {$this->getPostType()}");
+		$this->fields=new CustomFields();
+		$this->fields->prepare($this->getPostType());
+		$this->fields->loadPostedValues();			
+		ImageCache::loadImageCache($this->getPostType());		
+	}
+	function getPostType() {			
 		return $this->postType; 	
 	}
-	function setPostType() {
-		//return "mauta";
-		$hivePress=false;
-	  	if ($hivePress) {
-			$this->postType="hp_listing";
-	    }	 
-		$this->postType=filter_var($_POST['type'], FILTER_SANITIZE_STRING); 	
+	function setPostType($cpt="") {		
+		if ($cpt) $this->postType=$cpt;	
+		else $this->postType=filter_var($_POST['type'], FILTER_SANITIZE_STRING); 	
+		Caching::setPostType($this->getPostType());
 	}
 
 	function regShortCodes() {		
 		add_shortcode('majaxfilter', [$this,'printFilters'] );
 		add_shortcode('majaxcontent', [$this,'printContent'] );
+		add_shortcode('majaxstaticcontent', [$this,'showStaticContent'] );
+	}
+	
+	function showStaticContent($atts = []) {				
+		$atts = array_change_key_case( (array) $atts, CASE_LOWER );
+		if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute				 
+		$this->setPostType($type);		
+		$this->loadFields();		
+		?>
+		<div id="majaxmain" class="majaxmain">
+		<?php			
+		$query=$this->buildQuerySQL();
+		$rows=Caching::getCachedRows($query);
+		foreach ($rows as $row) {
+			$metaMisc=$this->buildInit();
+
+			$item=[];
+			$item=$this->buildItem($row,"","",0);		
+			$this->logWrite("row ".$item["image"]);	
+			//$this->htmlElements->showPost(1,$row["post_title"],ImageCache::getImageUrlFromId($row["_thumbnail_id"]),$row["post_content"],$row["meta"],$item);
+			$this->htmlElements->showPost(1,$item["title"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
+		}
+		?>
+		</div>
+		<?php
 	}
 	
 	function printFilters($atts = []) {
 		 $atts = array_change_key_case( (array) $atts, CASE_LOWER );
-		 if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute		
+		 if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute				 
+		 $this->setPostType($type);
+		 $this->loadFields();
 		//prints filter, run by shortcode majaxfilter	
 		ob_start();		
-		?>
-		<form id="majaxform">
-			<div class='majaxfiltercontainer'>			
-					<input type='hidden' name='type' value='<?= $type?>' />
-				<?php		
-				foreach ($this->fields->getFieldsFiltered() as $fields) {
-				  ?> <div class='majaxfilterbox'> <?php  
-							echo $fields->outFieldFilter();	
-				  ?> </div> <?php
-				}
-				?>			
-			</div>
-		</form>
-		<div style='display:none;' id="majaxback">
-			<div class='mbutton btn'>
-				<a href='javascript: history.go(-1)'>zpátky</a>
-			</div>
-		</div>
-		<?php
+		 $this->htmlElements->showFilters($this->postType,$this->fields->getFieldsFiltered());		 
 		 return ob_get_clean();
 	}	
 	function printContent($atts = []) {	
 		//prints content, run by shortcode majaxcontent		
 		ob_start();
-		?>
-		<div id="majaxmain" class="majaxmain">
-		 <?php
-		  //ajax content comes here
-		 ?>
-		</div> <?php
-		 return ob_get_clean();
+		$this->htmlElements->showMainPlaceHolder();
+		return ob_get_clean();
 	}	
 	function buildSingle($id) {	
 		//get all posts and their metas						
@@ -175,7 +186,7 @@ Class MajaxRender {
 		return $outRows;
 	}		
 	
-	function buildItem($row,$addFieldKey="",$addFieldValue="") {
+	function buildItem($row,$addFieldKey="",$addFieldValue="",$getJson=1) {
 		$ajaxItem=new MajaxItem();
 		$ajaxItem->addField("title",$row["post_title"])->addField("id",$row["ID"])
 		->addField("content",$row["post_content"])->addField("url",$row["slug"])
@@ -184,8 +195,8 @@ Class MajaxRender {
 		foreach ($this->fields->getFieldsDisplayed() as $field) {
 		 $ajaxItem->addMeta($field->outName(),$row[$field->outName()]);
 		}	
-		$out=$ajaxItem->expose();
-		$this->logWrite($out);
+		$out=$ajaxItem->expose($getJson);
+		$this->logWrite("exposed: ".$out);
 		return $out;					
 	}
 	function buildInit() {
@@ -198,6 +209,7 @@ Class MajaxRender {
 			$row["misc"][$field->outName()]["min"]=$field->valMin;
 			$row["misc"][$field->outName()]["max"]=$field->valMax;			
 			$row["misc"][$field->outName()]["displayorder"]=$field->displayOrder;	
+			$row["misc"][$field->outName()]["title"]=$field->title;	
 		}
 		return $row;	
 	}

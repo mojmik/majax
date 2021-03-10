@@ -14,10 +14,8 @@ Class MajaxHandlerShort {
 
 	public function register()  {		
 
-		$this->ajaxRender=new MajaxRender("handlershort");
-		
+		$this->ajaxRender=new MajaxRender();		
 		$this->ajaxRender->regShortCodes();				
-
         add_action('wp_loaded', [$this, 'register_script']);
 	}
 	
@@ -29,7 +27,7 @@ Class MajaxHandlerShort {
 		wp_register_script('majaxview', MAJAX_PLUGIN_URL . 'majaxview.js', array( 'jquery' ) );	
 		wp_enqueue_script('majaxview');
 		wp_register_script('majaxprc', MAJAX_PLUGIN_URL . 'majaxprc.js', array( 'jquery' ) );	
-		wp_enqueue_script('majaxprc');		
+		wp_enqueue_script('majaxprc');				
 		wp_register_script('majax-script', MAJAX_PLUGIN_URL . 'majax.js', array( 'jquery' ) );		
 		wp_localize_script('majax-script', 'majax', $this->get_ajax_data());
 		wp_enqueue_script('majax-script');		

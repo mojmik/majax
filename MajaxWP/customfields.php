@@ -4,20 +4,17 @@ namespace MajaxWP;
 class CustomFields {
   public $fieldsList=array();
   public $fieldsRows=array();
-  public function prepare($forceCreateJson) {
+  private $customPostType;
+  public function prepare($cpt="mauta") {
 	//recreate fields json		
-	if ($forceCreateJson) {
-	 $this->createJson();	
-	}
-	else {
-		$fieldRows=Caching::cacheRead("fieldsrows");	
-		if (!count($fieldRows))	$this->createJson();		
-		else $this->loadFromRows($fieldRows);
-	}
+	$this->customPostType=$cpt;	
+	$fieldRows=Caching::cacheRead("fieldsrows".$this->customPostType);	
+	if (!count($fieldRows))	$this->createJson();		
+	else $this->loadFromRows($fieldRows);
   }
   private function createJson() {
 	$this->loadFromSQL();
-	Caching::cacheWrite("fieldsrows",$this->fieldsRows);
+	Caching::cacheWrite("fieldsrows".$this->customPostType,$this->fieldsRows);
   }
   public function addField($c) {
     $this->fieldsList[] = $c;	  
@@ -80,7 +77,7 @@ class CustomFields {
 
   public function loadFromSQL() {
 	global $wpdb;
-	$query = "SELECT * FROM `".$wpdb->prefix."majax_fields` WHERE `filterorder`>'0' OR `displayorder`>'0' ORDER BY `filterorder`";
+	$query = "SELECT * FROM `".$wpdb->prefix.$this->customPostType."_majax_fields` WHERE `filterorder`>'0' OR `displayorder`>'0' ORDER BY `filterorder`";
 	$load=false;
 	foreach( $wpdb->get_results($query) as $key => $row) {	
 		$this->fieldsRows[] = $row;	

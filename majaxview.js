@@ -3,9 +3,9 @@ var majaxModule=(function (my) {
     const majaxRender = {        
         postTemplate: (id,title,content,url,meta,image,single) => { 
             let metaOut=[];
-            metaOut[0]="";
-            metaOut[1]="";
-            metaOut[2]="";
+            for (let n=0;n<5;n++) {
+                metaOut[n]="";    
+            }            
         
             for (const property in meta) {
                 let metaIcon=my.metaMisc.icons[property];
@@ -35,38 +35,76 @@ var majaxModule=(function (my) {
                         </div> 
                     </div>`;
                 }
-                
+                if (displayOrder>30 && displayOrder<=40) {
+                    let propVal=meta[property];
+                    if (propVal == null) propVal="neuvedeno";
+                    metaOut[3]=metaOut[3] + `
+                    <div class='col-sm-3'>
+                        <span>${my.metaMisc.title[property]}</span>
+                        <div class='row'>
+                            <span>
+                             ${propVal}
+                            </span>
+                        </div> 
+                    </div>`
+                }
             }	
             if (image!="") {
                 image=`<img src='${image}' />`;
+            }            
+            if (typeof single !== 'undefined' ) {
+                 //single                  
+                 return(
+                    `
+                    <div class='majaxout row2' id='majaxout${id}'>
+                        <div class='row flex-grow-1'>
+                            <div class='col title'>                        
+                                ${image}                        
+                            </div>
+                        </div>
+                        <div class='row mcontent'>			    
+                            <span>${content}</span>
+                        </div>
+                        <div class='row bors'>			
+                             ${metaOut[0]}                    
+                        </div>
+                        <div class='row bort'>			
+                                ${metaOut[1]}
+                                ${metaOut[2]}	
+                        </div>    
+                        <div class='row borb'>
+                                ${metaOut[3]}	
+                        </div>
+                    </div>
+                    `);            
             }
-            let mainClassName="majaxout";
-            if (typeof single !== 'undefined' ) mainClassName="majaxout row2"
-            return(
-            `
-            <div class='${mainClassName}' id='majaxout${id}'>
-                <div class='row flex-grow-1'>
-                    <div class='col title'>                        
-                        ${image}                        
+            else {
+                return(
+                    `
+                    <div class='majaxout' id='majaxout${id}'>
+                        <div class='row flex-grow-1'>
+                            <div class='col title'>                        
+                                ${image}                        
+                            </div>
+                        </div>
+                        <div class='row mcontent'>			    
+                            <span>${content}</span>
+                        </div>
+                        <div class='row bors'>			
+                             ${metaOut[0]}                    
+                        </div>
+                        <div class='row bort'>			
+                                ${metaOut[1]}
+                                ${metaOut[2]}	
+                        </div>
+                        <div class='row borb'>
+                            <div class='col action'>
+                                <a data-slug='${my.mStrings.mNormalize(title)}' href='?id=${my.mStrings.mNormalize(title)}'>Objednat</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class='row mcontent'>			    
-                    <span>${content}</span>
-                </div>
-                <div class='row bors'>			
-                     ${metaOut[0]}                    
-                </div>
-                <div class='row bort'>			
-                        ${metaOut[1]}
-                        ${metaOut[2]}	
-                </div>
-                <div class='row borb'>
-                    <div class='col action'>
-                        <a data-slug='${my.mStrings.mNormalize(title)}' href='?id=${my.mStrings.mNormalize(title)}'>akce</a>
-                    </div>
-                </div>
-            </div>
-            `);
+                    `);
+            }            
         },
         postTemplateEmpty: (id,content) => { 
             let metaOut="";	
@@ -132,11 +170,11 @@ var majaxModule=(function (my) {
                         if (p!=0) url=my.mUrl.generateUrl("aktPage",p);
                         else url=my.mUrl.generateUrl("aktPage",null);
                         content+=`
-                        <span><a data-slug='pagination' data-page='${p}' href='${url}'>page ${p+1}</a></span>
+                        <span><a data-slug='pagination' data-page='${p}' href='${url}'>${p+1}</a></span>
                         `;
                     } else {
                         content+=`
-                        <span>aktpage ${p+1}</span> 
+                        <span>${p+1}</span> 
                         `; 
                     }
                 } 
@@ -185,26 +223,11 @@ var majaxModule=(function (my) {
             jQuery("#majaxout"+thisId).css("display", "flex").hide().fadeIn("slow");
             jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
         },
-        showBack: () => {
-            /*
-            const goBack=`<a href='${my.mUrl.getCurBaseUrl()}'>zpátky</a>`;
-            let postType=`
-             <input name='type' type='hidden' value='${jQuery('input[name="type"]').val()}' />
-             `;
-             jQuery("#majaxback").val(postType + goBack); //"<a href='"++"'>zpátky</a>");
-             */
-             //jQuery("#majaxform").css("display", "hidden");
-             //jQuery("#majaxform").replaceWith(goBack);             
-
+        showBack: () => {     
              jQuery("#majaxform").hide();
              jQuery("#majaxback").show();
         },
-        hideBack: () => {
-            /*
-            const goBack=``;           
-             jQuery("#majaxback").val(goBack); //"<a href='"++"'>zpátky</a>");
-             jQuery("#majaxform").css("display", "flex");
-             */
+        hideBack: () => { 
             jQuery("#majaxform").show();
             jQuery("#majaxback").hide();
         },

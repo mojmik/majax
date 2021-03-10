@@ -39,22 +39,31 @@ class CustomField {
 		if ($this->typeIs("select") && $this->value!="too many") {
 			//lets gen a nice selectbox
 		   return "<label {$labelFor}>{$this->title}</label>
+		   <div>
 		   <select name='".$this->name."' 
 		   data-group='majax-fields' 
 		   id='custField".urlencode($this->name)."' 
 		   class='majax-select' 
 		   multiple='multiple'>
 		   {$this->outSelectOptions()}
-		   </select>";
+		   </select>
+		   </div>
+		   ";
 		}
 		else if ($this->compare==">") {
 		   return "<label {$labelFor}>{$this->title}</label>
 			   <div class='sliderrng' id='majax-slider-".urlencode($this->name)."'></div>
-			   <input class='sliderval' type='text' name='".$this->name."' data-group='majax-fields' data-mslider='majax-slider-".urlencode($this->name)."' id='custField".urlencode($this->name)."' />					
+			   <input class='sliderval' readonly type='text' name='".$this->name."' data-group='majax-fields' data-mslider='majax-slider-".urlencode($this->name)."' id='custField".urlencode($this->name)."' />					
 			   "; 
 		}
 		else if ($this->type=="bool") {
-		   return "<label {$labelFor}>{$this->title}</label><input class='majax-fireinputs' type='checkbox' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."' />";	 
+		  // return "<input class='majax-fireinputs' type='checkbox' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."' /><label {$labelFor}>{$this->title}</label>";	 
+		  return "
+		  <label {$labelFor}>{$this->title}</label>
+		  <div>
+		  	<input class='majax-fireinputs myinput large' type='checkbox' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."' />
+		  </div>
+		  ";	 
 		}
 		return "<label {$labelFor}>{$this->title}</label><input class='majax-fireinputs' type='text' name='".$this->name."' data-group='majax-fields' id='custField".urlencode($this->name)."' />";
 	}
