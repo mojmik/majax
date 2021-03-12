@@ -1,7 +1,7 @@
 var majaxModule=(function (my) {
         
     const majaxRender = {        
-        postTemplate: (id,title,content,url,meta,image,single) => { 
+        postTemplate: (id,title,name,content,url,meta,image,single) => { 
             let metaOut=[];
             for (let n=0;n<5;n++) {
                 metaOut[n]="";    
@@ -13,15 +13,17 @@ var majaxModule=(function (my) {
                 if (typeof metaIcon!== 'undefined' && metaIcon!="") metaIcon=`<img src='${metaIcon}' />`;
                 else metaIcon=`<span>${property}</span>`;	
                 if (displayOrder<20) {
-                    metaOut[0]=metaOut[0] + `<div class='col meta'>${metaIcon} ${meta[property]}</div>`;
+                    metaOut[0]=metaOut[0] + `<div class='col meta'>${metaIcon}${meta[property]}</div>`;
                 }
-                if (displayOrder>=20 && displayOrder<=30) {
-                    metaOut[1]=metaOut[1] + `
+                if (displayOrder>=20 && displayOrder<=30) {                    		
+                    let formattedVal1=my.metaMisc.formatMetaVal(meta[property],0,my.metaMisc.fieldformat[property],"toFormat",true);
+                    let formattedVal2=my.metaMisc.formatMetaVal(meta[property]*1.21,0,my.metaMisc.fieldformat[property],"toFormat",true);
+                    metaOut[1]=metaOut[1] + `  
                     <div class='col-sm-6 price'>
                         Cena bez DPH / měsíc 
                         <div class='row'>
-                            <div class='col'>
-                                ${meta[property]}
+                            <div class='col priceTag'>
+                                ${formattedVal1}
                             </div>
                         </div> 
                     </div>`;
@@ -29,8 +31,8 @@ var majaxModule=(function (my) {
                     <div class='col-sm-6 price'>
                         Cena včetně DPH / měsíc 
                         <div class='row'>
-                            <div class='col'>
-                             ${meta[property]*1.21}
+                            <div class='col priceTag'>
+                             ${formattedVal2}
                             </div>
                         </div> 
                     </div>`;
@@ -58,7 +60,7 @@ var majaxModule=(function (my) {
                     `
                     <div class='majaxout row2' id='majaxout${id}'>
                         <div class='row flex-grow-1'>
-                            <div class='col title'>                        
+                            <div class='col title borf'>                        
                                 ${image}                        
                             </div>
                         </div>
@@ -83,11 +85,11 @@ var majaxModule=(function (my) {
                     `
                     <div class='majaxout' id='majaxout${id}'>
                         <div class='row flex-grow-1'>
-                            <div class='col title'>                        
+                            <div class='col title bort'>                        
                                 ${image}                        
                             </div>
                         </div>
-                        <div class='row mcontent'>			    
+                        <div class='row mcontent borb'>			    
                             <span>${content}</span>
                         </div>
                         <div class='row bors'>			
@@ -99,7 +101,7 @@ var majaxModule=(function (my) {
                         </div>
                         <div class='row borb'>
                             <div class='col action'>
-                                <a data-slug='${my.mStrings.mNormalize(title)}' href='?id=${my.mStrings.mNormalize(title)}'>Objednat</a>
+                                <a class='mButtonA' data-slug='${name}' href='?id=${name}'>Objednat</a>
                             </div>
                         </div>
                     </div>
@@ -249,8 +251,10 @@ var majaxModule=(function (my) {
                 jQuery("#dropDate").datepicker();
                 majaxRender.showBack();
                 jQuery("#majaxContactForm").on('submit', function(event) {				
-                    my.majaxPrc.runAjax(this);
-                    event.preventDefault();			
+                    event.preventDefault();	      
+                    if (my.majaxViewComponents.validateForm(this)) {
+                        my.majaxPrc.runAjax(this);                        		
+                    }                                  
 			        return false;
                 });                
         
@@ -260,7 +264,7 @@ var majaxModule=(function (my) {
                 majaxRender.animateMajaxBox(thisHtml,thisId);			
             }
             else { 
-                thisHtml=majaxRender.postTemplate(thisId,jsonObj.title,jsonObj.content,jsonObj.url,jsonObj.meta,jsonObj.image,jsonObj.single);
+                thisHtml=majaxRender.postTemplate(thisId,jsonObj.title,jsonObj.name,jsonObj.content,jsonObj.url,jsonObj.meta,jsonObj.image,jsonObj.single);
                 majaxRender.animateMajaxBox(thisHtml,thisId);			
             }
          }

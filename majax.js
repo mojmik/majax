@@ -70,7 +70,33 @@ const metaMisc = {
 			this.displayorder[key]=misc[key]["displayorder"];
 			this.title[key]=misc[key]["title"];
 		}
-	}
+	},
+	formatMetaVal: (val1 , val2=0, format=2, direction="toFormat", oneVal=false) => {		
+		if (direction=="toFormat") {			
+			if (oneVal) return format.replace("%1",val1);
+			if (format===2) return ""	+ val1 + " - " + "" + val2 + "";
+			else {
+			 return format.replace("%1",val1) + " - " + format.replace("%1",val2);
+			}
+		}
+		else {
+			if (format!==2) {
+				let formatStr=format.replace("%1","");
+				val1=val1.split(formatStr).join(""); //replaceAll added on August2020
+				val1=val1.split(" - ").join("|"); //or use replaceAll
+				return val1;
+			}
+			//convert from format			
+			//let's take 2 numbers
+			const rex = /-?\d(?:[,\d]*\.\d+|[,\d]*)/g;
+			let out="";
+			while ((match = rex.exec(val1)) !== null) {
+			if (out!="") out+='|'; 
+			out+=match[0];
+			}
+			return out;
+		}
+    }
 };
 
 
@@ -80,7 +106,12 @@ const metaMisc = {
 	
 
 	
-	jQuery(document).ready(function() {		
+	jQuery(document).ready(function() {	
+		let hasFilterForm=false;
+		let hasIdSign=false;
+		if (jQuery('#majaxform').length>0)  hasFilterForm=true;
+		if (jQuery('#idSign').length>0)  hasIdSign=true;
+
 		my.mUrl.readUrl();
 		//fire event handlers			
 		jQuery('.majax-select').on('change', function() {				
@@ -109,7 +140,7 @@ const metaMisc = {
 			event.preventDefault();			
 			return false;
 		});
-
+		
 		jQuery('#goBackButton').on('click', function(e) {			
 			e.stopImmediatePropagation();
 			my.mUrl.goBack();			
@@ -119,15 +150,19 @@ const metaMisc = {
 			let href="";
 			if(e.state) href=e.state.href;
 			//reset filter boxes
-			my.majaxSelect.resetAll();
-			my.majaxPrc.runAjax(this);			
+			if (hasFilterForm) {
+				my.majaxSelect.resetAll();
+				my.majaxPrc.runAjax(this);			
+			} else {				
+					location.reload(); 				
+			}	
 		 }); 
 		 
 		//sliders
 		my.majaxSlider.initSliders(); 
 		
 		//load
-		if (jQuery('#majaxform').length>0) my.majaxPrc.runAjax(false);
+		if (hasFilterForm || hasIdSign) my.majaxPrc.runAjax(false);
 	}); 
 })();
 

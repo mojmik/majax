@@ -9,7 +9,7 @@ class CustomFields {
 	//recreate fields json		
 	$this->customPostType=$cpt;	
 	$fieldRows=Caching::cacheRead("fieldsrows".$this->customPostType);	
-	if (!count($fieldRows))	$this->createJson();		
+	if (!$fieldRows || !count($fieldRows))	$this->createJson();		
 	else $this->loadFromRows($fieldRows);
   }
   private function createJson() {

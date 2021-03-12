@@ -29,18 +29,18 @@ var majaxModule=(function (my) {
                             </div>
                         <form id="majaxContactForm" method="post">
                             <div class="row formGroup">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6">                                    
                                     <input type="text" class="form-control" id="fname" name="fname" placeholder="Jméno*">
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6">                                    
                                     <input type="text" class="form-control" id="lname" name="lname" placeholder="Příjmení*">
                                 </div>
                             </div>
-                            <div class="row formGroup">
-                                <div class="col-sm-6">
+                            <div class="row formGroup">                                
+                                <div class="col-sm-6">                                                                        
                                     <input type="text" class="form-control email" id="email" name="email" placeholder="Email*">
-                                </div>
-                                <div class="col-sm-6">
+                                </div>                                
+                                <div class="col-sm-6">                                    
                                     <input type="text" class="form-control email" id="remail" name="cemail" placeholder="Email*">
                                 </div>
                             </div>
@@ -60,10 +60,10 @@ var majaxModule=(function (my) {
                                     <input type="text" class="form-control mileage" id="mileage" placeholder="Předpoklad najetých kilometrů*" name="expected_mileage">
                                 </div>
                                 <div class="col-sm-6 p-spc-0">
-                                            <label for="leisure" id="leasing-for-leisure" class="leisLabel">
-                                                   <input name="leisure" id="leisure" type="checkbox" class="leisCheck">
+                                            <label for="business" id="leasing-for-leisure" class="leisLabel">
+                                                   <input name="business" id="leisure" type="checkbox" class="leisCheck">
                                                    <em id="leisureBox" class="sprite"></em>
-                                                   Soukromý pronájem*
+                                                   Jste již naším firemním zákazníkem*
                                             </label>
                                 </div>
                             </div>
@@ -97,7 +97,88 @@ var majaxModule=(function (my) {
         </g>
         </g>
         </svg></div>	
-        `
+        `,
+        mForms: {
+            formId:"",
+            postedFields:[],
+            formatFields: {
+                "letters":/^[a-zA-Z]*$/,
+                "email": /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                "phone": /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+                "number":/^-?\d*\.?\d*$/,
+                "date":/^\d{2}[./-]\d{2}[./-]\d{4}$/
+            },
+            formatErrors: {
+                "letters":"Zadaný text musí obsahovat pouze písmena",
+                "email": "Zadaný text musí platný email",
+                "phone": "Zadaný text musí být platné telefonní číslo",
+                "number":"Zadaný text musí být platné číslo",
+                "date":"Zadaný text musí být platné datum",
+                "required":"Toto je povinné pole",
+                "sameLikeName":"Kontrolní pole se neshoduje"
+            },
+            addInput: function (idName,inputType,isRequired=true,sameLikeName=false) {
+                this.postedFields.push({"name": idName,"type": inputType,"required": isRequired, "sameLikeName" : sameLikeName});                                  
+            },
+            check: function(postedFieldKey,val) {
+                let postedField=this.postedFields[postedFieldKey];
+                if (postedField["required"]===true && val == "") return this.formatErrors["required"];
+                if (!this.formatFields[postedField["type"]].test(val)) return this.formatErrors[postedField["type"]];
+                if (postedField["sameLikeName"]!==false) {
+                    let otherVal=this.getPostedFieldValByName(postedField["sameLikeName"]);
+                    if (otherVal !== val) return this.formatErrors["sameLikeName"];
+                }
+                return true;
+            },
+            getPostedFieldValByName: function(name) {
+                for (let field in this.postedFields) {
+                  let otherFieldName=this.postedFields[field]["name"];
+                  if (otherFieldName == name) {
+                      return jQuery(this.formId).find(`input[name="${otherFieldName}"]`).val();
+                  }
+                }
+            },
+            setForm(formId) {
+                this.formId=formId;
+                this.postedFields=[];
+            }
+        },
+        validateForm: (checkedForm) => {
+            majaxViewComponents.mForms.setForm(checkedForm);
+            majaxViewComponents.mForms.addInput("fname","letters");
+            majaxViewComponents.mForms.addInput("lname","letters");
+            majaxViewComponents.mForms.addInput("email","email");
+            majaxViewComponents.mForms.addInput("cemail","email","true","email");            
+            majaxViewComponents.mForms.addInput("start_date","date");
+            majaxViewComponents.mForms.addInput("end_date","date");
+            majaxViewComponents.mForms.addInput("phone_no","phone");
+            majaxViewComponents.mForms.addInput("expected_mileage","number");      
+            
+            let merrors=[];            
+            for (let key in majaxViewComponents.mForms.postedFields) {
+                let name=majaxViewComponents.mForms.postedFields[key]["name"];
+                let checkedElement=jQuery(checkedForm).find('input[name="'+name+'"]');
+                let val = jQuery(checkedElement).val();
+                let checkType=majaxViewComponents.mForms.postedFields[key]["type"];
+                let checkRegex=majaxViewComponents.mForms.formatFields[checkType];
+                let mErr=majaxViewComponents.mForms.check(key,val);
+                let prev=jQuery(checkedElement).prev();
+                if (mErr !== true) {                    
+                    if (jQuery(prev).data('formerr')=="1") jQuery(prev).text(mErr);
+                    else jQuery('<span class="formerr" data-formerr="1">'+mErr+'</span>').insertBefore(checkedElement);
+                } else {
+                   if (jQuery(prev).data('formerr')=="1") jQuery(prev).text("");                   
+                }
+                merrors.push([key,mErr]);                
+            }
+            /*
+            for (let n=0;n<merrors.length;n++) {
+                let errorVal=merrors[n][0];
+                let errorMsg=merrors[n][1];
+                console.log(errorMsg);
+            }
+            */
+        }
     }
      
     
@@ -105,4 +186,4 @@ var majaxModule=(function (my) {
     my.majaxViewComponents=majaxViewComponents;
     return my;
 
-}(majaxModule || {} ));
+ }(majaxModule || {} ));

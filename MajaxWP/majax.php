@@ -7,6 +7,7 @@ Class Majax {
 	public $postTypeName=["mauta","mauta2"];
 	function __construct() {
 		spl_autoload_register([$this,"mLoadClass"]);
+		Caching::checkPruneCacheNeeded($this->postTypeName);
 		if (MAJAX_FAST > 1) $this->ajaxHandler=new MajaxHandlerShort(); //shortinit lightweight version
 		else $this->ajaxHandler=new MajaxHandler(); //ajax-admin version
 		$this->ajaxHandler->register();							

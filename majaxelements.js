@@ -37,32 +37,7 @@ const majaxSelect = {
 }
 
 const majaxSlider =  {
-
-	formatSliderVal: (val1 , val2=0, format=2, direction="toFormat") => {		
-		if (direction=="toFormat") {			
-			if (format===2) return ""	+ val1 + " - " + "" + val2 + "";
-			else {
-			 return format.replace("%1",val1) + " - " + format.replace("%1",val2);
-			}
-		}
-		else {
-			if (format!==2) {
-				let formatStr=format.replace("%1","");
-				val1=val1.split(formatStr).join(""); //replaceAll added on August2020
-				val1=val1.split(" - ").join("|"); //or use replaceAll
-				return val1;
-			}
-			//convert from format			
-			//let's take 2 numbers
-			const rex = /-?\d(?:[,\d]*\.\d+|[,\d]*)/g;
-			let out="";
-			while ((match = rex.exec(val1)) !== null) {
-			if (out!="") out+='|'; 
-			out+=match[0];
-			}
-			return out;
-		}
-    },
+	
     setSlidersVals: function(sliderId,val1,val2) {        
         let thisInput=jQuery('input[data-mslider="'+sliderId+'"]');
         let inputName=thisInput.attr('name');
@@ -71,7 +46,7 @@ const majaxSlider =  {
     },
 	initSlidersMinMax: function() {		
         //init sliders with detected min-max values 
-		var fs=this.formatSliderVal;
+		var fs=my.metaMisc.formatMetaVal;
 		jQuery('input[data-mslider]').each(function(index) {
 			var inputId=this.id;
 			let sliderId=jQuery(this).attr('data-mslider');
@@ -107,7 +82,7 @@ const majaxSlider =  {
 	},
 	initSliders: function() {
             //init sliders with default values 0,1
-			var fs=this.formatSliderVal;		
+			var fs=my.metaMisc.formatMetaVal;		
 			//initialize numeric sliders
 			jQuery('input[data-mslider]').each(function(index) {
 				var inputId=this.id;

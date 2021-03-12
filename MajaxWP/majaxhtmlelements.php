@@ -4,7 +4,17 @@ namespace MajaxWP;
 use stdClass;
 
 Class MajaxHtmlElements {	
-    function showMainPlaceHolder() {    
+    function showBackButton() {
+        ?>
+        <div style='display:none;' id="majaxback">
+            <div id='goBackButton' class='mbutton btn btn-primary'>
+                <a href='javascript: history.go(-1)'>zpátky</a>
+            </div>
+        </div>
+        <?php  
+    }
+    function showMainPlaceHolder() {  
+        $this->showBackButton();  
 		?>
 		<div id="majaxmain" class="majaxmain">
 		 <?php
@@ -12,6 +22,26 @@ Class MajaxHtmlElements {
 		 ?>
 		</div> 
 		<?php
+    }
+    function showIdSign() {
+        ?>
+        <input id='idSign' type='hidden' name='idSign' value='1' />
+        <?php
+    }
+    function showMainPlaceHolderStatic($header=false,$postType="") {    
+        if ($header) {
+            $this->showBackButton();
+            ?>
+            <input type='hidden' name='type' value='<?= $postType?>' />
+            <div id="majaxmain" class="majaxmain">            
+             <?php
+        }
+        //ajax content comes here
+		else {
+            ?>
+            </div> 
+            <?php
+        }
     }
     function showFilters($postType,$allFields) {
 		?>
@@ -25,38 +55,39 @@ Class MajaxHtmlElements {
 				  ?> </div> <?php
 				}
 				?>			
-            </div>
-            <div style='display:none;' id="majaxback">
-                <div id='goBackButton' class='mbutton btn btn-primary'>
-                    <a href='javascript: history.go(-1)'>zpátky</a>
-                </div>
-    		</div>
-		</form>		
+            </div>            
+		</form>		       
 		<?php
+    }
+    function formatField($field,$fieldFormat) {                
+        if ($fieldFormat) $field=str_replace("%1",$field,$fieldFormat);
+        return $field;
     }
     function showPost($id,$title,$image,$content,$metas,$itemDetails) {         
         $metaOut=array();     
         for ($n=0;$n<5;$n++) {
             $metaOut[$n]="";
-        }
-
+        }        
         foreach ($metas as $metaName => $metaMisc) {           
-            $metaIcon=$metaMisc["icons"];
+            //echo json_encode($metaMisc); da
+            $metaIcon=$metaMisc["icon"];
             $displayOrder=$metaMisc["displayorder"];
+            $fieldFormat=$metaMisc["fieldformat"];
             $metaVal=$itemDetails[$metaName];
             if ($metaIcon) $metaIcon="<img src='$metaIcon' />";
             else $metaIcon="<span>$metaName</span>";	
            
             if ($displayOrder<20) {
-                $metaOut[0]=$metaOut[0] . "<div class='col meta'>$metaIcon $metaVal</div>";
+                if ($metaMisc["type"]=="NUMERIC") $metaOut[0]=$metaOut[0] . "<div class='col meta col-md-2'>$metaIcon"."$metaVal</div>";
+                else $metaOut[0]=$metaOut[0] . "<div class='col meta'>$metaIcon"."$metaVal</div>";
             }
             if ($displayOrder>=20 && $displayOrder<=30) {
                 $metaOut[1]=$metaOut[1] . "
                 <div class='col-sm-6 price'>
                     Cena bez DPH / měsíc 
                     <div class='row'>
-                        <div class='col'>
-                            $metaVal
+                        <div class='col priceTag'>".
+                            $this->formatField($metaVal,$fieldFormat)."
                         </div>
                     </div> 
                 </div>";
@@ -64,8 +95,8 @@ Class MajaxHtmlElements {
                 <div class='col-sm-6 price'>
                     Cena včetně DPH / měsíc 
                     <div class='row'>
-                        <div class='col'>".
-                         ($metaVal*1.21)."
+                        <div class='col priceTag'>".
+                        $this->formatField(floor($metaVal*1.21),$fieldFormat)."
                         </div>
                     </div> 
                 </div>";
@@ -87,13 +118,15 @@ Class MajaxHtmlElements {
         }
   
         if ($image!="") {
-            $image="<img src='$image' />";
+            $image="<img class='pct80' src='$image' />";
         }  
         ?>
         <div class='majaxout majaxoutStatic' id='majaxout<?=$id?>'>              
-                        <div class='row flex-grow-1'>
+                        <div class='row flex-grow-1 borf'>
                             <div class='col title'>                        
                                 <?= $image?>
+                                <div class='stripes stripe1'>Převodovka - manuál</div>
+                                <div class='stripes stripe2'>Dálniční známka pro ČR</div>
                             </div>
                         </div>
                         <div class='row mcontent'>			    
@@ -108,7 +141,7 @@ Class MajaxHtmlElements {
                         </div>
                         <div class='row borb'>
                             <div class='col action'>
-                                <a data-slug='<?=$title?>' href='?id=<?=$title?>'>Objednat</a>
+                                <a class='mButtonA' data-slug='<?=$title?>' href='?id=<?=$title?>'>Objednat</a>
                             </div>
                         </div>
                     </div>

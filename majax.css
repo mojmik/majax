@@ -17,8 +17,9 @@
   padding: 15px 30px;
   border: 0;
   font-weight: 700;
-  color: #fff;
-  background-color: #EAAB1C;
+  color: #000;
+  /*background-color: #EAAB1C;*/
+  background-color: #ffd100;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   cursor: pointer;
@@ -28,15 +29,45 @@
   margin: 0 auto;
 }
 .mbutton a {
-  color: #fff;
+  color: #000;
   text-decoration: none;
 }
-.site-main .btn-primary:hover {
+.site-main .btn-primary {
   background-color: #ffd100;
-  border-color: #ffd100;
+  /*border-color: #ffd100;*/
 }
+
+.site-main .btn-primary:hover {
+  /*background-color: #ffd100;*/
+  background-color: rgba(255,209,0,0.4);
+  /*border-color: #ffd100;*/
+}
+.site-main .btn {
+  color:#000;
+}
+.site-main .btn:hover {
+  color:#000;
+}
+.mButtonA {
+  font-size: 13px;
+  padding: 0px 20px;
+  border: 0;
+  font-weight: 700;
+  color: #000;
+  background-color: #ffd100;
   
-    
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  -webkit-appearance: button;
+  text-decoration: none;
+  text-align: center;
+  margin: 5px 0 5px 0;
+} 
+.mButtonA:hover { 
+  background-color: rgba(255,209,0,0.4);
+  color: #000;
+}    
 
 
 #majaxback {
@@ -65,6 +96,9 @@
     border: 1px solid #ccc;
     box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.formGroup .formerr {
+  color:rgb(160, 38, 38);
 }
 .formGroup .email {
   background: url(./pics/email.jpg) no-repeat right center;
@@ -120,6 +154,32 @@
 .majaxoutStatic {  
   display:flex;
 }
+
+.majaxout .title {
+  position:relative;
+  padding:0;
+}
+.majaxout .pct80 {
+  width:80%;
+}
+.majaxout .stripes {
+  position:absolute;
+  right:0px;
+  width:130px;
+  background-color: rgba(255,209,0,0.4);
+  color:#000; 
+  font-size:10px;
+  padding:0 5px 0 5px;
+}
+.majaxout .stripe1 {
+  top:10px;
+}
+.majaxout .stripe2 {
+  top:40px;
+}
+.majaxout .borf {
+  border: 1px solid #ffdd00;  
+}
 .majaxout .bors {
   border-left: 1px solid #ffdd00;
   border-right: 1px solid #ffdd00;
@@ -163,6 +223,10 @@
 }
 .majaxout .price:first-child {
   border-right:1px solid #ffdd00;  
+}
+.majaxout .price .priceTag {
+  font-size:14px;
+  font-weight: 700;
 }
 .majaxmain .mpagination {
   width:100%;

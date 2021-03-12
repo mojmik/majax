@@ -14,7 +14,8 @@ var majaxModule=(function (my) {
         },
         goBack() {            
             if (mUrl.getCurUrl() == mUrl.prevUrl || mUrl.prevUrl == "") history.go(-1);
-            else window.location=mUrl.prevUrl;
+            else window.location.href=mUrl.prevUrl;            
+            return false;
         },
         readUrl() {
          //read all values from browser's address
@@ -185,7 +186,7 @@ var majaxModule=(function (my) {
                  if (obj.value != defaultVal) {                                       
                     let fieldFormat=my.metaMisc.fieldformat[inputName];
                     fieldFormat = (fieldFormat == "") ? 2 : fieldFormat;
-                    let aktVal=my.majaxSlider.formatSliderVal(obj.value,0,fieldFormat,"fromFormat");
+                    let aktVal=my.metaMisc.formatMetaVal(obj.value,0,fieldFormat,"fromFormat");
                     outObj.data[obj.name]=aktVal;
                     if (majaxPrc.thisFiringObjId == sliderId) {
                         //slider set by user, save to url

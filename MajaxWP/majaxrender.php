@@ -39,28 +39,31 @@ Class MajaxRender {
 		add_shortcode('majaxstaticcontent', [$this,'showStaticContent'] );
 	}
 	
-	function showStaticContent($atts = []) {				
+	function showStaticContent($atts = []) {					
 		$atts = array_change_key_case( (array) $atts, CASE_LOWER );
 		if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute				 
 		$this->setPostType($type);		
 		$this->loadFields();		
-		?>
-		<div id="majaxmain" class="majaxmain">
-		<?php			
-		$query=$this->buildQuerySQL();
+		ob_start();
+		$this->htmlElements->showMainPlaceHolderStatic(true,$type);
+		$postId=filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+		if ($postId) { 
+			$query=$this->buildSingle($postId);
+			$this->htmlElements->showIdSign();
+		}
+		else $query=$this->buildQuerySQL();
 		$rows=Caching::getCachedRows($query);
+		
 		foreach ($rows as $row) {
 			$metaMisc=$this->buildInit();
-
 			$item=[];
 			$item=$this->buildItem($row,"","",0);		
-			$this->logWrite("row ".$item["image"]);	
-			//$this->htmlElements->showPost(1,$row["post_title"],ImageCache::getImageUrlFromId($row["_thumbnail_id"]),$row["post_content"],$row["meta"],$item);
-			$this->htmlElements->showPost(1,$item["title"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
+			$this->logWrite("row ".$item["image"]);				
+			$this->htmlElements->showPost(1,$row["post_name"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
 		}
-		?>
-		</div>
-		<?php
+
+		$this->htmlElements->showMainPlaceHolderStatic(false);
+		return ob_get_clean();
 	}
 	
 	function printFilters($atts = []) {
@@ -151,8 +154,8 @@ Class MajaxRender {
 		if ($filters) $filters=" WHERE $filters";
 		$query=
 		"
-		SELECT post_title,post_content{$colSelect}  FROM
-		(SELECT post_title,post_content 
+		SELECT post_title,post_name,post_content{$colSelect}  FROM
+		(SELECT post_title,post_name,post_content 
 			$col
 			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
 			WHERE post_id=id 
@@ -188,7 +191,9 @@ Class MajaxRender {
 	
 	function buildItem($row,$addFieldKey="",$addFieldValue="",$getJson=1) {
 		$ajaxItem=new MajaxItem();
-		$ajaxItem->addField("title",$row["post_title"])->addField("id",$row["ID"])
+		$ajaxItem->addField("title",$row["post_title"])
+		->addField("name",$row["post_name"])
+		->addField("id",$row["ID"])
 		->addField("content",$row["post_content"])->addField("url",$row["slug"])
 		->addField("image",ImageCache::getImageUrlFromId($row["_thumbnail_id"]));
 		if ($addFieldKey && $addFieldValue) $ajaxItem->addField($addFieldKey,$addFieldValue);
@@ -210,6 +215,7 @@ Class MajaxRender {
 			$row["misc"][$field->outName()]["max"]=$field->valMax;			
 			$row["misc"][$field->outName()]["displayorder"]=$field->displayOrder;	
 			$row["misc"][$field->outName()]["title"]=$field->title;	
+			$row["misc"][$field->outName()]["type"]=$field->type;	
 		}
 		return $row;	
 	}
@@ -265,6 +271,9 @@ Class MajaxRender {
 			$row["content"]="";
 		}
 		if ($action=="contactFilled") {
+			$postedFields=["fname" => "Jméno", "lname" => "Příjmení", "email" => "Email", "start_date" => "Začátek pronájmu", 
+			"end_date" => "Konec pronájmu", "phone_no" => "Telefon", "expected_mileage" => "Předpoklad km", "business" => "Již je firemní zákazník"];
+
 			$row["title"]="action";
 			$row["content"]="Díky za odeslání. Budeme vás brzy kontaktovat.";
 		}
