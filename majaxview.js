@@ -52,7 +52,10 @@ var majaxModule=(function (my) {
                 }
             }	
             if (image!="") {
-                image=`<img src='${image}' />`;
+                image=`<img src='${image}' />
+                     <div class='stripes stripe1'>Převodovka - manuál</div>
+                     <div class='stripes stripe2'>Dálniční známka pro ČR</div>   
+                `;
             }            
             if (typeof single !== 'undefined' ) {
                  //single                  
@@ -84,9 +87,9 @@ var majaxModule=(function (my) {
                 return(
                     `
                     <div class='majaxout' id='majaxout${id}'>
-                        <div class='row flex-grow-1'>
-                            <div class='col title bort'>                        
-                                ${image}                        
+                        <div class='row flex-grow-1 bort'>
+                            <div class='col title'>                        
+                                ${image}                                                        
                             </div>
                         </div>
                         <div class='row mcontent borb'>			    
@@ -192,25 +195,6 @@ var majaxModule=(function (my) {
                 </div>
                 `);   
         },
-        postTemplateAction: (content) => {
-            if (content) {
-                return(
-                    `    
-                    <div class='mpagination'>            
-                    ${content}                      
-                    </div>
-                    `);   
-            }            
-            else {
-                return(
-                    `    
-                    <div class='mpagination'>            
-                    ${content}  
-                    ${my.majaxViewComponents.majaxContactForm()}              
-                    </div>
-                    `);   
-            }
-        },
         sendClearFunction: (firingAction) => {
             jQuery('#majaxmain').empty();				 
             jQuery('#majaxmain').append(my.majaxViewComponents.majaxLoader);
@@ -219,11 +203,15 @@ var majaxModule=(function (my) {
             //nastavit vsem checkboxum a dalsim elementum nuly- neni potreba, posilaji se i nuly
             //jQuery('.counter').text("(0)");
         },
+        hideLoaderAnim: () => {
+            jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+        },
         animateMajaxBox: (thisHtml,thisId) => {
             jQuery('#majaxmain').append(thisHtml);
             //jQuery("#majaxout"+thisId).fadeIn("slow");														
             jQuery("#majaxout"+thisId).css("display", "flex").hide().fadeIn("slow");
-            jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+            //jQuery('.majax-loader').addClass('majax-loader-disappear-anim');
+            majaxRender.hideLoaderAnim();
         },
         showBack: () => {     
              jQuery("#majaxform").hide();
@@ -244,20 +232,11 @@ var majaxModule=(function (my) {
                 let thisHtml=majaxRender.postTemplatePagination(jsonObj);
                 jQuery('#majaxmain').append(thisHtml);                
             }
-            else if (jsonObj.title=="action") {                
-                let thisHtml=majaxRender.postTemplateAction(jsonObj.content);
-                jQuery('#majaxmain').append(thisHtml);
-                jQuery("#pickDate").datepicker();
-                jQuery("#dropDate").datepicker();
-                majaxRender.showBack();
-                jQuery("#majaxContactForm").on('submit', function(event) {				
-                    event.preventDefault();	      
-                    if (my.majaxViewComponents.validateForm(this)) {
-                        my.majaxPrc.runAjax(this);                        		
-                    }                                  
-			        return false;
-                });                
-        
+            else if (jsonObj.title=="action") {                                
+                majaxRender.hideLoaderAnim();
+                jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.render("majaxContactForm",jsonObj.content,jsonObj.postTitle));
+                my.majaxViewComponents.majaxContactForm.init("majaxContactForm");                
+                majaxRender.showBack();                
             }
             else if (jsonObj.title=="empty") {
                 thisHtml=majaxRender.postTemplateEmpty(thisId,jsonObj.content);

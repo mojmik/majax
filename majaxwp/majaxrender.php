@@ -59,7 +59,7 @@ Class MajaxRender {
 			$item=[];
 			$item=$this->buildItem($row,"","",0);		
 			$this->logWrite("row ".$item["image"]);				
-			$this->htmlElements->showPost(1,$row["post_name"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
+			$this->htmlElements->showPost(1,$row["post_name"],$row["post_title"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
 		}
 
 		$this->htmlElements->showMainPlaceHolderStatic(false);
@@ -264,16 +264,24 @@ Class MajaxRender {
 		}		
 		return $row;
 	}
-	function getMiscAction($action="") {		
+	function getMiscAction($action="",$postTitle="") {		
 		$row=[];
 		if ($action=="action") {
 			$row["title"]="action";
 			$row["content"]="";
+			$row["postTitle"]=$postTitle;
 		}
 		if ($action=="contactFilled") {
 			$postedFields=["fname" => "Jméno", "lname" => "Příjmení", "email" => "Email", "start_date" => "Začátek pronájmu", 
-			"end_date" => "Konec pronájmu", "phone_no" => "Telefon", "expected_mileage" => "Předpoklad km", "business" => "Již je firemní zákazník"];
-
+			"end_date" => "Konec pronájmu", "phone_no" => "Telefon", "expected_mileage" => "Předpoklad km", "business" => "Již je firemní zákazník", 
+			"postTitle" => "Vybrané auto"];
+			$out="";
+			foreach ($postedFields as $name => $value) {
+				if ($out) $out.="\n";
+				//$out.="$name: ".filter_var($_POST[$name], FILTER_SANITIZE_STRING);
+				$out.="$name - $value: ".$_POST[$name];
+			}
+			$this->logWrite("aktpage ".$out,"filledform.txt");
 			$row["title"]="action";
 			$row["content"]="Díky za odeslání. Budeme vás brzy kontaktovat.";
 		}
@@ -281,6 +289,7 @@ Class MajaxRender {
 	}
 	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=9,$aktPage=0,$miscAction="") {
 		$n=0;	
+		$showPosts=true;
 		$totalRows=count($rows);
 
 		if ($custTitle != "majaxcounts") {
@@ -304,10 +313,14 @@ Class MajaxRender {
 				 if ($n==0) {
 					 //first row
 					echo json_encode($this->buildInit()).PHP_EOL;	
-					if ($miscAction) echo json_encode($this->getMiscAction($miscAction)).PHP_EOL;				 
+					if ($miscAction) echo json_encode($this->getMiscAction($miscAction,$row["post_title"])).PHP_EOL;	
+					if ($miscAction=="contactFilled") $showPosts=false;
 				 }
-				 if (count($rows)==1) echo $this->buildItem($row,"single","yes").PHP_EOL;
-				 else echo $this->buildItem($row).PHP_EOL;
+				 if ($showPosts) {
+					if (count($rows)==1) echo $this->buildItem($row,"single","yes").PHP_EOL;
+					else echo $this->buildItem($row).PHP_EOL;
+				 }
+				 
 				 if ($n==count($rows)-1) { 
 					 //last row
 					echo json_encode($pagination).PHP_EOL;						
@@ -337,7 +350,7 @@ Class MajaxRender {
 		exit;
 	}
 
-	function logWrite($val) {
-	 file_put_contents(plugin_dir_path( __FILE__ ) . "log.txt",date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
+	function logWrite($val,$file="log.txt") {
+	 file_put_contents(plugin_dir_path( __FILE__ ) . $file,date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
 	}
 }

@@ -140,7 +140,7 @@ var majaxModule=(function (my) {
                         data: {
                               action: actionFunction,
                               category: objCategory,
-                              type: jQuery('input[name="type"]').val(),
+                              type: jQuery('input[name="type"]').val(),                              
                               aktPage: aktPage,
                               security: majax.nonce
                         },
@@ -175,6 +175,12 @@ var majaxModule=(function (my) {
                         
          };			
          
+         if (majaxPrc.thisFiringObjId=="majaxContactForm") {
+            let formData=my.majaxViewComponents.mForms.returnValues();
+            for (let field in formData) {
+                outObj.data[field]=formData[field];
+            }
+         }
          
          var inputFields = jQuery('input[data-group="majax-fields"]');
          inputFields.each(function (i,obj) {

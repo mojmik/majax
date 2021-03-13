@@ -63,7 +63,7 @@ Class MajaxHtmlElements {
         if ($fieldFormat) $field=str_replace("%1",$field,$fieldFormat);
         return $field;
     }
-    function showPost($id,$title,$image,$content,$metas,$itemDetails) {         
+    function showPost($id,$name,$title,$image,$content,$metas,$itemDetails) {         
         $metaOut=array();     
         for ($n=0;$n<5;$n++) {
             $metaOut[$n]="";
@@ -122,12 +122,15 @@ Class MajaxHtmlElements {
         }  
         ?>
         <div class='majaxout majaxoutStatic' id='majaxout<?=$id?>'>              
-                        <div class='row flex-grow-1 borf'>
+                        <div class='row flex-grow-1 bort'>
                             <div class='col title'>                        
                                 <?= $image?>
                                 <div class='stripes stripe1'>Převodovka - manuál</div>
-                                <div class='stripes stripe2'>Dálniční známka pro ČR</div>
+                                <div class='stripes stripe2'>Dálniční známka pro ČR</div>                                
                             </div>
+                        </div>
+                        <div class='row mcontent borb'>			    
+                            <span><?= $title?></span>
                         </div>
                         <div class='row mcontent'>			    
                             <span><?= $content?></span>
@@ -141,7 +144,7 @@ Class MajaxHtmlElements {
                         </div>
                         <div class='row borb'>
                             <div class='col action'>
-                                <a class='mButtonA' data-slug='<?=$title?>' href='?id=<?=$title?>'>Objednat</a>
+                                <a class='mButtonA' data-slug='<?=$name?>' href='?id=<?=$name?>'>Objednat</a>
                             </div>
                         </div>
                     </div>

@@ -99,29 +99,23 @@ const metaMisc = {
     }
 };
 
-
-
-(function() {
 	
-	
-
-	
-	jQuery(document).ready(function() {	
+	jQuery(document).ready(function($) {	
 		let hasFilterForm=false;
 		let hasIdSign=false;
-		if (jQuery('#majaxform').length>0)  hasFilterForm=true;
-		if (jQuery('#idSign').length>0)  hasIdSign=true;
+		if ($('#majaxform').length>0)  hasFilterForm=true;
+		if ($('#idSign').length>0)  hasIdSign=true;
 
 		my.mUrl.readUrl();
 		//fire event handlers			
-		jQuery('.majax-select').on('change', function() {				
+		$('.majax-select').on('change', function() {				
 				my.majaxPrc.runAjax(this);
 		});
-		jQuery('.majax-fireinputs').on('change', function() {	
+		$('.majax-fireinputs').on('change', function() {	
 				my.majaxPrc.runAjax(this);
 		});		
 		//select2
-		let sliders2 =jQuery(".majax-select");
+		let sliders2 =$(".majax-select");
 		if (sliders2.length>0) {
 			sliders2.select2({
 				templateResult: my.majaxSelect.formatState,
@@ -130,8 +124,8 @@ const metaMisc = {
 		}		
 
 		//click items anchors 
-		jQuery('#majaxmain').on('click', 'a', function(event) {
-			let href=jQuery(this).attr('href');
+		$('#majaxmain').on('click', 'a', function(event) {
+			let href=$(this).attr('href');
 			//console.info('Anchor clicked!' + href);
 			//window.history.pushState({href: href}, '', href);
 			my.mUrl.saveUrl();
@@ -141,7 +135,7 @@ const metaMisc = {
 			return false;
 		});
 		
-		jQuery('#goBackButton').on('click', function(e) {			
+		$('#goBackButton').on('click', function(e) {			
 			e.stopImmediatePropagation();
 			my.mUrl.goBack();			
 		});
@@ -164,7 +158,7 @@ const metaMisc = {
 		//load
 		if (hasFilterForm || hasIdSign) my.majaxPrc.runAjax(false);
 	}); 
-})();
+
 
 
 my.mStrings=mStrings;
