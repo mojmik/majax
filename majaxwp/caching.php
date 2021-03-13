@@ -72,10 +72,10 @@ Class Caching {
     }
     static function cacheRead($name) {
        if (Caching::$recreateCache) return false;
-       if (Caching::$compressJson) 
-        $rows=json_decode(gzuncompress(file_get_contents(Caching::getCachePath() . "$name.json")),1);
-       else 
-        $rows=json_decode(file_get_contents(Caching::getCachePath() . "$name.json"),1);
+       $txt=file_get_contents(Caching::getCachePath() . "$name.json");
+       if ($txt===false) return false;
+       if (Caching::$compressJson) $rows=json_decode(gzuncompress($txt),1);
+       else $rows=json_decode($txt,1);
        return $rows;
     }
     static function getCachedFn($query) {
@@ -117,7 +117,8 @@ Class Caching {
     static function loadCacheMap() {
         if (Caching::$recreateCache) return false;
         Caching::$cacheMap=array();
-        $txt=file_get_contents(Caching::getCachePath() . "cachemap.txt");
+        $txt=@file_get_contents(Caching::getCachePath() . "cachemap.txt");
+        if ($txt === false) return false;
         $rows=explode("^",$txt);
         foreach ($rows as $row) {
             $ex=explode("|",$row);
