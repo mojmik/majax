@@ -72,7 +72,7 @@ Class Caching {
     }
     static function cacheRead($name) {
        if (Caching::$recreateCache) return false;
-       $txt=file_get_contents(Caching::getCachePath() . "$name.json");
+       $txt=@file_get_contents(Caching::getCachePath() . "$name.json");
        if ($txt===false) return false;
        if (Caching::$compressJson) $rows=json_decode(gzuncompress($txt),1);
        else $rows=json_decode($txt,1);
