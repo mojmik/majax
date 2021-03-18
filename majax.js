@@ -105,6 +105,18 @@ const metaMisc = {
 		let hasIdSign=false;
 		if ($('#majaxform').length>0)  hasFilterForm=true;
 		if ($('#idSign').length>0)  hasIdSign=true;
+		if ($('#majaxContactForm').length>0)  {
+			
+			/*
+			let href=window.location;
+			window.history.pushState({href: href}, '', href);
+			
+			my.mUrl.saveUrl();
+			*/
+			my.majaxViewComponents.majaxContactForm.initDotaz("majaxContactForm");  
+			my.mUrl.writeUrl();
+		}
+		
 
 		my.mUrl.readUrl();
 		//fire event handlers			
@@ -115,9 +127,9 @@ const metaMisc = {
 				my.majaxPrc.runAjax(this);
 		});		
 		//select2
-		let sliders2 =$(".majax-select");
-		if (sliders2.length>0) {
-			sliders2.select2({
+		let selects2 =$(".majax-select");
+		if (selects2.length>0) {
+			selects2.select2({
 				templateResult: my.majaxSelect.formatState,
 				templateSelection: my.majaxSelect.formatState
 			});

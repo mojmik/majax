@@ -140,7 +140,7 @@ var majaxModule=(function (my) {
                         data: {
                               action: actionFunction,
                               category: objCategory,
-                              type: jQuery('input[name="type"]').val(),                              
+                              type: my.majaxRender.getType(),                              
                               aktPage: aktPage,
                               security: majax.nonce
                         },

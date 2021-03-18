@@ -12,11 +12,45 @@ Class MajaxHandlerShort {
 				
 	}
 
-	public function register()  {		
+	public function register()  {				
+		add_shortcode('majaxfilter', [$this,'printFilters'] );
+		add_shortcode('majaxcontent', [$this,'printContent'] );
+		add_shortcode('majaxstaticcontent', [$this,'showStaticContent'] );
+		add_shortcode('majaxstaticform', [$this,'showStaticForm'] );
+		add_action('wp_loaded', [$this, 'register_script']);
+	}
+	
+	function initRender($atts) {		
+		$this->ajaxRender=new MajaxRender(false,$atts);		
+	}
+	function setAtts($atts = []) {
+		$atts = array_change_key_case( (array) $atts, CASE_LOWER );		
+		return $atts;	
+	}
 
-		$this->ajaxRender=new MajaxRender();		
-		$this->ajaxRender->regShortCodes();				
-        add_action('wp_loaded', [$this, 'register_script']);
+	function printFilters($atts = []) {			
+		ob_start();					
+		$this->initRender($this->setAtts($atts));
+		$this->ajaxRender->printFilters();
+		return ob_get_clean();
+	}
+	function printContent($atts = []) {	
+		ob_start();	
+		$this->initRender($this->setAtts($atts));
+		$this->ajaxRender->printContent();
+		return ob_get_clean();
+	}
+	function showStaticContent($atts = []) {	
+		ob_start();	
+		$this->initRender($this->setAtts($atts));
+		$this->ajaxRender->showStaticContent();
+		return ob_get_clean();
+	}
+	function showStaticForm($atts = []) {	
+		ob_start();	
+		$this->initRender($this->setAtts($atts));
+		$this->ajaxRender->showStaticForm();
+		return ob_get_clean();
 	}
 	
 	public function register_script()    {	      		

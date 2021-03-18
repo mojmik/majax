@@ -43,6 +43,19 @@ class CustomFields {
 	  } 
 	  return $rows;
   }
+  public function setFixFilter($name,$value) {
+	foreach ($this->fieldsList as $f) {		
+		if ($f->name == $name) { 
+			$f->setFixFilter($value);
+			return "set";
+		}
+	} 
+  }
+  public function getFixFilter($name) {
+	foreach ($this->fieldsList as $f) {		
+		if ($f->name == $name) return $f->fixFilter;
+	} 
+  }
   public function getFieldsFilteredOrDisplayed() {
 	$rows=[];
 	foreach ($this->fieldsList as $f) {
@@ -54,7 +67,7 @@ class CustomFields {
 	$rows=[];
 	foreach ($this->fieldsList as $f) {		
 		if ($f->typeIs($type)) $rows[]=$f;
-	  } 
+	} 
 	  return $rows;
   }
   public function getFieldsFiltered() {

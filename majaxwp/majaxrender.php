@@ -7,8 +7,14 @@ Class MajaxRender {
 	private $callFromAjax;	
 	private $postType;
 	private $htmlElements;
+	private $subType;
+	
 
-	function __construct($ajax=false) {	
+	function __construct($ajax=false,$atts=[]) {	
+			if (!empty($atts)) { 
+				if (isset($atts["type"])) $this->setPostType($atts["type"]);
+				if (isset($atts["typ"])) $this->subType=$atts["typ"];				
+			} 
 			$this->htmlElements=new MajaxHtmlElements();
 			$this->callFromAjax=$ajax;
 			//init custom fields			
@@ -33,19 +39,15 @@ Class MajaxRender {
 		Caching::setPostType($this->getPostType());
 	}
 
-	function regShortCodes() {		
-		add_shortcode('majaxfilter', [$this,'printFilters'] );
-		add_shortcode('majaxcontent', [$this,'printContent'] );
-		add_shortcode('majaxstaticcontent', [$this,'showStaticContent'] );
-	}
 	
-	function showStaticContent($atts = []) {					
-		$atts = array_change_key_case( (array) $atts, CASE_LOWER );
-		if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute				 
-		$this->setPostType($type);		
-		$this->loadFields();		
-		ob_start();
-		$this->htmlElements->showMainPlaceHolderStatic(true,$type);
+	
+	function showStaticContent($atts = []) {								
+		$this->loadFields();				
+		if (isset($this->subType)) { 		 
+			$this->fields->setFixFilter("mauta_typ",$this->subType);					
+		}
+					
+		$this->htmlElements->showMainPlaceHolderStatic(true,$this->postType);
 		$postId=filter_var($_GET['id'], FILTER_SANITIZE_STRING);
 		if ($postId) { 
 			$query=$this->buildSingle($postId);
@@ -54,96 +56,66 @@ Class MajaxRender {
 		else $query=$this->buildQuerySQL();
 		$rows=Caching::getCachedRows($query);
 		
-		foreach ($rows as $row) {
+		foreach ($rows as $row) {			
 			$metaMisc=$this->buildInit();
 			$item=[];
 			$item=$this->buildItem($row,"","",0);		
-			$this->logWrite("row ".$item["image"]);				
-			$this->htmlElements->showPost(1,$row["post_name"],$row["post_title"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
+			$this->logWrite("rowimg ".$item["image"]);				
+			$this->htmlElements->showPost($this->postType,1,$row["post_name"],$row["post_title"],$item["image"],$item["content"],$metaMisc["misc"],$item["meta"]);
 		}
 
+		$this->htmlElements->showMainPlaceHolderStatic(false);		
+	}
+	function showStaticForm($atts = []) {						
+		$title="kontakt title";		
+		$mForm=new MajaxForm($this->getPostType());		
+		$this->htmlElements->showMainPlaceHolderStatic(true,$this->getPostType());
+		$mForm->printForm("majaxContactForm",$title);
 		$this->htmlElements->showMainPlaceHolderStatic(false);
-		return ob_get_clean();
+	}
+	function showFormFilled($miscAction,$title) {
+		$mForm=new MajaxForm($this->getPostType());
+		echo json_encode($mForm->processForm($miscAction,$title,$this->getPostType())).PHP_EOL;
 	}
 	
 	function printFilters($atts = []) {
-		 $atts = array_change_key_case( (array) $atts, CASE_LOWER );
-		 if (isset($atts["type"])) $type=$atts["type"]; //we load postType from shortcode attribute				 
-		 $this->setPostType($type);
 		 $this->loadFields();
-		//prints filter, run by shortcode majaxfilter	
-		ob_start();		
-		 $this->htmlElements->showFilters($this->postType,$this->fields->getFieldsFiltered());		 
-		 return ob_get_clean();
+		//prints filter, run by shortcode majaxfilter					
+		 $this->htmlElements->showFilters($this->postType,$this->fields->getFieldsFiltered());		 		 
 	}	
 	function printContent($atts = []) {	
-		//prints content, run by shortcode majaxcontent		
-		ob_start();
-		$this->htmlElements->showMainPlaceHolder();
-		return ob_get_clean();
+		//prints content, run by shortcode majaxcontent				
+		$this->htmlElements->showMainPlaceHolder();		
 	}	
-	function buildSingle($id) {	
-		//get all posts and their metas						
-		$limit=""; //need all rows for counts
-		$mType = $this->getPostType();
-		$col="";
-		$filters="";
-		$colSelect="";
-		foreach ($this->fields->getFieldsFilteredOrDisplayed() as $field) {			
-			$fieldName=$field->outName();		
-			$col.=$this->getSqlFilterMeta($fieldName);
-			$colSelect.=$this->getSqlSelectMeta($fieldName);		
-
-		}
-		$additionalMetas=["_thumbnail_id"];
-		foreach ($additionalMetas as $fieldName) {			
-			$col.=$this->getSqlFilterMeta($fieldName);
-			$colSelect.=$this->getSqlSelectMeta($fieldName);
-		}
-
-		$filters=" WHERE post_name like '$id'";
-		$query=
-		"
-		SELECT post_title,post_name,post_content{$colSelect}  FROM
-		(SELECT post_title,post_content,post_name 
-			$col
-			FROM wp_posts LEFT JOIN wp_postmeta pm1 ON ( pm1.post_id = ID) 
-			WHERE post_id=id 
-			AND post_status like 'publish' 
-			AND post_type like '$mType'			
-			GROUP BY ID, post_title
-			) AS pm1
-			$filters
-			$limit
-		";
-		$this->logWrite("queryitem {$query}");
-
-		return $query;
-	}	
-	function getSqlFilterMeta($fieldName) {
-		return ",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as `$fieldName`";
+	function addToStr($sep,$add,$str) {
+		if ($str) $str.=$sep.$add;
+		else $str=$add;
+		return $str;
 	}
-	function getSqlSelectMeta($fieldName) {
-		return ",pm1.`$fieldName`";
-	}
-	function buildQuerySQL() {	
-		//get all posts and their metas, filter only non selects for multiple selections		
+	function produceSQL($id="") {
 		$limit=" LIMIT 10";		
 		$limit=""; //need all rows for counts
 		$mType = $this->getPostType();
 		$col="";
 		$filters="";
 		$colSelect="";
+
 		foreach ($this->fields->getFieldsFilteredOrDisplayed() as $field) {			
 			$fieldName=$field->outName();		
 			$col.=$this->getSqlFilterMeta($fieldName);
 			$colSelect.=$this->getSqlSelectMeta($fieldName);
 			$filter=$field->getFieldFilterSQL();
 			if ($filter && !$field->typeIs("select")) {
-				if ($filters) $filters.=" AND ";
-				$filters.=$filter;
+				$filters=$this->addToStr(" AND ",$filter,$filters);				
 			}
-
+			if (strpos($fieldName,"cena")!==false) { 
+				$orderBy="cast(pm1.".$fieldName." AS unsigned)";
+				$orderDir='ASC';
+			}
+		}
+		if (!$orderBy) { 
+			$orderBy="post_title";
+			$orderDir="ASC";
 		}
 		$additionalMetas=["_thumbnail_id"];
 		foreach ($additionalMetas as $fieldName) {			
@@ -151,6 +123,7 @@ Class MajaxRender {
 			$colSelect.=$this->getSqlSelectMeta($fieldName);
 		}
 
+		if ($id) $filters=$this->addToStr(" AND ","post_name like '$id'",$filters);
 		if ($filters) $filters=" WHERE $filters";
 		$query=
 		"
@@ -164,11 +137,27 @@ Class MajaxRender {
 			GROUP BY ID, post_title
 			) AS pm1
 			$filters
+			ORDER BY $orderBy $orderDir
 			$limit
 		";
-		$this->logWrite("queryitem {$query}");
-
 		return $query;
+	}
+	function buildSingle($id) {					
+		$query=$this->produceSQL($id);
+		$this->logWrite("queryitem {$query}");
+		return $query;
+	}	
+	function getSqlFilterMeta($fieldName) {
+		return ",MAX(CASE WHEN pm1.meta_key = '$fieldName' then pm1.meta_value ELSE NULL END) as `$fieldName`";
+	}
+	function getSqlSelectMeta($fieldName) {
+		return ",pm1.`$fieldName`";
+	}
+	function buildQuerySQL() {	
+		//get all posts and their metas, filter only non selects for multiple selections		
+		$query=$this->produceSQL();
+		$this->logWrite("queryitem {$query}");
+		return $query;		
 	}
 	function filterMetaSelects($rows) {
 		$outRows=[];
@@ -263,30 +252,7 @@ Class MajaxRender {
 			else $row[$n] = "1";
 		}		
 		return $row;
-	}
-	function getMiscAction($action="",$postTitle="") {		
-		$row=[];
-		if ($action=="action") {
-			$row["title"]="action";
-			$row["content"]="";
-			$row["postTitle"]=$postTitle;
-		}
-		if ($action=="contactFilled") {
-			$postedFields=["fname" => "Jméno", "lname" => "Příjmení", "email" => "Email", "start_date" => "Začátek pronájmu", 
-			"end_date" => "Konec pronájmu", "phone_no" => "Telefon", "expected_mileage" => "Předpoklad km", "business" => "Již je firemní zákazník", 
-			"postTitle" => "Vybrané auto"];
-			$out="";
-			foreach ($postedFields as $name => $value) {
-				if ($out) $out.="\n";
-				//$out.="$name: ".filter_var($_POST[$name], FILTER_SANITIZE_STRING);
-				$out.="$name - $value: ".$_POST[$name];
-			}
-			$this->logWrite("aktpage ".$out,"filledform.txt");
-			$row["title"]="action";
-			$row["content"]="Díky za odeslání. Budeme vás brzy kontaktovat.";
-		}
-		return $row;
-	}
+	}	
 	function showRows($rows,$delayBetweenPostsSeconds=0.5,$custTitle="",$limit=9,$aktPage=0,$miscAction="") {
 		$n=0;	
 		$showPosts=true;
@@ -313,7 +279,10 @@ Class MajaxRender {
 				 if ($n==0) {
 					 //first row
 					echo json_encode($this->buildInit()).PHP_EOL;	
-					if ($miscAction) echo json_encode($this->getMiscAction($miscAction,$row["post_title"])).PHP_EOL;	
+					if ($miscAction) { 
+						$mForm=new MajaxForm();
+						echo json_encode($mForm->processForm($miscAction,$row["post_title"],$this->getPostType())).PHP_EOL;	
+					}
 					if ($miscAction=="contactFilled") $showPosts=false;
 				 }
 				 if ($showPosts) {

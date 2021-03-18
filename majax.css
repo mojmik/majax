@@ -19,7 +19,7 @@
   font-weight: 700;
   color: #000;
   /*background-color: #EAAB1C;*/
-  background-color: #ffd100;
+  background-color: #ffdd00;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   cursor: pointer;
@@ -33,7 +33,7 @@
   text-decoration: none;
 }
 .site-main .btn-primary {
-  background-color: #ffd100;
+  background-color: #ffdd00;
   /*border-color: #ffd100;*/
 }
 
@@ -54,7 +54,7 @@
   border: 0;
   font-weight: 700;
   color: #000;
-  background-color: #ffd100;
+  background-color: #ffdd00;
   
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
@@ -149,6 +149,7 @@
   background-position: -236px -20px;
 }
 
+
 .majaxout {  
 	display:none; 
 	flex-wrap: wrap;
@@ -157,6 +158,28 @@
 	align-items: stretch;
   width: 100%;	 
   color:#000;
+}
+span.select2-selection.select2-selection--single {
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;  
+  height: 34px;
+  border-radius: 0px;
+  font-size: 16px;
+  background: #fff;
+  color: #000;
+  margin-bottom: 0;
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  line-height: 1.42857143;
+}
+span#select2-pickTime-container { 
+  line-height: 1.42857143;
+  padding-left: 0px;
+}
+button.select2-selection__clear {
+ display:none;
 }
 .majaxoutStatic {  
   display:flex;
@@ -213,6 +236,82 @@
 .majaxout .mcontent span {
   padding:0px;  
 }
+.majaxout .mcontent .sikmaCara  {
+  height: 53px;
+  width: 3px;
+  border: 1px solid #ccc;
+  transform: skewX(315deg);
+  background: #ddd;
+  margin: -1px;
+  padding: 0;  
+  position:absolute;
+}
+.majaxout .mtitle {
+  background: #ffdd00;
+  font-size: 18px;
+  font-weight: 900;
+}
+.majaxout .mBckGray {
+  background:#DADADA;
+  background-image: linear-gradient(135deg, #DADADA 0%, #FFF 100%);
+  margin: 5px 0;
+  height: 280px;
+  line-height: 1.6em;
+  padding:10px 0 0 10px
+}
+.majaxout .mbold {
+  font-weight:700;
+}
+.majaxout .mcontent2 {
+  padding:0 0 0 5px;  
+  height: 50px;
+  position:relative;  
+}
+.majaxout .mcontent2 .div1 {
+  position:absolute;
+  left:0px;
+  top: 10px;  
+  font-size:16px;
+  font-weight:700;
+}
+.majaxout .mcontent2 .div2 {
+  position: absolute;
+  left: 56%;
+  top: 0px;
+  width: 160px;
+  font-size:14px;
+  font-weight:700;
+}
+.majaxout .mcontent2 .div2-10 {
+  top: 10px;
+  width: 250px;
+}
+.majaxout .mcontent2 .sikmaCara  {
+  height: 50px;
+  width: 3px;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  transform: skewX(315deg);
+  background: #ddd;
+  margin: -1px;
+  padding: 0;  
+  position:absolute;
+  left: 50%;
+}
+.majaxout .metaBig {
+  padding:0 15px 15px 15px;
+  line-height: 1.1em;
+}
+.majaxout .hCara {
+  border:1px solid #DADADA;
+  margin: 0px 0 10px 5%;
+  width: 90%;
+}
+
+.majaxmain .borf {
+  border: 1px solid #ffdd00;  
+}
+
 .majaxout .action {
   text-align:center;
 }
@@ -232,7 +331,7 @@
   border-right:1px solid #ffdd00;  
 }
 .majaxout .price .priceTag {
-  font-size:14px;
+  font-size:18px;
   font-weight: 700;
 }
 .majaxmain .mpagination {

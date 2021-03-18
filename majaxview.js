@@ -1,6 +1,13 @@
 var majaxModule=(function (my) {
         
-    const majaxRender = {        
+    const majaxRender = {   
+        customType : "",
+        getType: function() {
+            if (majaxRender.customType=="") {                
+                majaxRender.customType=jQuery('input[name="type"]').val();
+            } 
+            return majaxRender.customType;
+        },     
         postTemplate: (id,title,name,content,url,meta,image,single) => { 
             let metaOut=[];
             for (let n=0;n<5;n++) {
@@ -17,7 +24,7 @@ var majaxModule=(function (my) {
                 }
                 if (displayOrder>=20 && displayOrder<=30) {                    		
                     let formattedVal1=my.metaMisc.formatMetaVal(meta[property],0,my.metaMisc.fieldformat[property],"toFormat",true);
-                    let formattedVal2=my.metaMisc.formatMetaVal(meta[property]*1.21,0,my.metaMisc.fieldformat[property],"toFormat",true);
+                    let formattedVal2=my.metaMisc.formatMetaVal(Math.ceil(meta[property]*1.21),0,my.metaMisc.fieldformat[property],"toFormat",true);
                     metaOut[1]=metaOut[1] + `  
                     <div class='col-sm-6 price'>
                         Cena bez DPH / měsíc 
@@ -58,57 +65,13 @@ var majaxModule=(function (my) {
                 `;
             }            
             if (typeof single !== 'undefined' ) {
-                 //single                  
-                 return(
-                    `
-                    <div class='majaxout row2' id='majaxout${id}'>
-                        <div class='row flex-grow-1'>
-                            <div class='col title borf'>                        
-                                ${image}                        
-                            </div>
-                        </div>
-                        <div class='row mcontent'>			    
-                            <span>${content}</span>
-                        </div>
-                        <div class='row bors'>			
-                             ${metaOut[0]}                    
-                        </div>
-                        <div class='row bort'>			
-                                ${metaOut[1]}
-                                ${metaOut[2]}	
-                        </div>    
-                        <div class='row borb'>
-                                ${metaOut[3]}	
-                        </div>
-                    </div>
-                    `);            
+                 //single                      
+                 if (majaxRender.getType()=="mycka") return my.majaxViewComponents.singleMyckaShow(id,title,content,image,meta);                      
+                 else return my.majaxViewComponents.singleDefaultShow(id,title,content,image,metaOut);                      
             }
             else {
-                return(
-                    `
-                    <div class='majaxout' id='majaxout${id}'>
-                        <div class='row flex-grow-1 bort'>
-                            <div class='col title'>                        
-                                ${image}                                                        
-                            </div>
-                        </div>
-                        <div class='row mcontent borb'>			    
-                            <span>${content}</span>
-                        </div>
-                        <div class='row bors'>			
-                             ${metaOut[0]}                    
-                        </div>
-                        <div class='row bort'>			
-                                ${metaOut[1]}
-                                ${metaOut[2]}	
-                        </div>
-                        <div class='row borb'>
-                            <div class='col action'>
-                                <a class='mButtonA' data-slug='${name}' href='?id=${name}'>Objednat</a>
-                            </div>
-                        </div>
-                    </div>
-                    `);
+                //multi default    
+                return my.majaxViewComponents.multiDefaultShow(id,name,content,image,metaOut);                  
             }            
         },
         postTemplateEmpty: (id,content) => { 
@@ -234,8 +197,14 @@ var majaxModule=(function (my) {
             }
             else if (jsonObj.title=="action") {                                
                 majaxRender.hideLoaderAnim();
-                jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.render("majaxContactForm",jsonObj.content,jsonObj.postTitle));
-                my.majaxViewComponents.majaxContactForm.init("majaxContactForm");                
+                if (majaxRender.getType()=="mycka") { 
+                    jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderMycka("majaxContactForm",jsonObj.content,jsonObj.postTitle,majaxRender.getType()));
+                    my.majaxViewComponents.majaxContactForm.initMycka("majaxContactForm"); 
+                }
+                else { 
+                    jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderDefault("majaxContactForm",jsonObj.content,jsonObj.postTitle,majaxRender.getType()));
+                    my.majaxViewComponents.majaxContactForm.initDefault("majaxContactForm");                
+                }
                 majaxRender.showBack();                
             }
             else if (jsonObj.title=="empty") {

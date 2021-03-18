@@ -2,6 +2,7 @@
 namespace MajaxWP;
 
 class CustomField {
+
  
 	public function __construct($name="",$value="",$type="",$title="",$compare="=",$valMin=false,$valMax=false,$postType="hp_listing",$icon="",$filterOrder="",$displayOrder="",$fieldformat="") {
 	 $this->name=$name;	 
@@ -19,6 +20,9 @@ class CustomField {
 	 $this->fieldformat=$fieldformat;	 
 	 $this->postedValue="";
 	}	
+	public function setFixFilter($filter) {
+		$this->fixFilter=$filter;
+	}
 	public function outName() {
 		return "{$this->name}";
 	}
@@ -168,6 +172,8 @@ class CustomField {
 	}
 	public function getFieldFilterSQL() {
 		//$val=$_POST[$this->name];			   
+		if ($this->fixFilter) return "`{$this->name}` {$this->compare} '{$this->fixFilter}'";
+
 		$val=$this->postedValue;			   
 		if ($val=="") {
 		 return false;	

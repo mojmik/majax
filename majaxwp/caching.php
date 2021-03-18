@@ -116,6 +116,7 @@ Class Caching {
     
     static function loadCacheMap() {
         if (Caching::$recreateCache) return false;
+        Caching::checkPath();        
         Caching::$cacheMap=array();
         $txt=@file_get_contents(Caching::getCachePath() . "cachemap.txt");
         if ($txt === false) return false;

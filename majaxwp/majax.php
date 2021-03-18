@@ -4,7 +4,7 @@ namespace MajaxWP;
 Class Majax {
 	public $thisPluginName="majax";	
 	private $ajaxHandler;
-	public $postTypeName=["mauta","mauta2"];
+	public $postTypeName=["mauta","mauta2","mycka"];
 	function __construct() {
 		spl_autoload_register([$this,"mLoadClass"]);
 		Caching::checkPruneCacheNeeded($this->postTypeName);
