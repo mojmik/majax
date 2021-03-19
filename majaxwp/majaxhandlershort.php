@@ -54,6 +54,9 @@ Class MajaxHandlerShort {
 	}
 	
 	public function register_script()    {	      		
+		//recaptcha
+		wp_register_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=6LdLk7EUAAAAAEWHuB2tabMmlxQ2-RRTLPHEGe9Y');	
+
 		wp_register_script('majaxelements', MAJAX_PLUGIN_URL . 'majaxelements.js', array( 'jquery' ) );	
 		wp_enqueue_script('majaxelements');
 		wp_register_script('majaxviewcomponents', MAJAX_PLUGIN_URL . 'majaxviewcomponents.js', array( 'jquery' ) );	
