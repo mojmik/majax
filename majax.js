@@ -1,4 +1,16 @@
+
+var onReCaptchaLoad = function () {
+	//tohle je kvuli tomu kdyz se zada odkaz primo
+		
+}
+
 var majaxModule=(function (my) {
+
+const captchaLoaded= {
+	tellme: () => {
+		console.log("ok");
+	}
+};
 
 const mStrings = {
 	mReplaceAll: (mStr,from,to) => {
@@ -113,7 +125,7 @@ const metaMisc = {
 			
 			my.mUrl.saveUrl();
 			*/
-			my.majaxViewComponents.majaxContactForm.initDotaz("majaxContactForm");  
+			my.majaxViewComponents.majaxContactForm.initDotaz("majaxContactForm");  			
 			my.mUrl.writeUrl();
 		}
 		

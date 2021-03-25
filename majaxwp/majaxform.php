@@ -37,7 +37,8 @@ class MajaxForm {
                 ];
         }
     }
-    function printForm($id,$title) {        
+    function printForm($id,$title) {     
+        //<div class="g-recaptcha" data-sitekey="6LdBeIYaAAAAAKca7Xx8-xEHujjD6XbdIj3Q5mUb"></div>   
         ?>
         <div class="mpagination">
             <div class="row frameGray">
@@ -56,19 +57,61 @@ class MajaxForm {
                                                         <textarea class="form-control" id="txtmsg" name="msg" placeholder="Vaše zpráva*"></textarea>
                                                     </div>
                                                 </div>
+                                                <div class="row formGroup">                                                                                    
+                                                    <div class="col-sm-12">
+                                                        anti-spam                                                                                            
+                                                        <div id="myCaptcha"></div>
+                                                    </div>
+                                                </div>                                                                                                
                                                 <div class="row3">	
                                                         <div class="col-sm-3 pullRight col-xs-12">
                                                             <input type="submit" class="btn btn-primary btn-block" name="submit" id="submit" value="Potvrdit">
                                                                 <input type="Button" class="btn btn-primary btn block" value="Processing.." id="divprocessing" style="display: none;">
                                                         </div>
-                                                </div>
+                                                </div>                                                
                                                 <input type='hidden' name='postTitle' value='<?= $title?>' />
                                                 <input type='hidden' name='postType' value='<?= $this->postType?>' />
+                                                
                         </form>
                     </div>
                 </div>
             </div>
         <?php             
+   }
+   function checkCaptcha() {
+       $captchaResponse=$_POST["captcha"];
+       if (!$captchaResponse) { 
+        $this->logWrite("CAPTCHA blank ","filledform.txt");
+        return false;
+       } 
+       
+       //$secret="6LcmZoYaAAAAANExi_9zVCZApLH36NvQp9UK-SI0";
+       $secret="6LdBeIYaAAAAAANYHhzW4JqhPA5UuA74Ym1d5oOt";       
+       //$verify=file_get_contents($url);
+
+       $ch = curl_init();
+       curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://www.google.com/recaptcha/api/siteverify',
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => [
+                'secret' => $secret,
+                'response' => $captchaResponse,
+                'remoteip' => $_SERVER['REMOTE_ADDR']
+            ],
+            CURLOPT_RETURNTRANSFER => true
+        ]);
+       $output = curl_exec($ch);
+       curl_close($ch);
+       $verify = json_decode($output);
+
+       $this->logWrite("CAPTCHA response out -".$output."-","filledform.txt");           
+        if ($verify->success==true) {
+           $this->logWrite("CAPTCHA success ".$output,"filledform.txt");
+          //This user is verified by recaptcha
+        return true;
+       }
+       $this->logWrite("CAPTCHA fail ".$output,"filledform.txt");
+       return false;
    }
    function processForm($action="",$type="") {		
         $row=[];
@@ -77,7 +120,12 @@ class MajaxForm {
             $row["content"]="";
             $row["postTitle"]=$this->postType;
         }
-        if ($action=="contactFilled") {                       
+        if ($action=="contactFilled") {  
+            if (!$this->checkCaptcha()) {
+                $row["title"]="action";
+                $row["content"]="Antispam ověření selhalo, vraťte se zpět a zkuste znova."; 
+                return $row;
+            }
             $outHtml="";
             $outTxt="";
             foreach ($this->postedFields as $name => $value) {
@@ -91,7 +139,8 @@ class MajaxForm {
             $outHtml="<table>$outHtml</table>";			
             
             //$to      = ['mkavan@hertz.cz','mfrencl@hertz.cz'];
-            $to      = ['mkavan@hertz.cz'];
+            if ($type=="mycka") $to = ['diplomat@hertz.cz','mkavan@hertz.cz'];
+            else $to = ['rezervace@hertz.cz','mkavan@hertz.cz'];
             $subject = 'objednavka z hertz-autopujcovna.cz';
             $body = "<h1>Objednavka z webu</h1> <h3>Typ: $type</h3> <br /><br />$outHtml";
             $altBody=strip_tags($outTxt);

@@ -64,6 +64,7 @@ var majaxModule=(function (my) {
     const majaxPrc = {
         ajaxSeq:0,
         thisFiringObjId:"",
+        captcha:"",
         runAjax: function(firingElement) {
             my.majaxRender.hideBack();             
             mUrl.readUrl(); //load parameters from url           
@@ -85,6 +86,7 @@ var majaxModule=(function (my) {
          var objCategory="";
          var actionFunction='filter_rows';
          var aktPage=0;
+         var captchaPresent=false;
          
          if (varThisObj.length!=0) {		
             objCategory=varThisObj.data('slug');
@@ -100,6 +102,7 @@ var majaxModule=(function (my) {
             }
             if (varThisObj[0].id=="majaxContactForm") {
                 actionFunction='contact_filled'; 
+                captchaPresent=true;
                 objCategory=mUrl.params["id"];
             }
             majaxPrc.thisFiringObjId=varThisObj[0].id;		
@@ -174,7 +177,13 @@ var majaxModule=(function (my) {
                         }
                         
          };			
+        
+    
+         if (majaxPrc.captcha != "") {            
+            outObj.data["captcha"]=majaxPrc.captcha;
+         }
          
+
          if (majaxPrc.thisFiringObjId=="majaxContactForm") {
             let formData=my.majaxViewComponents.mForms.returnValues();
             for (let field in formData) {

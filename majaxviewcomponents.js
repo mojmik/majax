@@ -89,6 +89,22 @@ var majaxModule=(function (my) {
         },
         majaxContactForm: { 
             formElement: null,
+            captchaWidgetId:null,
+            initCaptchaWidget: () => {
+                if (window.grecaptcha === undefined || window.grecaptcha.render===undefined) {
+                    setTimeout(function(){ majaxViewComponents.majaxContactForm.initCaptchaWidget(); }, 500)
+                    return;
+                };
+           
+                    if (jQuery('#myCaptcha').length>0) {
+                        majaxViewComponents.majaxContactForm.captchaWidgetId = grecaptcha.render( 'myCaptcha', {
+                            'sitekey' : '6LdBeIYaAAAAAKca7Xx8-xEHujjD6XbdIj3Q5mUb',  // required
+                            'theme' : 'light',  // optional
+                            /*'callback': 'verifyCallback'*/  // optional
+                          });
+                    }
+           
+            },
             initDefault: (formName) => {
             majaxViewComponents.majaxContactForm.formElement=jQuery("#"+formName);
             //jQuery(document).on("click", "label.leisLabel", function() {               		            
@@ -150,7 +166,10 @@ var majaxModule=(function (my) {
                 jQuery(majaxViewComponents.majaxContactForm.formElement).on('submit', function(event) {				
                     event.preventDefault();	      
                     if (my.majaxViewComponents.validateForm(this)) {
-                        my.majaxPrc.runAjax(this);                        		
+                        my.mUrl.addParam("formsent","1");
+                        my.mUrl.writeUrl();                        
+                        my.majaxPrc.captcha=grecaptcha.getResponse(majaxViewComponents.majaxContactForm.captchaWidgetId);
+                        my.majaxPrc.runAjax(this);                                            		
                     }                                  
 			        return false;
                 });     
@@ -158,6 +177,7 @@ var majaxModule=(function (my) {
                       let prev=jQuery(this).prev();
                       if (typeof prev !=='undefined' && prev.data('formerr')=="1") jQuery(prev).text("");                        
                 });
+                my.majaxViewComponents.majaxContactForm.initCaptchaWidget();
             },
             initMycka: (formName) => {
                 majaxViewComponents.majaxContactForm.formElement=jQuery("#"+formName);
@@ -210,7 +230,10 @@ var majaxModule=(function (my) {
                     jQuery(majaxViewComponents.majaxContactForm.formElement).on('submit', function(event) {				
                         event.preventDefault();	      
                         if (my.majaxViewComponents.validateForm(this)) {
-                            my.majaxPrc.runAjax(this);                        		
+                            my.mUrl.addParam("formsent","1");
+                            my.mUrl.writeUrl();                            
+                            my.majaxPrc.captcha=grecaptcha.getResponse(majaxViewComponents.majaxContactForm.captchaWidgetId);
+                            my.majaxPrc.runAjax(this);  
                         }                                  
                         return false;
                     });     
@@ -224,7 +247,8 @@ var majaxModule=(function (my) {
                             placeholder: "Požadovaný čas mytí*",
                             allowClear: true
                         });
-                    }		    
+                    }
+                    my.majaxViewComponents.majaxContactForm.initCaptchaWidget();		    
 
             },
             initDotaz: (formName) => {
@@ -237,8 +261,11 @@ var majaxModule=(function (my) {
                     majaxViewComponents.mForms.addInput("postType","hidden",false); 
                     
                     jQuery(majaxViewComponents.majaxContactForm.formElement).on('submit', function(event) {				
-                        event.preventDefault();	      
-                        if (my.majaxViewComponents.validateForm(this)) {
+                        event.preventDefault();	                              
+                        if (my.majaxViewComponents.validateForm(this)) {    
+                            my.mUrl.addParam("formsent","1");
+                            my.mUrl.writeUrl();                            
+                            my.majaxPrc.captcha=grecaptcha.getResponse();
                             my.majaxPrc.runAjax(this);                        		
                         }                                  
                         return false;
@@ -246,7 +273,8 @@ var majaxModule=(function (my) {
                     jQuery("#majaxContactForm input[type='text']").on('focus', function (event) {
                           let prev=jQuery(this).prev();
                           if (typeof prev !=='undefined' && prev.data('formerr')=="1") jQuery(prev).text("");                        
-                    });           	    
+                    }); 
+                    my.majaxViewComponents.majaxContactForm.initCaptchaWidget();          	    
             },
             renderDefault: (name,content,postTitle="",postType="") => {
                 if (content!="") {
@@ -258,7 +286,7 @@ var majaxModule=(function (my) {
                             </div>
                         </div>
                     </div>`;    
-                }
+                }                
                 return `
                 <div class='mpagination'>      
                     <div class="row frameGray">                        
@@ -316,6 +344,12 @@ var majaxModule=(function (my) {
                                                     </label>
                                         </div>
                                     </div>
+                                    <div class="row formGroup">                                                                                    
+                                                    <div class="col-sm-12">
+                                                        anti-spam                                    
+                                                        <div id="myCaptcha"></div>
+                                                    </div>
+                                    </div> 
                                     <div class="row formGroup">
                                         <div class="col-sm-12">* Povinné pole</div>
                                     </div>                                 
@@ -344,7 +378,7 @@ var majaxModule=(function (my) {
                             </div>
                         </div>
                     </div>`;    
-                }
+                }                
                 return `
                 <div class='mpagination'>      
                     <div class="row frameGray">                        
@@ -403,6 +437,12 @@ var majaxModule=(function (my) {
                                             <input type="text" class="form-control tel" id="phone_no" name="phone_no" placeholder="Telefon*">
                                         </div>
                                     </div>   
+                                    <div class="row formGroup">                                                                                    
+                                                    <div class="col-sm-12">
+                                                        anti-spam                                    
+                                                        <div id="myCaptcha"></div>
+                                                    </div>
+                                    </div> 
                                     <div class="row formGroup">
                                         <div class="col-sm-12">* Povinné pole</div>
                                     </div>                                 

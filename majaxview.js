@@ -199,11 +199,11 @@ var majaxModule=(function (my) {
                 majaxRender.hideLoaderAnim();
                 if (majaxRender.getType()=="mycka") { 
                     jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderMycka("majaxContactForm",jsonObj.content,jsonObj.postTitle,majaxRender.getType()));
-                    my.majaxViewComponents.majaxContactForm.initMycka("majaxContactForm"); 
+                    my.majaxViewComponents.majaxContactForm.initMycka("majaxContactForm");                     
                 }
                 else { 
                     jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderDefault("majaxContactForm",jsonObj.content,jsonObj.postTitle,majaxRender.getType()));
-                    my.majaxViewComponents.majaxContactForm.initDefault("majaxContactForm");                
+                    my.majaxViewComponents.majaxContactForm.initDefault("majaxContactForm");                                    
                 }
                 majaxRender.showBack();                
             }

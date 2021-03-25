@@ -343,14 +343,20 @@ button.select2-selection__clear {
 @media (min-width: 1100px) {
 	.majaxout {
 		margin-left: 1%;
-		width: 32.333%;
-	}
+		width: 32.666%;
+  }
+  .majaxout:first-child {
+    margin-left: 0%;
+  }
 }
 @media (max-width: 1099px) and (min-width: 667px) {
 	.majaxout {
 		margin-left: 0.5%;
-		width: 49.5%;
-	}
+		width: 49.75%;
+  }
+  .majaxout:first-child {
+    margin-left: 0%;
+  }
 }
 .row2 {
   width:100%;

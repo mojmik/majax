@@ -52,10 +52,27 @@ Class MajaxHandlerShort {
 		$this->ajaxRender->showStaticForm();
 		return ob_get_clean();
 	}
+
+	function add_async_forscript($url) 	{
+    if (strpos($url, '#asyncload')===false)
+        return $url;
+    else if (is_admin())
+        return str_replace('#asyncload', '', $url);
+    else
+        return str_replace('#asyncload', '', $url)."' async='async' defer='defer"; 
+	}
 	
 	public function register_script()    {	      		
 		//recaptcha
-		wp_register_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=6LdLk7EUAAAAAEWHuB2tabMmlxQ2-RRTLPHEGe9Y');	
+		add_filter('clean_url', [$this,'add_async_forscript'], 11, 1);
+		//wp_register_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=explicit');	
+		//wp_register_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=explicit&neco=1#asyncload');			
+		//wp_enqueue_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=explicit',[],null);
+		//wp_enqueue_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js',[],null);
+		
+		wp_enqueue_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=explicit&onload=onReCaptchaLoad',[],null);
+		//wp_register_script('majaxrecaptcha','https://www.google.com/recaptcha/api.js?render=explicit#asyncload',[],null);	
+		wp_enqueue_script('majaxrecaptcha');
 
 		wp_register_script('majaxelements', MAJAX_PLUGIN_URL . 'majaxelements.js', array( 'jquery' ) );	
 		wp_enqueue_script('majaxelements');
@@ -67,8 +84,7 @@ Class MajaxHandlerShort {
 		wp_enqueue_script('majaxprc');				
 		wp_register_script('majax-script', MAJAX_PLUGIN_URL . 'majax.js', array( 'jquery' ) );		
 		wp_localize_script('majax-script', 'majax', $this->get_ajax_data());
-		wp_enqueue_script('majax-script');		
-		
+		wp_enqueue_script('majax-script');				
 	}
 	
 	private function get_ajax_data() {
