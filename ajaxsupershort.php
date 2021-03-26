@@ -37,7 +37,6 @@ if ($action=="contact_filled") {
 		$postId=$_POST["category"];	
 		$query=$renderer->buildSingle($postId);
 		$rows=Caching::getCachedRows($query);
-		$countsJson=Caching::getCachedJson("json_$query");	
 		$renderer->showRows($rows,0,"single",9,0,"contactFilled");		
 	}    
 	else {
@@ -51,7 +50,6 @@ if ($action=="single_row") {
 	MikDb::connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);		
     $query=$renderer->buildSingle($_POST["category"]);
 	$rows=Caching::getCachedRows($query);
-	$countsJson=Caching::getCachedJson("json_$query");	
 	$renderer->showRows($rows,0,"single",9,0,"action");		
 	exit;
 }

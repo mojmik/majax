@@ -84,7 +84,7 @@ class MajaxForm {
         $this->logWrite("CAPTCHA blank ","filledform.txt");
         return false;
        }               
-       $secret=plugin_dir_path( __FILE__ ) ."secret/captchakey.txt";      
+       $secret=$this->loadSecret("captchakey");       
        //$verify=file_get_contents($url);
 
        $ch = curl_init();
@@ -111,7 +111,7 @@ class MajaxForm {
        $this->logWrite("CAPTCHA fail ".$output,"filledform.txt");
        return false;
    }
-   function processForm($action="",$type="") {		
+   function processForm($action="",$title="",$type="") {		
         $row=[];
         if ($action=="action") {
             $row["title"]="action";
@@ -136,9 +136,13 @@ class MajaxForm {
             }			
             $outHtml="<table>$outHtml</table>";			
             
-            //$to      = ['mkavan@hertz.cz','mfrencl@hertz.cz'];
-            if ($type=="mycka") $to = ['diplomat@hertz.cz','mkavan@hertz.cz'];
-            else $to = ['rezervace@hertz.cz','mkavan@hertz.cz'];
+            
+            //if ($type=="mycka") $to = ['diplomat@hertz.cz','mkavan@hertz.cz'];
+            //else $to = ['rezervace@hertz.cz','mkavan@hertz.cz'];
+            if ($type=="mycka") $to=$this->loadSecret("emailymycka",true);
+            else $to = $this->loadSecret("emailydefault",true);
+            
+            //$to      = ['mkavan@hertz.cz'];
             $subject = 'objednavka z hertz-autopujcovna.cz';
             $body = "<h1>Objednavka z webu</h1> <h3>Typ: $type</h3> <br /><br />$outHtml";
             $altBody=strip_tags($outTxt);
@@ -159,7 +163,11 @@ class MajaxForm {
         }
         return $row;
     }	
-    
+    function loadSecret($file,$isArray=false) {     
+     $out=@file_get_contents(plugin_dir_path( __FILE__ ) ."secret/$file.txt");      
+     if (!$isArray) return $out;
+     else return explode(";",$out);
+    }
     function logWrite($val,$file="log.txt") {
         file_put_contents(plugin_dir_path( __FILE__ ) . $file,date("d-m-Y h:i:s")." ".$val."\n",FILE_APPEND | LOCK_EX);
        }

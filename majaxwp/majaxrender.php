@@ -280,7 +280,7 @@ Class MajaxRender {
 					 //first row
 					echo json_encode($this->buildInit()).PHP_EOL;	
 					if ($miscAction) { 
-						$mForm=new MajaxForm();
+						$mForm=new MajaxForm($this->getPostType());
 						echo json_encode($mForm->processForm($miscAction,$row["post_title"],$this->getPostType())).PHP_EOL;	
 					}
 					if ($miscAction=="contactFilled") $showPosts=false;
