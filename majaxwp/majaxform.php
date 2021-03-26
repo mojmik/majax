@@ -83,10 +83,8 @@ class MajaxForm {
        if (!$captchaResponse) { 
         $this->logWrite("CAPTCHA blank ","filledform.txt");
         return false;
-       } 
-       
-       //$secret="6LcmZoYaAAAAANExi_9zVCZApLH36NvQp9UK-SI0";
-       $secret="6LdBeIYaAAAAAANYHhzW4JqhPA5UuA74Ym1d5oOt";       
+       }               
+       $secret=plugin_dir_path( __FILE__ ) ."secret/captchakey.txt";      
        //$verify=file_get_contents($url);
 
        $ch = curl_init();
