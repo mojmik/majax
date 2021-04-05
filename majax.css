@@ -345,7 +345,10 @@ button.select2-selection__clear {
 		margin-left: 1%;
 		width: 32.666%;
   }
-  .majaxout:first-child {
+  .majaxout:first-of-type {
+    margin-left: 0%;
+  }
+  .majaxout:nth-of-type(3n-1) {
     margin-left: 0%;
   }
 }
@@ -354,7 +357,7 @@ button.select2-selection__clear {
 		margin-left: 0.5%;
 		width: 49.75%;
   }
-  .majaxout:first-child {
+  .majaxout:nth-of-type(2n-1) {
     margin-left: 0%;
   }
 }

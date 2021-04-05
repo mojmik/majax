@@ -17,6 +17,7 @@ Class MajaxHtmlElements {
         $this->showBackButton();  
 		?>
 		<div id="majaxmain" class="majaxmain">
+         <div></div>
 		 <?php
 		  //ajax content comes here
 		 ?>
@@ -33,7 +34,8 @@ Class MajaxHtmlElements {
             $this->showBackButton();
             ?>
             <input type='hidden' name='type' value='<?= $postType?>' />
-            <div id="majaxmain" class="majaxmain">            
+            <div id="majaxmain" class="majaxmain">
+            <div></div>            
              <?php
         }
         //ajax content comes here
@@ -127,7 +129,8 @@ Class MajaxHtmlElements {
             $image="obrazek chybi";
         }
         ?>
-        <div class='majaxout majaxoutStatic' id='majaxout<?=$id?>'>              
+        <div class='majaxout majaxoutStatic' id='majaxout<?=$id?>'>
+                                  
                         <div class='row mcontent mtitle'>			    
                             <span><?= $title?></span>
                         </div>
@@ -186,7 +189,7 @@ Class MajaxHtmlElements {
         }  
         ?>
                      <div class='majaxout majaxoutStatic borf' id='majaxout<?=$id?>'>              
-                     
+                    
                         <div class='row mcontent2 bort' <?= $style?>>	
                             <div class='div1'><?= $title?></div>
                             <div class='sikmaCara'></div>
