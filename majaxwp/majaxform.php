@@ -116,7 +116,10 @@ class MajaxForm {
         if ($action=="action") {
             $row["title"]="action";
             $row["content"]="";
-            $row["postTitle"]=$this->postType;
+            //$row["postTitle"]=$this->postType;
+            $row["postTitle"]=$title;
+            $row["postType"]=$this->postType;
+            //$row["itemTitle"]=$title;
         }
         if ($action=="contactFilled") {  
             if (!$this->checkCaptcha()) {
@@ -140,9 +143,9 @@ class MajaxForm {
             //if ($type=="mycka") $to = ['diplomat@hertz.cz','mkavan@hertz.cz'];
             //else $to = ['rezervace@hertz.cz','mkavan@hertz.cz'];
             if ($type=="mycka") $to=$this->loadSecret("emailymycka",true);
-            else $to = $this->loadSecret("emailydefault",true);
-            
+            else $to = $this->loadSecret("emailydefault",true);            
             //$to      = ['mkavan@hertz.cz'];
+            
             $subject = 'objednavka z hertz-autopujcovna.cz';
             $body = "<h1>Objednavka z webu</h1> <h3>Typ: $type</h3> <br /><br />$outHtml";
             $altBody=strip_tags($outTxt);

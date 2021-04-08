@@ -133,6 +133,7 @@ var majaxModule=(function (my) {
                 jQuery("#pickDate").datepicker({
                         duration: '',
                         changeMonth: false,
+                        minDate : 0,
                         changeYear: false,
                         yearRange: '2010:2050',
                         showTime: false,
@@ -195,6 +196,7 @@ var majaxModule=(function (my) {
                             duration: '',
                             changeMonth: false,
                             changeYear: false,
+                            minDate : 0,
                             yearRange: '2010:2050',
                             showTime: false,
                             time24h: true,

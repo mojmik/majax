@@ -198,11 +198,11 @@ var majaxModule=(function (my) {
             else if (jsonObj.title=="action") {                                
                 majaxRender.hideLoaderAnim();
                 if (majaxRender.getType()=="mycka") { 
-                    jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderMycka("majaxContactForm",jsonObj.content,jsonObj.postTitle,majaxRender.getType()));
+                    jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderMycka("majaxContactForm",jsonObj.content,jsonObj.postTitle,jsonObj.postType));
                     my.majaxViewComponents.majaxContactForm.initMycka("majaxContactForm");                     
                 }
                 else { 
-                    jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderDefault("majaxContactForm",jsonObj.content,jsonObj.postTitle,majaxRender.getType()));
+                    jQuery('#majaxmain').append(my.majaxViewComponents.majaxContactForm.renderDefault("majaxContactForm",jsonObj.content,jsonObj.postTitle,jsonObj.postType));
                     my.majaxViewComponents.majaxContactForm.initDefault("majaxContactForm");                                    
                 }
                 majaxRender.showBack();                
